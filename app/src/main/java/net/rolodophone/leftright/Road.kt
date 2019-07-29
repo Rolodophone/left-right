@@ -9,7 +9,7 @@ class Road(context: Context) : GameObject {
     var tileYs = mutableListOf<Int>()
     var img: Bitmap = BitmapFactory.decodeResource(context.resources, R.drawable.road)
     val tileW = width
-    val tileH = width * (76/128)
+    val tileH = (width * (76f/128f)).toInt()
 
 
     init {

@@ -21,6 +21,7 @@ class MainActivity : Activity() {
         windowManager.defaultDisplay.getSize(dim)
         width = dim.x
         height = dim.y
+        Log.i("Activity", "width: $width height: $height")
 
         mainView = MainView(this)
 
@@ -46,7 +47,8 @@ class MainActivity : Activity() {
         super.onRestart()
 
         appOpen = true
-        Log.i("Activity", "Starting game thread")
+        Log.i("Activity", "Restarting game thread")
+        thread = Thread(mainView)
         thread.start()
 
     }

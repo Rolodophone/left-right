@@ -40,15 +40,19 @@ class MainView(context: Context) : SurfaceView(context), Runnable {
 
 
             if (holder.surface.isValid) {
-                canvas = holder.lockCanvas()
+                val c = holder.lockCanvas()
 
-                road.draw()
-                for (car in cars) car.draw()
-                for (fuel in fuels) fuel.draw()
-                player.draw()
-                gui.draw()
+                if (c != null) {
+                    canvas = c
 
-                holder.unlockCanvasAndPost(canvas)
+                    road.draw()
+                    for (car in cars) car.draw()
+                    for (fuel in fuels) fuel.draw()
+                    player.draw()
+                    gui.draw()
+
+                    holder.unlockCanvasAndPost(canvas)
+                }
             }
 
             else {
@@ -70,6 +74,8 @@ class MainView(context: Context) : SurfaceView(context), Runnable {
         cars = mutableListOf()
         fuels = mutableListOf()
         gameLogic = GameLogic(context)
+
+        paint.isAntiAlias = false
     }
 
 
