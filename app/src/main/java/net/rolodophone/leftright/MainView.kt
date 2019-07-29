@@ -21,6 +21,7 @@ class MainView(activity: Context) : SurfaceView(activity), Runnable {
     lateinit var gui: Gui
     lateinit var cars: MutableList<Car>
     lateinit var fuels: MutableList<Fuel>
+    lateinit var gameLogic: GameLogic
 
 
     override fun run() {
@@ -34,6 +35,7 @@ class MainView(activity: Context) : SurfaceView(activity), Runnable {
             gui.update()
             for (car in cars) car.update()
             for (fuel in fuels) fuel.update()
+            gameLogic.update()
 
 
             if (holder.surface.isValid) {
@@ -66,6 +68,7 @@ class MainView(activity: Context) : SurfaceView(activity), Runnable {
         gui = Gui()
         cars = mutableListOf()
         fuels = mutableListOf()
+        gameLogic = GameLogic()
     }
 
 
