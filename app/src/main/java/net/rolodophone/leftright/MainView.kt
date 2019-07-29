@@ -19,10 +19,8 @@ class MainView(activity: Context) : SurfaceView(activity), Runnable {
     lateinit var player: Player
     lateinit var road: Road
     lateinit var gui: Gui
-    lateinit var cars: GameObjectArray<Car>
-    lateinit var fuels: GameObjectArray<Fuel>
-
-    lateinit var gameObjects: List<GameObject>
+    lateinit var cars: MutableList<Car>
+    lateinit var fuels: MutableList<Fuel>
 
 
     override fun run() {
@@ -31,16 +29,21 @@ class MainView(activity: Context) : SurfaceView(activity), Runnable {
         while (appOpen) {
             val initialTime = System.currentTimeMillis()
 
-            for (obj in gameObjects) {
-                obj.update()
-            }
+            road.update()
+            player.update()
+            gui.update()
+            for (car in cars) car.update()
+            for (fuel in fuels) fuel.update()
+
 
             if (holder.surface.isValid) {
                 canvas = holder.lockCanvas()
 
-                for (obj in gameObjects) {
-                    obj.draw()
-                }
+                road.draw()
+                for (car in cars) car.draw()
+                for (fuel in fuels) fuel.draw()
+                player.draw()
+                gui.draw()
 
                 holder.unlockCanvasAndPost(canvas)
             }
@@ -61,10 +64,8 @@ class MainView(activity: Context) : SurfaceView(activity), Runnable {
         player = Player()
         road = Road()
         gui = Gui()
-        cars = GameObjectArray()
-        fuels = GameObjectArray()
-
-        gameObjects = listOf(player, road, gui, cars, fuels)
+        cars = mutableListOf()
+        fuels = mutableListOf()
     }
 
 
