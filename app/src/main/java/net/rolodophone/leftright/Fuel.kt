@@ -1,6 +1,8 @@
 package net.rolodophone.leftright
 
-class Fuel : GameObject {
+import android.content.Context
+
+class Fuel(context: Context) : GameObject {
     override fun update() {}
     override fun draw() {}
 }

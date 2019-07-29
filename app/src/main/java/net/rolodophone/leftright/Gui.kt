@@ -1,6 +1,8 @@
 package net.rolodophone.leftright
 
-class Gui : GameObject {
+import android.content.Context
+
+class Gui(context: Context) : GameObject {
     override fun update() {}
     override fun draw() {}
 }

@@ -6,8 +6,8 @@ import android.os.Bundle
 import android.util.Log
 
 var appOpen = true
-var width: Float = 0f
-var height: Float = 0f
+var width = 0
+var height = 0
 
 class MainActivity : Activity() {
 
@@ -19,8 +19,8 @@ class MainActivity : Activity() {
 
         val dim = Point()
         windowManager.defaultDisplay.getSize(dim)
-        width = dim.x.toFloat()
-        height = dim.y.toFloat()
+        width = dim.x
+        height = dim.y
 
         mainView = MainView(this)
 

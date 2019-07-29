@@ -1,6 +1,8 @@
 package net.rolodophone.leftright
 
-class Car : GameObject {
+import android.content.Context
+
+class Car(context: Context) : GameObject {
     override fun update() {}
     override fun draw() {}
 }

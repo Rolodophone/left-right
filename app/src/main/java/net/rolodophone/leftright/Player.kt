@@ -1,6 +1,8 @@
 package net.rolodophone.leftright
 
-class Player : GameObject {
+import android.content.Context
+
+class Player(context: Context) : GameObject {
 
     var speed = 0
 

@@ -13,16 +13,17 @@ var fps = 0f
 var canvas = Canvas()
 var paint = Paint()
 
+lateinit var player: Player
+lateinit var road: Road
+lateinit var gui: Gui
+lateinit var cars: MutableList<Car>
+lateinit var fuels: MutableList<Fuel>
+
+
 @SuppressLint("ViewConstructor")
-class MainView(activity: Context) : SurfaceView(activity), Runnable {
+class MainView(context: Context) : SurfaceView(context), Runnable {
 
-    lateinit var player: Player
-    lateinit var road: Road
-    lateinit var gui: Gui
-    lateinit var cars: MutableList<Car>
-    lateinit var fuels: MutableList<Fuel>
     lateinit var gameLogic: GameLogic
-
 
     override fun run() {
         setup()
@@ -63,12 +64,12 @@ class MainView(activity: Context) : SurfaceView(activity), Runnable {
 
 
     fun setup() {
-        player = Player()
-        road = Road()
-        gui = Gui()
+        player = Player(context)
+        road = Road(context)
+        gui = Gui(context)
         cars = mutableListOf()
         fuels = mutableListOf()
-        gameLogic = GameLogic()
+        gameLogic = GameLogic(context)
     }
 
 
