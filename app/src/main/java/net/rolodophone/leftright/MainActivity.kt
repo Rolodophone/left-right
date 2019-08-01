@@ -6,8 +6,8 @@ import android.os.Bundle
 import android.util.Log
 
 var appOpen = true
-var width = 0
-var height = 0
+var width = 0f
+var height = 0f
 
 class MainActivity : Activity() {
 
@@ -19,17 +19,25 @@ class MainActivity : Activity() {
 
         val dim = Point()
         windowManager.defaultDisplay.getSize(dim)
-        width = dim.x
-        height = dim.y
+        width = dim.x.toFloat()
+        height = dim.y.toFloat()
         Log.i("Activity", "width: $width height: $height")
 
         mainView = MainView(this)
 
         setContentView(mainView)
 
+        mainView.setup()
+
         thread = Thread(mainView)
         Log.i("Activity", "Starting game thread")
         thread.start()
+    }
+
+
+    override fun onStart() {
+        Log.i("Activity", "onStart()")
+        super.onStart()
     }
     
     

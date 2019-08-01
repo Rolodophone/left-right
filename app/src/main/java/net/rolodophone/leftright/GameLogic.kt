@@ -2,11 +2,8 @@ package net.rolodophone.leftright
 
 import android.content.Context
 
-class GameLogic(context: Context) : GameObject {
+class GameLogic(context: Context) {
 
-    override fun draw() {}
-
-    override fun update() {
-
+    fun update() {
     }
 }
