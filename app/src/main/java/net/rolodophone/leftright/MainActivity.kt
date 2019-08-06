@@ -9,6 +9,8 @@ var appOpen = true
 var width = 0f
 var height = 0f
 
+const val isDebug = true
+
 class MainActivity : Activity() {
 
     private lateinit var mainView: MainView

@@ -3,8 +3,8 @@ package net.rolodophone.leftright
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Paint
+import android.os.SystemClock
 import android.util.Log
 import android.view.SurfaceView
 
@@ -27,7 +27,7 @@ class MainView(context: Context) : SurfaceView(context), Runnable {
 
     override fun run() {
         while (appOpen) {
-            val initialTime = System.currentTimeMillis()
+            val initialTime = SystemClock.elapsedRealtime()
 
             if (holder.surface.isValid) {
 
@@ -46,7 +46,7 @@ class MainView(context: Context) : SurfaceView(context), Runnable {
                     canvas = c
 
                     //set background to black (for debugging)
-                    canvas.drawColor(Color.BLACK)
+                    //canvas.drawColor(Color.BLACK)
 
                     road.draw()
                     for (car in cars) car.draw()
@@ -58,7 +58,7 @@ class MainView(context: Context) : SurfaceView(context), Runnable {
                 }
 
 
-                val timeElapsed = System.currentTimeMillis() - initialTime
+                val timeElapsed = SystemClock.elapsedRealtime() - initialTime
                 Log.v("View", "time elapsed: $timeElapsed")
 
                 fps = if (timeElapsed == 0L) 2000f else 1000f / timeElapsed

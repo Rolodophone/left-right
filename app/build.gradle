@@ -5,6 +5,14 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
+    signingConfigs {
+        release {
+            storeFile file('C:\\Users\\Admin\\Documents\\Programming\\AndroidStudio\\LeftRight\\app\\keys\\keys.jks')
+            storePassword '***REMOVED***'
+            keyPassword '***REMOVED***'
+            keyAlias = '***REMOVED***'
+        }
+    }
     compileSdkVersion 28
     defaultConfig {
         applicationId "net.rolodophone.leftright"
@@ -18,6 +26,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
 }
