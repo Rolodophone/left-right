@@ -6,7 +6,7 @@ import android.graphics.BitmapFactory
 import android.graphics.Paint
 import android.graphics.RectF
 
-class Gui(context: Context) : GameObject {
+class Gui(context: Context) {
     var fuelImg: Bitmap
     val fuelPadding = 10f
     val fuelW = width / 16f
@@ -25,10 +25,10 @@ class Gui(context: Context) : GameObject {
     }
 
 
-    override fun update() {}
+    fun update() {}
 
 
-    override fun draw() {
+    fun draw() {
         if (isDebug) {
             paint.textSize = 90f
             paint.textAlign = Paint.Align.LEFT

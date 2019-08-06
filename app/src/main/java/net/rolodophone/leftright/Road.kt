@@ -3,7 +3,7 @@ package net.rolodophone.leftright
 import android.content.Context
 import android.graphics.Color
 
-class Road(context: Context) : GameObject {
+class Road(context: Context) {
 
     val numLanes = 3
     val lineW = width / 128f
@@ -13,13 +13,13 @@ class Road(context: Context) : GameObject {
     var topLineBottom = 0f
 
 
-    override fun update() {
+    fun update() {
         topLineBottom += player.ySpeed / fps
         topLineBottom %= lineH + lineGap
     }
 
 
-    override fun draw() {
+    fun draw() {
         canvas.drawRGB(111, 111, 111)
 
         paint.color = Color.rgb(255, 255, 255)

@@ -36,7 +36,17 @@ class MainView(context: Context) : SurfaceView(context), Runnable {
                     player.update()
                     gui.update()
                     for (car in cars) car.update()
+
                     for (fuel in fuels) fuel.update()
+                    for (fuel in Fuel.fuelsToDel) fuels.remove(fuel)
+                    Fuel.fuelsToDel.clear()
+
+
+                    //spawn fuels
+                    if (fps != Float.POSITIVE_INFINITY && (0 until (Fuel.spawnRate * fps.toInt())).random() == 0) {
+                        fuels.add(Fuel((0 until road.numLanes).random()))
+                        Log.i("View", "Fuel spawned in lane ${fuels.last().lane}")
+                    }
                 }
 
 
@@ -58,10 +68,7 @@ class MainView(context: Context) : SurfaceView(context), Runnable {
 
 
                 val timeElapsed = SystemClock.elapsedRealtime() - initialTime
-                Log.v("View", "time elapsed: $timeElapsed")
-
                 fps = if (timeElapsed == 0L) 2000f else 1000f / timeElapsed
-                Log.v("View", "FPS: $fps")
             }
 
 
@@ -75,13 +82,14 @@ class MainView(context: Context) : SurfaceView(context), Runnable {
     fun setup() {
         Log.i("View", "<---------SETUP--------->")
 
+        holder.setFormat(PixelFormat.RGB_565)
+
         road = Road(context)
         player = Player(context)
         gui = Gui(context)
         cars = mutableListOf()
+        Fuel.init(context)
         fuels = mutableListOf()
-
-        holder.setFormat(PixelFormat.RGB_565)
 
         Log.i("View", "</--------SETUP--------->")
     }

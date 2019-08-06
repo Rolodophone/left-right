@@ -5,7 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.RectF
 
-class Player(context: Context) : GameObject {
+class Player(context: Context) {
     private var img: Bitmap
     var ySpeed = height / 2f
     var xSpeed = width * 5f
@@ -36,15 +36,15 @@ class Player(context: Context) : GameObject {
         opts.inScaled = false
         img = BitmapFactory.decodeResource(context.resources, R.drawable.car1, opts)
 
-        for (i in 1..road.numLanes) {
-            laneXs.add((2f * width * i - width - road.numLanes * w) / (2f * road.numLanes))
+        for (i in 0 until road.numLanes) {
+            laneXs.add(centerOfLane(i) - w / 2f)
         }
 
         lane = 1
     }
 
 
-    override fun update() {
+    fun update() {
         fuel -= 2f / fps
 
         if (goingL) {
@@ -65,7 +65,8 @@ class Player(context: Context) : GameObject {
             }
         }
     }
-    override fun draw() {
+
+    fun draw() {
         canvas.drawBitmap(img, null, dim, paint)
     }
 }
