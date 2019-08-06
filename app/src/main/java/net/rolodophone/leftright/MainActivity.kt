@@ -17,6 +17,7 @@ class MainActivity : Activity() {
     private lateinit var thread: Thread
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        Log.i("Activity", "onCreate()")
         super.onCreate(savedInstanceState)
 
         val dim = Point()
@@ -30,16 +31,17 @@ class MainActivity : Activity() {
         setContentView(mainView)
 
         mainView.setup()
-
-        thread = Thread(mainView)
-        Log.i("Activity", "Starting game thread")
-        thread.start()
     }
 
 
     override fun onStart() {
         Log.i("Activity", "onStart()")
         super.onStart()
+
+        appOpen = true
+        thread = Thread(mainView)
+        thread.name = "LeftRightDraw"
+        thread.start()
     }
     
     
@@ -55,11 +57,6 @@ class MainActivity : Activity() {
     override fun onRestart() {
         Log.i("Activity", "onRestart()")
         super.onRestart()
-
-        appOpen = true
-        Log.i("Activity", "Restarting game thread")
-        thread = Thread(mainView)
-        thread.start()
 
     }
 

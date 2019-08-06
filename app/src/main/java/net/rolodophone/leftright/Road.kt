@@ -5,7 +5,7 @@ import android.graphics.Color
 
 class Road(context: Context) : GameObject {
 
-    val numLines = 2
+    val numLanes = 3
     val lineW = width / 128f
     val lineH = height / 6f
     val lineGap = height / 10f
@@ -14,7 +14,7 @@ class Road(context: Context) : GameObject {
 
 
     override fun update() {
-        topLineBottom += player.speed / fps
+        topLineBottom += player.ySpeed / fps
         topLineBottom %= lineH + lineGap
     }
 
@@ -27,11 +27,11 @@ class Road(context: Context) : GameObject {
         var y = topLineBottom
         while (y <= height + lineH) {
 
-            for (i in 1..numLines) {
+            for (i in 1 until numLanes) {
                 canvas.drawRect(
-                    ((width * i) / (numLines + 1)) - (lineW / 2),
+                    ((width * i) / numLanes) - (lineW / 2),
                     y - lineH,
-                    ((width * i) / (numLines + 1)) + (lineW / 2),
+                    ((width * i) / numLanes) + (lineW / 2),
                     y,
                     paint
                 )

@@ -4,8 +4,10 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
+import android.graphics.PixelFormat
 import android.os.SystemClock
 import android.util.Log
+import android.view.MotionEvent
 import android.view.SurfaceView
 
 
@@ -19,10 +21,8 @@ lateinit var road: Road
 lateinit var gui: Gui
 lateinit var cars: MutableList<Car>
 lateinit var fuels: MutableList<Fuel>
-lateinit var gameLogic: GameLogic
 
 
-@SuppressLint("ViewConstructor")
 class MainView(context: Context) : SurfaceView(context), Runnable {
 
     override fun run() {
@@ -37,7 +37,6 @@ class MainView(context: Context) : SurfaceView(context), Runnable {
                     gui.update()
                     for (car in cars) car.update()
                     for (fuel in fuels) fuel.update()
-                    gameLogic.update()
                 }
 
 
@@ -76,14 +75,43 @@ class MainView(context: Context) : SurfaceView(context), Runnable {
     fun setup() {
         Log.i("View", "<---------SETUP--------->")
 
-        player = Player(context)
         road = Road(context)
+        player = Player(context)
         gui = Gui(context)
         cars = mutableListOf()
         fuels = mutableListOf()
-        gameLogic = GameLogic(context)
 
-        Log.i("View", "</---------SETUP--------->")
+        holder.setFormat(PixelFormat.RGB_565)
+
+        Log.i("View", "</--------SETUP--------->")
+    }
+
+
+    @SuppressLint("ClickableViewAccessibility")
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        if (event?.action == MotionEvent.ACTION_DOWN) {
+
+            if (event.x < width / 2f) {
+
+                //if the player turns in between lanes, set the lane to the lane it would have gone to
+                if (player.goingR) {
+                    player.lane++
+                }
+
+                if (player.lane != 0) player.goingL = true
+                player.goingR = false
+            } else {
+                //if the player turns in between lanes, set the lane to the lane it would have gone to
+                if (player.goingL) {
+                    player.lane--
+                }
+
+                if (player.lane != road.numLanes - 1) player.goingR = true
+                player.goingL = false
+            }
+
+            return true
+        } else return false
     }
 
 
