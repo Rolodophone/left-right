@@ -36,7 +36,7 @@ class Player(context: Context) {
         opts.inScaled = false
         img = BitmapFactory.decodeResource(context.resources, R.drawable.car1, opts)
 
-        for (i in 0 until road.numLanes) {
+        for (i in 0 until Road.NUM_LANES) {
             laneXs.add(centerOfLane(i) - w / 2f)
         }
 
@@ -46,6 +46,7 @@ class Player(context: Context) {
 
     fun update() {
         fuel -= 2f / fps
+        if (fuel <= 0f) gui.gameOver()
 
         if (goingL) {
             dim.offset(-xSpeed / fps, 0f)

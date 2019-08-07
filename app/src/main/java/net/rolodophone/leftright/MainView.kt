@@ -19,8 +19,6 @@ var paint = Paint()
 lateinit var player: Player
 lateinit var road: Road
 lateinit var gui: Gui
-lateinit var cars: MutableList<Car>
-lateinit var fuels: MutableList<Fuel>
 
 
 class MainView(context: Context) : SurfaceView(context), Runnable {
@@ -31,35 +29,19 @@ class MainView(context: Context) : SurfaceView(context), Runnable {
 
             if (holder.surface.isValid) {
 
+                //update
                 if (!paused) {
                     road.update()
                     player.update()
                     gui.update()
-                    for (car in cars) car.update()
-
-                    for (fuel in fuels) fuel.update()
-                    for (fuel in Fuel.fuelsToDel) fuels.remove(fuel)
-                    Fuel.fuelsToDel.clear()
-
-
-                    //spawn fuels
-                    if (fps != Float.POSITIVE_INFINITY && (0 until (Fuel.spawnRate * fps.toInt())).random() == 0) {
-                        fuels.add(Fuel((0 until road.numLanes).random()))
-                        Log.i("View", "Fuel spawned in lane ${fuels.last().lane}")
-                    }
                 }
 
-
+                //draw
                 val c = holder.lockCanvas()
                 if (c != null) {
                     canvas = c
 
-                    //set background to black (for debugging)
-                    //canvas.drawColor(Color.BLACK)
-
                     road.draw()
-                    for (car in cars) car.draw()
-                    for (fuel in fuels) fuel.draw()
                     player.draw()
                     gui.draw()
 
@@ -84,12 +66,11 @@ class MainView(context: Context) : SurfaceView(context), Runnable {
 
         holder.setFormat(PixelFormat.RGB_565)
 
-        road = Road(context)
+        //player initialised first because measurements depend on player's width
         player = Player(context)
+
+        road = Road(context)
         gui = Gui(context)
-        cars = mutableListOf()
-        Fuel.init(context)
-        fuels = mutableListOf()
 
         Log.i("View", "</--------SETUP--------->")
     }
@@ -99,6 +80,7 @@ class MainView(context: Context) : SurfaceView(context), Runnable {
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         if (event?.action == MotionEvent.ACTION_DOWN) {
 
+            //handle turning left and right
             if (event.x < width / 2f) {
 
                 //if the player turns in between lanes, set the lane to the lane it would have gone to
@@ -114,7 +96,7 @@ class MainView(context: Context) : SurfaceView(context), Runnable {
                     player.lane--
                 }
 
-                if (player.lane != road.numLanes - 1) player.goingR = true
+                if (player.lane != Road.NUM_LANES - 1) player.goingR = true
                 player.goingL = false
             }
 

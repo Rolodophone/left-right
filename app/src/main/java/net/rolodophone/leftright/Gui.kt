@@ -44,4 +44,9 @@ class Gui(context: Context) {
         paint.textAlign = Paint.Align.RIGHT
         canvas.drawText(player.fuel.toInt().toString(), width - fuelW - 30f, fuelH, paint)
     }
+
+
+    fun gameOver() {
+
+    }
 }
