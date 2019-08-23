@@ -1,11 +1,10 @@
 package net.rolodophone.leftright
 
 import android.content.Context
-import android.graphics.Color
 
 class Road(context: Context) {
     companion object {
-        const val NUM_LANES = 3
+        val NUM_LANES = 3
     }
     
     val lineW = width / 128f
@@ -17,33 +16,37 @@ class Road(context: Context) {
     var fuels = ItemType(
         context,
         R.drawable.fuel,
-        player.dim.width() * (1f / 2f),
-        player.dim.width() * (4f / 7f),
+        player.dim.width() * 1f / 2f,
+        player.dim.width() * 4f / 7f,
         10
     ) {
-        for (item in it.list) if (item.dim.bottom >= player.dim.top && item.lane == player.lane) {
+        for (item in it.list) if (item.dim.bottom >= player.dim.top && item.dim.top < player.dim.bottom && item.lane == player.lane) {
             player.fuel += 50f
+            player.ySpeed += height / 8f
             it.toDel.add(item)
         }
     }
 
     var cones = ItemType(
-        context, R.drawable.traffic_cone,
-        player.dim.width() * (3f / 4f),
-        player.dim.width() * (3f / 4f),
+        context,
+        R.drawable.traffic_cone,
+        player.dim.width() * 3f / 4f,
+        player.dim.width() * 3f / 4f,
         10
     ) {
         for (item in it.list) if (item.dim.bottom >= player.dim.top && item.lane == player.lane) {
-            gui.gameOver()
+            gameOver()
         }
     }
+
+    val items = mutableListOf(fuels, cones)
 
 
     fun update() {
         topLineBottom += player.ySpeed / fps
         topLineBottom %= lineH + lineGap
 
-        fuels.update()
+        for (item in items) item.update()
     }
 
 
@@ -52,7 +55,6 @@ class Road(context: Context) {
         canvas.drawRGB(111, 111, 111)
 
         //draw lines
-        paint.color = Color.rgb(255, 255, 255)
         var y = topLineBottom
         while (y <= height + lineH) {
 
@@ -70,7 +72,7 @@ class Road(context: Context) {
         }
 
 
-        //draw fuels
-        fuels.draw()
+        //draw items
+        for (item in items) item.draw()
     }
 }

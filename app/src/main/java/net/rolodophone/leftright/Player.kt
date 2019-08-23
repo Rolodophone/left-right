@@ -14,7 +14,7 @@ class Player(context: Context) {
     private val w = width / 4f
     private val h = w * 2f
     private val x = (width - w) / 2f
-    private val y = height - (h / 2f)
+    private val y = height - h / 2f
     var dim = RectF(
         x,
         y,
@@ -46,7 +46,10 @@ class Player(context: Context) {
 
     fun update() {
         fuel -= 2f / fps
-        if (fuel <= 0f) gui.gameOver()
+        if (fuel <= 0f) gameOver()
+
+        //speed up over time
+        ySpeed += height / 128f / fps
 
         if (goingL) {
             dim.offset(-xSpeed / fps, 0f)

@@ -5,3 +5,8 @@ fun centerOfLane(lane: Int): Float {
 
     return (2f * width * (lane + 1) - width) / (2f * Road.NUM_LANES)
 }
+
+
+fun gameOver() {
+    state = PAUSED
+}

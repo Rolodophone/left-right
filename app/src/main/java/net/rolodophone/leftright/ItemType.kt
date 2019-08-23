@@ -45,7 +45,7 @@ class ItemType(
             item.dim.offset(0f, player.ySpeed / fps)
 
             //mark offscreen items for deletion
-            if (item.dim.top > height) toDel.add(item)
+            if (item.dim.top > height + player.dim.height()) toDel.add(item)
         }
 
         //remove items marked for deletion

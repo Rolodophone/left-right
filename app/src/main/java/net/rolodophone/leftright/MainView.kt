@@ -3,6 +3,7 @@ package net.rolodophone.leftright
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.PixelFormat
 import android.os.SystemClock
@@ -11,7 +12,11 @@ import android.view.MotionEvent
 import android.view.SurfaceView
 
 
-var paused = false
+const val MAIN: Byte = 0
+const val GAME: Byte = 1
+const val PAUSED: Byte = 2
+
+var state = GAME
 var fps = Float.POSITIVE_INFINITY
 var canvas = Canvas()
 var paint = Paint()
@@ -30,10 +35,9 @@ class MainView(context: Context) : SurfaceView(context), Runnable {
             if (holder.surface.isValid) {
 
                 //update
-                if (!paused) {
+                if (state == GAME) {
                     road.update()
                     player.update()
-                    gui.update()
                 }
 
                 //draw
@@ -41,9 +45,11 @@ class MainView(context: Context) : SurfaceView(context), Runnable {
                 if (c != null) {
                     canvas = c
 
-                    road.draw()
-                    player.draw()
-                    gui.draw()
+                    if (state == GAME) {
+                        road.draw()
+                        player.draw()
+                        gui.gameGui.draw()
+                    }
 
                     holder.unlockCanvasAndPost(canvas)
                 }
@@ -66,10 +72,12 @@ class MainView(context: Context) : SurfaceView(context), Runnable {
 
         holder.setFormat(PixelFormat.RGB_565)
 
+        paint.color = Color.rgb(255, 255, 255)
+
         //player initialised first because measurements depend on player's width
         player = Player(context)
-
         road = Road(context)
+
         gui = Gui(context)
 
         Log.i("View", "</--------SETUP--------->")
@@ -77,8 +85,23 @@ class MainView(context: Context) : SurfaceView(context), Runnable {
 
 
     @SuppressLint("ClickableViewAccessibility")
+
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         if (event?.action == MotionEvent.ACTION_DOWN) {
+
+            //handle unpausing
+            if (state == PAUSED) {
+                state = GAME
+                return true
+            }
+
+
+            //handle pausing
+            if (state == GAME && event.x < gui.gameGui.pauseW + 2 * Gui.padding && event.y > height - gui.gameGui.pauseH - 2 * Gui.padding) {
+                state = PAUSED
+                return true
+            }
+
 
             //handle turning left and right
             if (event.x < width / 2f) {
@@ -106,14 +129,14 @@ class MainView(context: Context) : SurfaceView(context), Runnable {
 
 
     fun pause() {
-        paused = true
+        if (state == GAME) state = PAUSED
         Log.i("View", "Paused")
     }
 
 
     // Called once at the same time as run()
     fun resume() {
-        paused = false
+        if (state == PAUSED) state = GAME
         Log.i("View", "Resumed")
     }
 
