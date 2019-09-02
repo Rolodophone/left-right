@@ -8,8 +8,11 @@ import android.util.Log
 var appOpen = true
 var width = 0f
 var height = 0f
+var halfWidth = 0f
+var halfHeight = 0f
+var unit = 0f
 
-const val isDebug = false
+const val isDebug = true
 
 class MainActivity : Activity() {
 
@@ -24,6 +27,9 @@ class MainActivity : Activity() {
         windowManager.defaultDisplay.getSize(dim)
         width = dim.x.toFloat()
         height = dim.y.toFloat()
+        halfWidth = width / 2f
+        halfHeight = height / 2f
+        unit = width / 360f
         Log.i("Activity", "width: $width height: $height")
 
         mainView = MainView(this)
@@ -66,7 +72,7 @@ class MainActivity : Activity() {
         super.onStop()
 
         appOpen = false
-        Log.i("Activity", "Joining game thread")
+        Log.i("Activity", "Joining status thread")
         thread.join()
     }
     

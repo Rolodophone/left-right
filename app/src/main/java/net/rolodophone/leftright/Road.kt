@@ -6,23 +6,22 @@ class Road(context: Context) {
     companion object {
         val NUM_LANES = 3
     }
-    
-    val lineW = width / 128f
-    val lineH = height / 6f
-    val lineGap = height / 10f
+
+    val lineW = !3
+    val lineH = !100
+    val lineGap = !40
 
     var topLineBottom = 0f
 
     var fuels = ItemType(
         context,
         R.drawable.fuel,
-        player.dim.width() * 1f / 2f,
-        player.dim.width() * 4f / 7f,
+        !45,
+        !45 * 8f / 7f,
         10
     ) {
         for (item in it.list) if (item.dim.bottom >= player.dim.top && item.dim.top < player.dim.bottom && item.lane == player.lane) {
             player.fuel += 50f
-            player.ySpeed += height / 8f
             it.toDel.add(item)
         }
     }
@@ -30,11 +29,11 @@ class Road(context: Context) {
     var cones = ItemType(
         context,
         R.drawable.traffic_cone,
-        player.dim.width() * 3f / 4f,
-        player.dim.width() * 3f / 4f,
+        !45,
+        !45,
         10
     ) {
-        for (item in it.list) if (item.dim.bottom >= player.dim.top && item.lane == player.lane) {
+        for (item in it.list) if (item.dim.bottom >= player.dim.top && item.dim.top < player.dim.bottom && item.lane == player.lane) {
             gameOver()
         }
     }

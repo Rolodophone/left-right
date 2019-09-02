@@ -10,6 +10,7 @@ import android.os.SystemClock
 import android.util.Log
 import android.view.MotionEvent
 import android.view.SurfaceView
+import net.rolodophone.leftright.Gui.Companion.padding
 
 
 const val MAIN: Byte = 0
@@ -48,7 +49,15 @@ class MainView(context: Context) : SurfaceView(context), Runnable {
                     if (state == GAME) {
                         road.draw()
                         player.draw()
-                        gui.gameGui.draw()
+                        gui.status.draw()
+                        gui.game.draw()
+                    }
+
+                    if (state == PAUSED) {
+                        road.draw()
+                        player.draw()
+                        gui.status.draw()
+                        gui.paused.draw()
                     }
 
                     holder.unlockCanvasAndPost(canvas)
@@ -97,14 +106,14 @@ class MainView(context: Context) : SurfaceView(context), Runnable {
 
 
             //handle pausing
-            if (state == GAME && event.x < gui.gameGui.pauseW + 2 * Gui.padding && event.y > height - gui.gameGui.pauseH - 2 * Gui.padding) {
+            if (state == GAME && event.x < gui.game.pauseW + 2 * padding && event.y > height - gui.game.pauseH - 2 * padding) {
                 state = PAUSED
                 return true
             }
 
 
             //handle turning left and right
-            if (event.x < width / 2f) {
+            if (event.x < halfWidth) {
 
                 //if the player turns in between lanes, set the lane to the lane it would have gone to
                 if (player.goingR) {

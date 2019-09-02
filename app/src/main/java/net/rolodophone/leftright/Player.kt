@@ -7,13 +7,13 @@ import android.graphics.RectF
 
 class Player(context: Context) {
     private var img: Bitmap
-    var ySpeed = height / 2f
-    var xSpeed = width * 5f
+    var ySpeed = !360
+    var xSpeed = !1800
     var fuel = 50f
 
-    private val w = width / 4f
-    private val h = w * 2f
-    private val x = (width - w) / 2f
+    private val w = !90
+    private val h = !180
+    private val x = halfWidth - w / 2f
     private val y = height - h / 2f
     var dim = RectF(
         x,
@@ -49,7 +49,7 @@ class Player(context: Context) {
         if (fuel <= 0f) gameOver()
 
         //speed up over time
-        ySpeed += height / 128f / fps
+        ySpeed += !3 / fps
 
         if (goingL) {
             dim.offset(-xSpeed / fps, 0f)
