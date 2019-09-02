@@ -99,7 +99,7 @@ class MainView(context: Context) : SurfaceView(context), Runnable {
         if (event?.action == MotionEvent.ACTION_DOWN) {
 
             //handle unpausing
-            if (state == PAUSED) {
+            if (state == PAUSED && event.x > !90 && event.x < !270 && event.y > halfHeight + !5 && event.y < halfHeight + !49) {
                 state = GAME
                 return true
             }

@@ -1,10 +1,7 @@
 package net.rolodophone.leftright
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Paint
-import android.graphics.RectF
+import android.graphics.*
 
 class Gui(context: Context) {
     companion object {
@@ -14,6 +11,7 @@ class Gui(context: Context) {
     val game = Game()
     val status = Status(context)
     val paused = Paused()
+    val gameOver = GameOver()
 
 
     class Game {
@@ -64,7 +62,7 @@ class Gui(context: Context) {
                 paint.textAlign = Paint.Align.LEFT
 
                 canvas.drawText(fps.toInt().toString(), !2, !20, paint)
-                //canvas.drawText("Player speed: ${player.ySpeed}", !2, !20, paint)
+                //canvas.drawText("Player speed: ${player.ySpeed}", !2, !40, paint)
             }
 
             //draw fuel meter
@@ -77,33 +75,44 @@ class Gui(context: Context) {
 
 
     class Paused {
-        val pauseW = halfWidth
-        val pauseH = pauseW
+        var resume = Path()
 
-        val resumeW = !45
-        val resumeH = !45
+        init {
+            resume.moveTo(!87, halfHeight + !5)
+            resume.lineTo(!87, halfHeight + !49)
+            resume.lineTo(!120, halfHeight + !27)
+            resume.close()
+        }
 
         fun draw() {
             //draw paused icon
             canvas.drawRect(
-                halfWidth - pauseW / 2f,
-                height / 5f,
-                halfWidth - pauseW / 6f,
-                height / 5f + pauseH,
+                !90,
+                halfHeight - !190,
+                !150,
+                halfHeight - !10,
                 paint
             )
             canvas.drawRect(
-                halfWidth + pauseW / 6f,
-                height / 5f,
-                halfWidth + pauseW / 2f,
-                height / 5f + pauseH,
+                !210,
+                halfHeight - !190,
+                !270,
+                halfHeight - !10,
                 paint
             )
 
             //draw resume icon
-//            canvas.drawRect(
-//
-//            )
+            canvas.drawPath(resume, paint)
+            paint.textSize = !40
+            paint.textAlign = Paint.Align.LEFT
+            canvas.drawText("Resume", !132, halfHeight + !39, paint)
+        }
+    }
+
+
+    class GameOver {
+        fun draw() {
+
         }
     }
 }
