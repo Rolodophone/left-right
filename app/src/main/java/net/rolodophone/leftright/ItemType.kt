@@ -67,6 +67,6 @@ class ItemType(
 
 
     fun draw() {
-        for (item in list) canvas.drawBitmap(img, null, item.dim, paint)
+        for (item in list) canvas.drawBitmap(img, null, item.dim, pWhite)
     }
 }

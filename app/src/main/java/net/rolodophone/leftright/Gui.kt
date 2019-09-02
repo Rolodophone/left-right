@@ -26,14 +26,14 @@ class Gui(context: Context) {
                 height - padding - pauseH,
                 padding + pauseW / 3f,
                 height - padding,
-                paint
+                pWhite
             )
             canvas.drawRect(
                 padding + pauseW * 2f / 3f,
                 height - padding - pauseH,
                 padding + pauseW,
                 height - padding,
-                paint
+                pWhite
             )
         }
     }
@@ -57,19 +57,18 @@ class Gui(context: Context) {
         }
 
         fun draw() {
-            if (isDebug) {
-                paint.textSize = !22
-                paint.textAlign = Paint.Align.LEFT
+            pWhite.textSize = !22
 
-                canvas.drawText(fps.toInt().toString(), !2, !20, paint)
-                //canvas.drawText("Player speed: ${player.ySpeed}", !2, !40, paint)
-            }
 
             //draw fuel meter
-            canvas.drawBitmap(fuelImg, null, fuelDim, paint)
-            paint.textSize = !22
-            paint.textAlign = Paint.Align.RIGHT
-            canvas.drawText(player.fuel.toInt().toString(), width - fuelW - !9, fuelH, paint)
+            canvas.drawBitmap(fuelImg, null, fuelDim, pWhite)
+
+            pWhite.textAlign = Paint.Align.RIGHT
+            canvas.drawText(player.fuel.toInt().toString(), width - fuelW - !9, !25, pWhite)
+
+            //draw distance
+            pWhite.textAlign = Paint.Align.LEFT
+            canvas.drawText(player.distance.toInt().toString() + "m", !7, !25, pWhite)
         }
     }
 
@@ -85,33 +84,39 @@ class Gui(context: Context) {
         }
 
         fun draw() {
+            //dim rest of screen
+            canvas.drawRect(0f, 0f, width, height, pDimmer)
+
             //draw paused icon
             canvas.drawRect(
                 !90,
                 halfHeight - !190,
                 !150,
                 halfHeight - !10,
-                paint
+                pWhite
             )
             canvas.drawRect(
                 !210,
                 halfHeight - !190,
                 !270,
                 halfHeight - !10,
-                paint
+                pWhite
             )
 
             //draw resume icon
-            canvas.drawPath(resume, paint)
-            paint.textSize = !40
-            paint.textAlign = Paint.Align.LEFT
-            canvas.drawText("Resume", !132, halfHeight + !39, paint)
+            canvas.drawPath(resume, pWhite)
+            pWhite.textSize = !40
+            pWhite.textAlign = Paint.Align.LEFT
+            canvas.drawText("Resume", !132, halfHeight + !39, pWhite)
         }
     }
 
 
     class GameOver {
         fun draw() {
+            //dim rest of screen
+            canvas.drawRect(0f, 0f, width, height, pDimmer)
+
 
         }
     }

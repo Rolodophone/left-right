@@ -7,8 +7,9 @@ fun centerOfLane(lane: Int): Float {
 }
 
 
-fun gameOver() {
-    state = PAUSED
+fun gameOver(cause: String) {
+
+    state = GAMEOVER
 }
 
 operator fun Int.not() = unit * this

@@ -34,7 +34,7 @@ class Road(context: Context) {
         10
     ) {
         for (item in it.list) if (item.dim.bottom >= player.dim.top && item.dim.top < player.dim.bottom && item.lane == player.lane) {
-            gameOver()
+            gameOver("Crashed into cone")
         }
     }
 
@@ -63,7 +63,7 @@ class Road(context: Context) {
                     y - lineH,
                     ((width * i) / NUM_LANES) + (lineW / 2),
                     y,
-                    paint
+                    pWhite
                 )
             }
 

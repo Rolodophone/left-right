@@ -16,11 +16,14 @@ import net.rolodophone.leftright.Gui.Companion.padding
 const val MAIN: Byte = 0
 const val GAME: Byte = 1
 const val PAUSED: Byte = 2
+const val GAMEOVER: Byte = 3
 
 var state = GAME
 var fps = Float.POSITIVE_INFINITY
 var canvas = Canvas()
-var paint = Paint()
+
+var pWhite = Paint()
+var pDimmer = Paint()
 
 lateinit var player: Player
 lateinit var road: Road
@@ -46,18 +49,31 @@ class MainView(context: Context) : SurfaceView(context), Runnable {
                 if (c != null) {
                     canvas = c
 
-                    if (state == GAME) {
-                        road.draw()
-                        player.draw()
-                        gui.status.draw()
-                        gui.game.draw()
-                    }
+                    when (state) {
 
-                    if (state == PAUSED) {
-                        road.draw()
-                        player.draw()
-                        gui.status.draw()
-                        gui.paused.draw()
+                        MAIN -> {
+
+                        }
+
+                        GAME -> {
+                            road.draw()
+                            player.draw()
+                            gui.status.draw()
+                            gui.game.draw()
+                        }
+
+                        PAUSED -> {
+                            road.draw()
+                            player.draw()
+                            gui.status.draw()
+                            gui.paused.draw()
+                        }
+
+                        GAMEOVER -> {
+                            road.draw()
+                            player.draw()
+                            gui.gameOver.draw()
+                        }
                     }
 
                     holder.unlockCanvasAndPost(canvas)
@@ -81,7 +97,8 @@ class MainView(context: Context) : SurfaceView(context), Runnable {
 
         holder.setFormat(PixelFormat.RGB_565)
 
-        paint.color = Color.rgb(255, 255, 255)
+        pWhite.color = Color.rgb(255, 255, 255)
+        pDimmer.color = Color.argb(100, 0, 0, 0)
 
         //player initialised first because measurements depend on player's width
         player = Player(context)
