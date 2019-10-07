@@ -7,10 +7,7 @@ fun centerOfLane(lane: Int): Float {
 }
 
 
-fun gameOver(cause: String) {
-
-    state = GAMEOVER
-}
-
-operator fun Int.not() = unit * this
-operator fun Float.not() = unit * this
+fun w(n: Int): Float = wUnit * n
+fun w(n: Float): Float = wUnit * n
+fun h(n: Int): Float = hUnit * n
+fun h(n: Float): Float = hUnit * n

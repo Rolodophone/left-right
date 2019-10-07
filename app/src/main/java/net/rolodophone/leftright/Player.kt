@@ -7,8 +7,8 @@ import android.graphics.RectF
 
 class Player(context: Context) {
     private var img: Bitmap
-    var ySpeed = !360
-    val xSpeed = !1800
+    var ySpeed = w(360)
+    val xSpeed = w(1800)
 
     var fuel = 50f
     var distance = 0f
@@ -16,8 +16,8 @@ class Player(context: Context) {
     var causeOfDeath = ""
 
 
-    private val w = !90
-    private val h = !180
+    private val w = w(90)
+    private val h = w(180)
     private val x = halfWidth - w / 2f
     private val y = height - h / 2f
     var dim = RectF(
@@ -51,12 +51,12 @@ class Player(context: Context) {
 
     fun update() {
         fuel -= 2f / fps
-        if (fuel <= 0f) gameOver("Ran out of fuel")
+        if (fuel <= 0f) die("Ran out of fuel!")
 
         distance += (ySpeed / width * 4) / fps
 
         //speed up over time
-        ySpeed += !3 / fps
+        ySpeed += w(3) / fps
 
         if (goingL) {
             dim.offset(-xSpeed / fps, 0f)
@@ -79,5 +79,12 @@ class Player(context: Context) {
 
     fun draw() {
         canvas.drawBitmap(img, null, dim, pWhite)
+    }
+
+
+    fun die(msg: String) {
+        causeOfDeath = msg
+        gui.gameOver.setup()
+        state = GAMEOVER
     }
 }

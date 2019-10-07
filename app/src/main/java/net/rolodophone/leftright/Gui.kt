@@ -5,18 +5,18 @@ import android.graphics.*
 
 class Gui(context: Context) {
     companion object {
-        val padding = !5
+        val padding = w(5)
     }
 
     val game = Game()
     val status = Status(context)
     val paused = Paused()
-    val gameOver = GameOver()
+    val gameOver = GameOver(context)
 
 
     class Game {
-        val pauseW = !45
-        val pauseH = !45
+        val pauseW = w(45)
+        val pauseH = w(45)
 
         fun draw() {
 
@@ -41,13 +41,13 @@ class Gui(context: Context) {
 
     class Status(context: Context) {
         var fuelImg: Bitmap
-        val fuelW = !22
+        val fuelW = w(22)
         val fuelH = fuelW * (16f / 14f)
         val fuelDim = RectF(
             width - fuelW - padding,
-            padding,
+            padding + statusBarHeight,
             width - padding,
-            padding + fuelH
+            padding + fuelH + statusBarHeight
         )
 
         init {
@@ -57,18 +57,28 @@ class Gui(context: Context) {
         }
 
         fun draw() {
-            pWhite.textSize = !22
+            pWhite.textSize = w(22)
 
 
             //draw fuel meter
             canvas.drawBitmap(fuelImg, null, fuelDim, pWhite)
 
             pWhite.textAlign = Paint.Align.RIGHT
-            canvas.drawText(player.fuel.toInt().toString(), width - fuelW - !9, !25, pWhite)
+            canvas.drawText(
+                player.fuel.toInt().toString(),
+                width - fuelW - w(9),
+                w(25) + statusBarHeight,
+                pWhite
+            )
 
             //draw distance
             pWhite.textAlign = Paint.Align.LEFT
-            canvas.drawText(player.distance.toInt().toString() + "m", !7, !25, pWhite)
+            canvas.drawText(
+                player.distance.toInt().toString() + "m",
+                w(7),
+                w(25) + statusBarHeight,
+                pWhite
+            )
         }
     }
 
@@ -77,9 +87,9 @@ class Gui(context: Context) {
         var resume = Path()
 
         init {
-            resume.moveTo(!87, halfHeight + !5)
-            resume.lineTo(!87, halfHeight + !49)
-            resume.lineTo(!120, halfHeight + !27)
+            resume.moveTo(w(87), halfHeight + w(5))
+            resume.lineTo(w(87), halfHeight + w(49))
+            resume.lineTo(w(120), halfHeight + w(27))
             resume.close()
         }
 
@@ -89,35 +99,64 @@ class Gui(context: Context) {
 
             //draw paused icon
             canvas.drawRect(
-                !90,
-                halfHeight - !190,
-                !150,
-                halfHeight - !10,
+                w(90),
+                halfHeight - w(190),
+                w(150),
+                halfHeight - w(10),
                 pWhite
             )
             canvas.drawRect(
-                !210,
-                halfHeight - !190,
-                !270,
-                halfHeight - !10,
+                w(210),
+                halfHeight - w(190),
+                w(270),
+                halfHeight - w(10),
                 pWhite
             )
 
             //draw resume icon
             canvas.drawPath(resume, pWhite)
-            pWhite.textSize = !40
+            pWhite.textSize = w(40)
             pWhite.textAlign = Paint.Align.LEFT
-            canvas.drawText("Resume", !132, halfHeight + !39, pWhite)
+            canvas.drawText("Resume", w(132), halfHeight + w(39), pWhite)
         }
     }
 
 
-    class GameOver {
+    class GameOver(context: Context) {
+        val deathMsgPaint = Paint()
+
+        var alpha = 0
+
+        var deathMsgImg: Bitmap
+        val deathMsgDim = RectF(
+            w(30),
+            w(330),
+            h(80),
+            h(80) + w(72.972972973f)
+        )
+
+        init {
+            val opts = BitmapFactory.Options()
+            opts.inScaled = false
+            deathMsgImg =
+                BitmapFactory.decodeResource(context.resources, R.drawable.death_msg, opts)
+        }
+
+
+        fun setup() {
+            alpha = 0
+        }
+
+
         fun draw() {
             //dim rest of screen
             canvas.drawRect(0f, 0f, width, height, pDimmer)
 
+            alpha += (50f / fps).toInt()
+            if (alpha > 100) alpha = 100
 
+            deathMsgPaint.setARGB(100, 255, 255, 255)
+            canvas.drawBitmap(deathMsgImg, null, deathMsgDim, pWhite)
         }
     }
 }

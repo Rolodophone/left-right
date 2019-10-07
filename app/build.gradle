@@ -7,7 +7,7 @@ apply plugin: 'kotlin-android-extensions'
 android {
     signingConfigs {
         release {
-            storeFile file('C:\\Users\\Admin\\Documents\\Programming\\AndroidStudio\\LeftRight\\app\\keys\\keys.jks')
+            storeFile file('keys/keys.jks')
             storePassword '***REMOVED***'
             keyPassword '***REMOVED***'
             keyAlias = '***REMOVED***'
@@ -16,10 +16,9 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "net.rolodophone.leftright"
-        minSdkVersion 15
+        minSdkVersion 21
         targetSdkVersion 28
         versionCode 1
-        versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

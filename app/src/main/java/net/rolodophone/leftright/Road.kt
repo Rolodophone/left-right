@@ -7,17 +7,17 @@ class Road(context: Context) {
         val NUM_LANES = 3
     }
 
-    val lineW = !3
-    val lineH = !100
-    val lineGap = !40
+    val lineW = w(3)
+    val lineH = w(100)
+    val lineGap = w(40)
 
     var topLineBottom = 0f
 
     var fuels = ItemType(
         context,
         R.drawable.fuel,
-        !45,
-        !45 * 8f / 7f,
+        w(45),
+        w(45) * 8f / 7f,
         10
     ) {
         for (item in it.list) if (item.dim.bottom >= player.dim.top && item.dim.top < player.dim.bottom && item.lane == player.lane) {
@@ -29,12 +29,12 @@ class Road(context: Context) {
     var cones = ItemType(
         context,
         R.drawable.traffic_cone,
-        !45,
-        !45,
+        w(45),
+        w(45),
         10
     ) {
         for (item in it.list) if (item.dim.bottom >= player.dim.top && item.dim.top < player.dim.bottom && item.lane == player.lane) {
-            gameOver("Crashed into cone")
+            player.die("Crashed into cone")
         }
     }
 

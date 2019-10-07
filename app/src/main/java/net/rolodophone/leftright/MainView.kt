@@ -1,6 +1,7 @@
 package net.rolodophone.leftright
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
@@ -10,6 +11,7 @@ import android.os.SystemClock
 import android.util.Log
 import android.view.MotionEvent
 import android.view.SurfaceView
+import android.view.WindowManager
 import net.rolodophone.leftright.Gui.Companion.padding
 
 
@@ -98,7 +100,17 @@ class MainView(context: Context) : SurfaceView(context), Runnable {
         holder.setFormat(PixelFormat.RGB_565)
 
         pWhite.color = Color.rgb(255, 255, 255)
+        pWhite.isAntiAlias = true
         pDimmer.color = Color.argb(100, 0, 0, 0)
+
+
+        val activity = context as Activity
+        val window = activity.window
+
+        window.statusBarColor = Color.argb(0, 0, 0, 0)
+
+        window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_IN_OVERSCAN)
+
 
         //player initialised first because measurements depend on player's width
         player = Player(context)
@@ -116,7 +128,10 @@ class MainView(context: Context) : SurfaceView(context), Runnable {
         if (event?.action == MotionEvent.ACTION_DOWN) {
 
             //handle unpausing
-            if (state == PAUSED && event.x > !90 && event.x < !270 && event.y > halfHeight + !5 && event.y < halfHeight + !49) {
+            if (state == PAUSED && event.x > w(90) && event.x < w(270) && event.y > halfHeight + w(5) && event.y < halfHeight + w(
+                    49
+                )
+            ) {
                 state = GAME
                 return true
             }
