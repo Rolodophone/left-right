@@ -16,7 +16,7 @@ var wUnit = 0f
 var hUnit = 0f
 var statusBarHeight = 0
 
-const val isDebug = false
+const val isDebug = true
 
 class MainActivity : Activity() {
 

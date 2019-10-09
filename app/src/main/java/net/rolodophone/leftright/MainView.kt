@@ -62,6 +62,7 @@ class MainView(context: Context) : SurfaceView(context), Runnable {
                             player.draw()
                             gui.status.draw()
                             gui.game.draw()
+                            if (isDebug) gui.debug.draw()
                         }
 
                         PAUSED -> {
@@ -69,12 +70,14 @@ class MainView(context: Context) : SurfaceView(context), Runnable {
                             player.draw()
                             gui.status.draw()
                             gui.paused.draw()
+                            if (isDebug) gui.debug.draw()
                         }
 
                         GAMEOVER -> {
                             road.draw()
                             player.draw()
                             gui.gameOver.draw()
+                            if (isDebug) gui.debug.draw()
                         }
                     }
 

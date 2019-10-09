@@ -2,6 +2,8 @@ package net.rolodophone.leftright
 
 import android.content.Context
 import android.graphics.*
+import android.os.SystemClock
+import kotlin.random.Random
 
 class Gui(context: Context) {
     companion object {
@@ -9,6 +11,7 @@ class Gui(context: Context) {
     }
 
     val game = Game()
+    val debug = Debug()
     val status = Status(context)
     val paused = Paused()
     val gameOver = GameOver(context)
@@ -35,6 +38,22 @@ class Gui(context: Context) {
                 height - padding,
                 pWhite
             )
+        }
+    }
+
+
+    class Debug {
+        var prevTime = SystemClock.elapsedRealtime()
+        var viewFps = fps.toInt()
+
+        fun draw() {
+            //draw fps
+            if (SystemClock.elapsedRealtime() > prevTime + 500) {
+                viewFps = fps.toInt()
+                prevTime = SystemClock.elapsedRealtime()
+            }
+            pWhite.textAlign = Paint.Align.LEFT
+            canvas.drawText("FPS: $viewFps", padding, w(50) + padding + statusBarHeight, pWhite)
         }
     }
 
@@ -125,13 +144,15 @@ class Gui(context: Context) {
     class GameOver(context: Context) {
         val deathMsgPaint = Paint()
 
-        var alpha = 0
+        var alpha = 0f
+        var rotation = 0f
+        var maxRotation = 0f
 
         var deathMsgImg: Bitmap
         val deathMsgDim = RectF(
             w(30),
-            w(330),
             h(80),
+            w(330),
             h(80) + w(72.972972973f)
         )
 
@@ -144,7 +165,9 @@ class Gui(context: Context) {
 
 
         fun setup() {
-            alpha = 0
+            alpha = 0f
+            rotation = 0f
+            maxRotation = -35f + Random.nextFloat() * (70f)
         }
 
 
@@ -152,11 +175,13 @@ class Gui(context: Context) {
             //dim rest of screen
             canvas.drawRect(0f, 0f, width, height, pDimmer)
 
-            alpha += (50f / fps).toInt()
-            if (alpha > 100) alpha = 100
 
-            deathMsgPaint.setARGB(100, 255, 255, 255)
-            canvas.drawBitmap(deathMsgImg, null, deathMsgDim, pWhite)
+            alpha += 25f / fps
+            rotation += (maxRotation / 4f) / fps
+            if (alpha > 100f) alpha = 100f
+            if (rotation > maxRotation) rotation = maxRotation
+
+            canvas.drawBitmap(deathMsgImg, null, deathMsgDim, deathMsgPaint)
         }
     }
 }
