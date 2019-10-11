@@ -63,7 +63,7 @@ class Road(context: Context) {
                     y - lineH,
                     ((width * i) / NUM_LANES) + (lineW / 2),
                     y,
-                    pWhite
+                    whitePaint
                 )
             }
 

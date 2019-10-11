@@ -29,31 +29,70 @@ class Gui(context: Context) {
                 height - padding - pauseH,
                 padding + pauseW / 3f,
                 height - padding,
-                pWhite
+                whitePaint
             )
             canvas.drawRect(
                 padding + pauseW * 2f / 3f,
                 height - padding - pauseH,
                 padding + pauseW,
                 height - padding,
-                pWhite
+                whitePaint
             )
         }
     }
 
 
     class Debug {
+        val showFps = true
+        val showGrid = true
+
+        val gridPaint = Paint()
+
         var prevTime = SystemClock.elapsedRealtime()
         var viewFps = fps.toInt()
 
+        init {
+            gridPaint.color = Color.argb(100, 255, 255, 255)
+        }
+
         fun draw() {
             //draw fps
-            if (SystemClock.elapsedRealtime() > prevTime + 500) {
-                viewFps = fps.toInt()
-                prevTime = SystemClock.elapsedRealtime()
+            if (showFps) {
+                if (SystemClock.elapsedRealtime() > prevTime + 500) {
+                    viewFps = fps.toInt()
+                    prevTime = SystemClock.elapsedRealtime()
+                }
+                whitePaint.textAlign = Paint.Align.LEFT
+                canvas.drawText("FPS: $viewFps", padding, w(50) + padding + statusBarHeight, whitePaint)
             }
-            pWhite.textAlign = Paint.Align.LEFT
-            canvas.drawText("FPS: $viewFps", padding, w(50) + padding + statusBarHeight, pWhite)
+
+            //draw grid
+            if (showGrid) {
+
+                var x = w(20)
+                while (x <= w(340)) {
+                    canvas.drawLine(x, 0f, x, height, gridPaint)
+                    x += w(20)
+                }
+
+                x = w(120)
+                while (x <= w(240)) {
+                    canvas.drawLine(x, 0f, x, height, whitePaint)
+                    x += w(120)
+                }
+
+                var y = h(20)
+                while (y <= h(340.001f)) {
+                    canvas.drawLine(0f, y, width, y, gridPaint)
+                    y += h(20)
+                }
+
+                y = h(120)
+                while (y <= h(240)) {
+                    canvas.drawLine(0f, y, width, y, whitePaint)
+                    y += h(120)
+                }
+            }
         }
     }
 
@@ -76,27 +115,27 @@ class Gui(context: Context) {
         }
 
         fun draw() {
-            pWhite.textSize = w(22)
+            whitePaint.textSize = w(22)
 
 
             //draw fuel meter
-            canvas.drawBitmap(fuelImg, null, fuelDim, pWhite)
+            canvas.drawBitmap(fuelImg, null, fuelDim, whitePaint)
 
-            pWhite.textAlign = Paint.Align.RIGHT
+            whitePaint.textAlign = Paint.Align.RIGHT
             canvas.drawText(
                 player.fuel.toInt().toString(),
                 width - fuelW - w(9),
                 w(25) + statusBarHeight,
-                pWhite
+                whitePaint
             )
 
             //draw distance
-            pWhite.textAlign = Paint.Align.LEFT
+            whitePaint.textAlign = Paint.Align.LEFT
             canvas.drawText(
                 player.distance.toInt().toString() + "m",
                 w(7),
                 w(25) + statusBarHeight,
-                pWhite
+                whitePaint
             )
         }
     }
@@ -114,7 +153,7 @@ class Gui(context: Context) {
 
         fun draw() {
             //dim rest of screen
-            canvas.drawRect(0f, 0f, width, height, pDimmer)
+            canvas.drawRect(0f, 0f, width, height, dimmerPaint)
 
             //draw paused icon
             canvas.drawRect(
@@ -122,21 +161,21 @@ class Gui(context: Context) {
                 halfHeight - w(190),
                 w(150),
                 halfHeight - w(10),
-                pWhite
+                whitePaint
             )
             canvas.drawRect(
                 w(210),
                 halfHeight - w(190),
                 w(270),
                 halfHeight - w(10),
-                pWhite
+                whitePaint
             )
 
             //draw resume icon
-            canvas.drawPath(resume, pWhite)
-            pWhite.textSize = w(40)
-            pWhite.textAlign = Paint.Align.LEFT
-            canvas.drawText("Resume", w(132), halfHeight + w(39), pWhite)
+            canvas.drawPath(resume, whitePaint)
+            whitePaint.textSize = w(40)
+            whitePaint.textAlign = Paint.Align.LEFT
+            canvas.drawText("Resume", w(132), halfHeight + w(39), whitePaint)
         }
     }
 
@@ -147,6 +186,7 @@ class Gui(context: Context) {
         var alpha = 0f
         var rotation = 0f
         var maxRotation = 0f
+        var scale = 0f
 
         var deathMsgImg: Bitmap
         val deathMsgDim = RectF(
@@ -159,29 +199,37 @@ class Gui(context: Context) {
         init {
             val opts = BitmapFactory.Options()
             opts.inScaled = false
-            deathMsgImg =
-                BitmapFactory.decodeResource(context.resources, R.drawable.death_msg, opts)
+            deathMsgImg = BitmapFactory.decodeResource(context.resources, R.drawable.death_msg, opts)
         }
 
 
         fun setup() {
             alpha = 0f
             rotation = 0f
-            maxRotation = -35f + Random.nextFloat() * (70f)
+            maxRotation = -20f + Random.nextFloat() * 40f
+            scale = 0f
         }
 
 
         fun draw() {
             //dim rest of screen
-            canvas.drawRect(0f, 0f, width, height, pDimmer)
+            canvas.drawRect(0f, 0f, width, height, dimmerPaint)
 
 
-            alpha += 25f / fps
-            rotation += (maxRotation / 4f) / fps
-            if (alpha > 100f) alpha = 100f
+            alpha += 2040f / fps
+            rotation += (maxRotation * 8f) / fps
+            scale += 8f / fps
+
+            if (alpha > 255f) alpha = 255f
             if (rotation > maxRotation) rotation = maxRotation
+            if (scale > 1f) scale = 1f
 
-            canvas.drawBitmap(deathMsgImg, null, deathMsgDim, deathMsgPaint)
+            deathMsgPaint.alpha = alpha.toInt()
+
+            canvas.save()
+            canvas.rotate(rotation, halfWidth, h(80))
+            canvas.drawBitmap(deathMsgImg, null, deathMsgDim.scale(scale), deathMsgPaint)
+            canvas.restore()
         }
     }
 }

@@ -78,7 +78,7 @@ class Player(context: Context) {
     }
 
     fun draw() {
-        canvas.drawBitmap(img, null, dim, pWhite)
+        canvas.drawBitmap(img, null, dim, whitePaint)
     }
 
 

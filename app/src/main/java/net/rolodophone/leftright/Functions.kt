@@ -1,9 +1,25 @@
 package net.rolodophone.leftright
 
+import android.graphics.RectF
+
+
 fun centerOfLane(lane: Int): Float {
-    if (lane >= Road.NUM_LANES) throw IllegalArgumentException("lane index must be less than Road.NUM_LANES")
+    require(lane < Road.NUM_LANES) { "lane index must be less than Road.NUM_LANES" }
 
     return (width * (lane + 1) - halfWidth) / (Road.NUM_LANES)
+}
+
+fun RectF.scale(factor: Float): RectF {
+    val diffHorizontal = (right - left) * (factor - 1f)
+    val diffVertical = (bottom - top) * (factor - 1f)
+
+    val mTop = top - diffVertical / 2f
+    val mBottom = bottom + diffVertical / 2f
+
+    val mLeft = left - diffHorizontal / 2f
+    val mRight = right + diffHorizontal / 2f
+
+    return RectF(mLeft, mTop, mRight, mBottom)
 }
 
 

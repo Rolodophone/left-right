@@ -16,8 +16,6 @@ var wUnit = 0f
 var hUnit = 0f
 var statusBarHeight = 0
 
-const val isDebug = true
-
 class MainActivity : Activity() {
 
     private lateinit var mainView: MainView
@@ -27,8 +25,7 @@ class MainActivity : Activity() {
         Log.i("Activity", "onCreate()")
         super.onCreate(savedInstanceState)
 
-        window.decorView.systemUiVisibility =
-            View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
 
         val dim = Point()
         windowManager.defaultDisplay.getRealSize(dim)
@@ -59,8 +56,7 @@ class MainActivity : Activity() {
         Log.i("Activity", "onStart()")
         super.onStart()
 
-        window.decorView.systemUiVisibility =
-            View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
 
         appOpen = true
         thread = Thread(mainView)

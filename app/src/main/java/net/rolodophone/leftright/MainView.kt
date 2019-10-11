@@ -24,12 +24,14 @@ var state = GAME
 var fps = Float.POSITIVE_INFINITY
 var canvas = Canvas()
 
-var pWhite = Paint()
-var pDimmer = Paint()
+var whitePaint = Paint()
+var dimmerPaint = Paint()
 
 lateinit var player: Player
 lateinit var road: Road
 lateinit var gui: Gui
+
+const val isDebug = true
 
 
 class MainView(context: Context) : SurfaceView(context), Runnable {
@@ -102,9 +104,9 @@ class MainView(context: Context) : SurfaceView(context), Runnable {
 
         holder.setFormat(PixelFormat.RGB_565)
 
-        pWhite.color = Color.rgb(255, 255, 255)
-        pWhite.isAntiAlias = true
-        pDimmer.color = Color.argb(100, 0, 0, 0)
+        whitePaint.color = Color.rgb(255, 255, 255)
+        whitePaint.isAntiAlias = true
+        dimmerPaint.color = Color.argb(100, 0, 0, 0)
 
 
         val activity = context as Activity
@@ -131,24 +133,19 @@ class MainView(context: Context) : SurfaceView(context), Runnable {
         if (event?.action == MotionEvent.ACTION_DOWN) {
 
             //handle unpausing
-            if (state == PAUSED && event.x > w(90) && event.x < w(270) && event.y > halfHeight + w(5) && event.y < halfHeight + w(
-                    49
-                )
-            ) {
+            if (state == PAUSED && event.x > w(90) && event.x < w(270) && event.y > halfHeight + w(5) && event.y < halfHeight + w(49)) {
                 state = GAME
-                return true
             }
 
 
             //handle pausing
-            if (state == GAME && event.x < gui.game.pauseW + 2 * padding && event.y > height - gui.game.pauseH - 2 * padding) {
+            else if (state == GAME && event.x < gui.game.pauseW + 2 * padding && event.y > height - gui.game.pauseH - 2 * padding) {
                 state = PAUSED
-                return true
             }
 
 
             //handle turning left and right
-            if (event.x < halfWidth) {
+            else if (state == GAME && event.x < halfWidth) {
 
                 //if the player turns in between lanes, set the lane to the lane it would have gone to
                 if (player.goingR) {
@@ -167,7 +164,9 @@ class MainView(context: Context) : SurfaceView(context), Runnable {
                 player.goingL = false
             }
 
+
             return true
+
         } else return false
     }
 
