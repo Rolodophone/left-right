@@ -1,39 +1,35 @@
 package net.rolodophone.leftright
 
-import android.content.Context
-
-class Road(context: Context) {
+class Road {
     companion object {
-        val NUM_LANES = 3
+        val numLanes = 3
+
+        val lineW = w(3)
+        val lineH = w(100)
+        val lineGap = w(40)
+
+        var topLineBottom = 0f
     }
 
-    val lineW = w(3)
-    val lineH = w(100)
-    val lineGap = w(40)
-
-    var topLineBottom = 0f
-
     var fuels = ItemType(
-        context,
-        R.drawable.fuel,
+        bitmaps.getValue("fuel"),
         w(45),
         w(45) * 8f / 7f,
         10
     ) {
-        for (item in it.list) if (item.dim.bottom >= player.dim.top && item.dim.top < player.dim.bottom && item.lane == player.lane) {
+        for (item in it.list) if (item.dim.bottom >= Player.dim.top && item.dim.top < Player.dim.bottom && item.lane == player.lane) {
             player.fuel += 50f
             it.toDel.add(item)
         }
     }
 
     var cones = ItemType(
-        context,
-        R.drawable.traffic_cone,
+        bitmaps.getValue("cone"),
         w(45),
         w(45),
         10
     ) {
-        for (item in it.list) if (item.dim.bottom >= player.dim.top && item.dim.top < player.dim.bottom && item.lane == player.lane) {
+        for (item in it.list) if (item.dim.bottom >= Player.dim.top && item.dim.top < Player.dim.bottom && item.lane == player.lane) {
             player.die("Crashed into cone")
         }
     }
@@ -57,11 +53,11 @@ class Road(context: Context) {
         var y = topLineBottom
         while (y <= height + lineH) {
 
-            for (i in 1 until NUM_LANES) {
+            for (i in 1 until numLanes) {
                 canvas.drawRect(
-                    ((width * i) / NUM_LANES) - (lineW / 2),
+                    ((width * i) / numLanes) - (lineW / 2),
                     y - lineH,
-                    ((width * i) / NUM_LANES) + (lineW / 2),
+                    ((width * i) / numLanes) + (lineW / 2),
                     y,
                     whitePaint
                 )

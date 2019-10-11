@@ -1,19 +1,10 @@
 package net.rolodophone.leftright
 
-import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.RectF
 import android.util.Log
 
-class ItemType(
-    context: Context,
-    imgId: Int,
-    val w: Float,
-    val h: Float,
-    val spawnRate: Int,
-    val customUpdate: (ItemType) -> Unit
-) {
+class ItemType(val bitmap: Bitmap, val w: Float, val h: Float, val spawnRate: Int, val customUpdate: (ItemType) -> Unit) {
 
     class Item(val lane: Int, w: Float, h: Float) {
 
@@ -27,14 +18,6 @@ class ItemType(
     }
 
 
-    var img: Bitmap
-
-    init {
-        val opts = BitmapFactory.Options()
-        opts.inScaled = false
-        img = BitmapFactory.decodeResource(context.resources, imgId, opts)
-    }
-
     val list = mutableListOf<Item>()
     val toDel = mutableListOf<Item>()
 
@@ -45,7 +28,7 @@ class ItemType(
             item.dim.offset(0f, player.ySpeed / fps)
 
             //mark offscreen items for deletion
-            if (item.dim.top > height + player.dim.height()) toDel.add(item)
+            if (item.dim.top > height) toDel.add(item)
         }
 
         //remove items marked for deletion
@@ -58,7 +41,7 @@ class ItemType(
 
         //spawn new items
         if (fps != Float.POSITIVE_INFINITY && (0 until (spawnRate * fps.toInt())).random() == 0) {
-            list.add(Item((0 until Road.NUM_LANES).random(), w, h))
+            list.add(Item((0 until Road.numLanes).random(), w, h))
         }
 
         //perform custom update
@@ -67,6 +50,6 @@ class ItemType(
 
 
     fun draw() {
-        for (item in list) canvas.drawBitmap(img, null, item.dim, whitePaint)
+        for (item in list) canvas.drawBitmap(bitmap, null, item.dim, whitePaint)
     }
 }

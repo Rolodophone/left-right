@@ -4,9 +4,9 @@ import android.graphics.RectF
 
 
 fun centerOfLane(lane: Int): Float {
-    require(lane < Road.NUM_LANES) { "lane index must be less than Road.NUM_LANES" }
+    require(lane < Road.numLanes) { "lane index must be less than Road.numLanes" }
 
-    return (width * (lane + 1) - halfWidth) / (Road.NUM_LANES)
+    return (width * (lane + 1) - halfWidth) / (Road.numLanes)
 }
 
 fun RectF.scale(factor: Float): RectF {

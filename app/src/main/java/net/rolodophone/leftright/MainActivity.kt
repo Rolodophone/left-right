@@ -46,9 +46,9 @@ class MainActivity : Activity() {
 
         mainView = MainView(this)
 
-        setContentView(mainView)
+        mainView.init()
 
-        mainView.setup()
+        setContentView(mainView)
     }
 
 
@@ -74,13 +74,6 @@ class MainActivity : Activity() {
 
 
 
-    override fun onRestart() {
-        Log.i("Activity", "onRestart()")
-        super.onRestart()
-
-    }
-
-
     override fun onStop() {
         Log.i("Activity", "onStop()")
         super.onStop()
@@ -88,14 +81,5 @@ class MainActivity : Activity() {
         appOpen = false
         Log.i("Activity", "Joining status thread")
         thread.join()
-    }
-    
-
-    //called once when the app starts
-    override fun onResume() {
-        Log.i("Activity", "onResume()")
-        super.onResume()
-
-        mainView.resume()
     }
 }

@@ -1,48 +1,75 @@
 package net.rolodophone.leftright
 
-import android.content.Context
-import android.graphics.*
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.Path
+import android.graphics.RectF
 import android.os.SystemClock
 import kotlin.random.Random
 
-class Gui(context: Context) {
-    companion object {
-        val padding = w(5)
-    }
+object gui {
+    val padding = w(5)
 
-    val game = Game()
-    val debug = Debug()
-    val status = Status(context)
-    val paused = Paused()
-    val gameOver = GameOver(context)
+    var gameOver = GameOver()
 
+    object game {
+        val pause = Button(RectF(padding, height - padding - w(45), padding + w(45), height - padding), stateGame, {
 
-    class Game {
-        val pauseW = w(45)
-        val pauseH = w(45)
-
-        fun draw() {
-
-            //draw pause button
             canvas.drawRect(
                 padding,
-                height - padding - pauseH,
-                padding + pauseW / 3f,
+                height - padding - w(45),
+                padding + w(15),
                 height - padding,
                 whitePaint
             )
             canvas.drawRect(
-                padding + pauseW * 2f / 3f,
-                height - padding - pauseH,
-                padding + pauseW,
+                padding + w(30),
+                height - padding - w(45),
+                padding + w(45),
                 height - padding,
                 whitePaint
             )
+
+        }) {
+            state = statePaused
+        }
+
+        val leftButton = Button(RectF(0f, 0f, halfWidth - 1f, height), stateGame, {}) {
+
+            //if the player turns in between lanes, set the lane to the lane it would have gone to
+            if (player.goingR) {
+                player.lane++
+            }
+
+            if (player.lane != 0) player.goingL = true
+            player.goingR = false
+        }
+
+        val rightButton = Button(RectF(halfWidth, 0f, width, height), stateGame, {}) {
+
+            //if the player turns in between lanes, set the lane to the lane it would have gone to
+            if (player.goingL) {
+                player.lane--
+            }
+
+            if (player.lane != Road.numLanes - 1) player.goingR = true
+            player.goingL = false
+        }
+
+        init {
+            buttons.add(pause)
+            buttons.add(leftButton)
+            buttons.add(rightButton)
+        }
+
+
+        fun draw() {
+            pause.draw()
         }
     }
 
 
-    class Debug {
+    object debug {
         val showFps = true
         val showGrid = true
 
@@ -63,6 +90,7 @@ class Gui(context: Context) {
                     prevTime = SystemClock.elapsedRealtime()
                 }
                 whitePaint.textAlign = Paint.Align.LEFT
+                whitePaint.textSize = w(22)
                 canvas.drawText("FPS: $viewFps", padding, w(50) + padding + statusBarHeight, whitePaint)
             }
 
@@ -97,8 +125,8 @@ class Gui(context: Context) {
     }
 
 
-    class Status(context: Context) {
-        var fuelImg: Bitmap
+    object status {
+        var fuelImg = bitmaps.getValue("fuel")
         val fuelW = w(22)
         val fuelH = fuelW * (16f / 14f)
         val fuelDim = RectF(
@@ -108,11 +136,6 @@ class Gui(context: Context) {
             padding + fuelH + statusBarHeight
         )
 
-        init {
-            val opts = BitmapFactory.Options()
-            opts.inScaled = false
-            fuelImg = BitmapFactory.decodeResource(context.resources, R.drawable.fuel, opts)
-        }
 
         fun draw() {
             whitePaint.textSize = w(22)
@@ -141,15 +164,26 @@ class Gui(context: Context) {
     }
 
 
-    class Paused {
-        var resume = Path()
+    object paused {
+        var resume = Button(RectF(w(90), halfHeight + w(5), w(270), halfHeight + w(49)), statePaused, {
+            val path = Path()
+            path.moveTo(w(87), halfHeight + w(5))
+            path.lineTo(w(87), halfHeight + w(49))
+            path.lineTo(w(120), halfHeight + w(27))
+            path.close()
+
+            canvas.drawPath(path, whitePaint)
+            whitePaint.textSize = w(40)
+            whitePaint.textAlign = Paint.Align.LEFT
+            canvas.drawText("Resume", w(132), halfHeight + w(39), whitePaint)
+        }) {
+            state = stateGame
+        }
 
         init {
-            resume.moveTo(w(87), halfHeight + w(5))
-            resume.lineTo(w(87), halfHeight + w(49))
-            resume.lineTo(w(120), halfHeight + w(27))
-            resume.close()
+            buttons.add(resume)
         }
+
 
         fun draw() {
             //dim rest of screen
@@ -171,43 +205,43 @@ class Gui(context: Context) {
                 whitePaint
             )
 
-            //draw resume icon
-            canvas.drawPath(resume, whitePaint)
-            whitePaint.textSize = w(40)
-            whitePaint.textAlign = Paint.Align.LEFT
-            canvas.drawText("Resume", w(132), halfHeight + w(39), whitePaint)
+            resume.draw()
         }
     }
 
 
-    class GameOver(context: Context) {
+    class GameOver {
+        companion object {
+            var deathMsgImg = bitmaps.getValue("death_msg")
+            val deathMsgDim = RectF(
+                w(30),
+                h(80),
+                w(330),
+                h(80) + w(72.972972973f)
+            )
+        }
+
+
+
         val deathMsgPaint = Paint()
 
         var alpha = 0f
         var rotation = 0f
-        var maxRotation = 0f
+        var maxRotation = -20f + Random.nextFloat() * 40f
         var scale = 0f
 
-        var deathMsgImg: Bitmap
-        val deathMsgDim = RectF(
-            w(30),
-            h(80),
-            w(330),
-            h(80) + w(72.972972973f)
-        )
 
-        init {
-            val opts = BitmapFactory.Options()
-            opts.inScaled = false
-            deathMsgImg = BitmapFactory.decodeResource(context.resources, R.drawable.death_msg, opts)
-        }
+        fun update() {
+            //update wasted image
+            alpha += 2040f / fps
+            rotation += (maxRotation * 8f) / fps
+            scale += 8f / fps
 
+            if (alpha > 255f) alpha = 255f
+            if (maxRotation > 0f && rotation > maxRotation || maxRotation < 0f && rotation < maxRotation) rotation = maxRotation
+            if (scale > 1f) scale = 1f
 
-        fun setup() {
-            alpha = 0f
-            rotation = 0f
-            maxRotation = -20f + Random.nextFloat() * 40f
-            scale = 0f
+            deathMsgPaint.alpha = alpha.toInt()
         }
 
 
@@ -216,16 +250,7 @@ class Gui(context: Context) {
             canvas.drawRect(0f, 0f, width, height, dimmerPaint)
 
 
-            alpha += 2040f / fps
-            rotation += (maxRotation * 8f) / fps
-            scale += 8f / fps
-
-            if (alpha > 255f) alpha = 255f
-            if (rotation > maxRotation) rotation = maxRotation
-            if (scale > 1f) scale = 1f
-
-            deathMsgPaint.alpha = alpha.toInt()
-
+            //draw wasted image
             canvas.save()
             canvas.rotate(rotation, halfWidth, h(80))
             canvas.drawBitmap(deathMsgImg, null, deathMsgDim.scale(scale), deathMsgPaint)

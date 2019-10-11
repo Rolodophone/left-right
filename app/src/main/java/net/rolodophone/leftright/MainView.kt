@@ -3,24 +3,27 @@ package net.rolodophone.leftright
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.PixelFormat
+import android.graphics.*
 import android.os.SystemClock
 import android.util.Log
 import android.view.MotionEvent
 import android.view.SurfaceView
 import android.view.WindowManager
-import net.rolodophone.leftright.Gui.Companion.padding
 
 
-const val MAIN: Byte = 0
-const val GAME: Byte = 1
-const val PAUSED: Byte = 2
-const val GAMEOVER: Byte = 3
+lateinit var bitmaps: Map<String, Bitmap>
+val buttons = mutableListOf<Button>()
 
-var state = GAME
+var state: State = stateGame
+    set(value) {
+
+        if (value == stateGameOver || value == stateGame && state != statePaused) {
+            value.reset()
+        }
+
+        field = value
+    }
+
 var fps = Float.POSITIVE_INFINITY
 var canvas = Canvas()
 
@@ -29,7 +32,6 @@ var dimmerPaint = Paint()
 
 lateinit var player: Player
 lateinit var road: Road
-lateinit var gui: Gui
 
 const val isDebug = true
 
@@ -43,52 +45,22 @@ class MainView(context: Context) : SurfaceView(context), Runnable {
             if (holder.surface.isValid) {
 
                 //update
-                if (state == GAME) {
-                    road.update()
-                    player.update()
-                }
+                state.update()
 
                 //draw
                 val c = holder.lockCanvas()
                 if (c != null) {
                     canvas = c
 
-                    when (state) {
-
-                        MAIN -> {
-
-                        }
-
-                        GAME -> {
-                            road.draw()
-                            player.draw()
-                            gui.status.draw()
-                            gui.game.draw()
-                            if (isDebug) gui.debug.draw()
-                        }
-
-                        PAUSED -> {
-                            road.draw()
-                            player.draw()
-                            gui.status.draw()
-                            gui.paused.draw()
-                            if (isDebug) gui.debug.draw()
-                        }
-
-                        GAMEOVER -> {
-                            road.draw()
-                            player.draw()
-                            gui.gameOver.draw()
-                            if (isDebug) gui.debug.draw()
-                        }
-                    }
+                    state.draw()
 
                     holder.unlockCanvasAndPost(canvas)
                 }
 
-
+                //calculate fps
                 val timeElapsed = SystemClock.elapsedRealtime() - initialTime
                 fps = if (timeElapsed == 0L) 2000f else 1000f / timeElapsed
+                if (isDebug && fps < 30f) fps = 30f
             }
 
 
@@ -99,8 +71,8 @@ class MainView(context: Context) : SurfaceView(context), Runnable {
     }
 
 
-    fun setup() {
-        Log.i("View", "<---------SETUP--------->")
+    fun init() {
+        Log.i("View", "<---------INIT--------->")
 
         holder.setFormat(PixelFormat.RGB_565)
 
@@ -117,13 +89,21 @@ class MainView(context: Context) : SurfaceView(context), Runnable {
         window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_IN_OVERSCAN)
 
 
-        //player initialised first because measurements depend on player's width
-        player = Player(context)
-        road = Road(context)
+        val bitmapOptions = BitmapFactory.Options()
+        bitmapOptions.inScaled = false
 
-        gui = Gui(context)
+        bitmaps = mapOf(
+            "car1" to BitmapFactory.decodeResource(context.resources, R.drawable.car1, bitmapOptions),
+            "death_msg" to BitmapFactory.decodeResource(context.resources, R.drawable.death_msg, bitmapOptions),
+            "fuel" to BitmapFactory.decodeResource(context.resources, R.drawable.fuel, bitmapOptions),
+            "main_menu" to BitmapFactory.decodeResource(context.resources, R.drawable.main_menu, bitmapOptions),
+            "play_again" to BitmapFactory.decodeResource(context.resources, R.drawable.play_again, bitmapOptions),
+            "cone" to BitmapFactory.decodeResource(context.resources, R.drawable.cone, bitmapOptions)
+        )
 
-        Log.i("View", "</--------SETUP--------->")
+        state.reset()
+
+        Log.i("View", "</--------INIT--------->")
     }
 
 
@@ -132,38 +112,7 @@ class MainView(context: Context) : SurfaceView(context), Runnable {
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         if (event?.action == MotionEvent.ACTION_DOWN) {
 
-            //handle unpausing
-            if (state == PAUSED && event.x > w(90) && event.x < w(270) && event.y > halfHeight + w(5) && event.y < halfHeight + w(49)) {
-                state = GAME
-            }
-
-
-            //handle pausing
-            else if (state == GAME && event.x < gui.game.pauseW + 2 * padding && event.y > height - gui.game.pauseH - 2 * padding) {
-                state = PAUSED
-            }
-
-
-            //handle turning left and right
-            else if (state == GAME && event.x < halfWidth) {
-
-                //if the player turns in between lanes, set the lane to the lane it would have gone to
-                if (player.goingR) {
-                    player.lane++
-                }
-
-                if (player.lane != 0) player.goingL = true
-                player.goingR = false
-            } else {
-                //if the player turns in between lanes, set the lane to the lane it would have gone to
-                if (player.goingL) {
-                    player.lane--
-                }
-
-                if (player.lane != Road.NUM_LANES - 1) player.goingR = true
-                player.goingL = false
-            }
-
+            for (button in buttons) button.handleClick(event.x, event.y)
 
             return true
 
@@ -172,15 +121,7 @@ class MainView(context: Context) : SurfaceView(context), Runnable {
 
 
     fun pause() {
-        if (state == GAME) state = PAUSED
+        if (state == stateGame) state = statePaused
         Log.i("View", "Paused")
     }
-
-
-    // Called once at the same time as run()
-    fun resume() {
-        if (state == PAUSED) state = GAME
-        Log.i("View", "Resumed")
-    }
-
 }
