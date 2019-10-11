@@ -17,7 +17,7 @@ class Road {
         w(45) * 8f / 7f,
         10
     ) {
-        for (item in it.list) if (item.dim.bottom >= Player.dim.top && item.dim.top < Player.dim.bottom && item.lane == player.lane) {
+        for (item in it.list) if (item.dim.bottom >= player.dim.top && item.dim.top < player.dim.bottom && item.lane == player.lane) {
             player.fuel += 50f
             it.toDel.add(item)
         }
@@ -29,7 +29,7 @@ class Road {
         w(45),
         10
     ) {
-        for (item in it.list) if (item.dim.bottom >= Player.dim.top && item.dim.top < Player.dim.bottom && item.lane == player.lane) {
+        for (item in it.list) if (item.dim.bottom >= player.dim.top && item.dim.top < player.dim.bottom && item.lane == player.lane) {
             player.die("Crashed into cone")
         }
     }

@@ -33,7 +33,7 @@ var dimmerPaint = Paint()
 lateinit var player: Player
 lateinit var road: Road
 
-const val isDebug = true
+const val isDebug = false
 
 
 class MainView(context: Context) : SurfaceView(context), Runnable {
@@ -111,12 +111,10 @@ class MainView(context: Context) : SurfaceView(context), Runnable {
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         if (event?.action == MotionEvent.ACTION_DOWN) {
+            for (button in buttons) if (button.handleClick(event.x, event.y)) return true
+        }
 
-            for (button in buttons) button.handleClick(event.x, event.y)
-
-            return true
-
-        } else return false
+        return false
     }
 
 

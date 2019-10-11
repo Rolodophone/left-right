@@ -6,30 +6,23 @@ class Player {
     companion object {
         private val xSpeed = w(1800)
 
-        private val w = w(90)
-        private val h = w(180)
-        private val x = halfWidth - w / 2f
-        private val y = height - h / 2f
-
         private var img = bitmaps.getValue("car1")
-
-        var dim = RectF(
-            x,
-            y,
-            x + w,
-            y + h
-        )
 
         //The x coordinate of the left side of the car, if it was in the Nth lane
         private var laneXs = mutableListOf<Float>()
-
         init {
             for (i in 0 until Road.numLanes) {
-                laneXs.add(centerOfLane(i) - w / 2f)
+                laneXs.add(centerOfLane(i) - w(45))
             }
         }
     }
 
+    var dim = RectF(
+        w(135),
+        height - w(90),
+        w(225),
+        height + w(90)
+    )
 
     var ySpeed = w(360)
     var fuel = 50f

@@ -219,11 +219,21 @@ object gui {
                 w(330),
                 h(80) + w(72.972972973f)
             )
+            val deathMsgPaint = Paint()
+
+            val playAgain = BitmapButton(bitmaps.getValue("play_again"), RectF(w(220), h(180), w(300), h(180) + w(80)), stateGameOver) {
+                state = stateGame
+            }
+            val mainMenu = BitmapButton(bitmaps.getValue("main_menu"), RectF(w(60), h(180), w(140), h(180) + w(80)), stateGameOver) {
+                //state = stateMain
+            }
+
+            init {
+                buttons.add(playAgain)
+                buttons.add(mainMenu)
+            }
         }
 
-
-
-        val deathMsgPaint = Paint()
 
         var alpha = 0f
         var rotation = 0f
@@ -255,6 +265,9 @@ object gui {
             canvas.rotate(rotation, halfWidth, h(80))
             canvas.drawBitmap(deathMsgImg, null, deathMsgDim.scale(scale), deathMsgPaint)
             canvas.restore()
+
+            playAgain.draw()
+            mainMenu.draw()
         }
     }
 }
