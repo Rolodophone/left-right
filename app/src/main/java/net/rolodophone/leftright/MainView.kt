@@ -77,7 +77,7 @@ class MainView(context: Context) : SurfaceView(context), Runnable {
 
         whitePaint.color = Color.rgb(255, 255, 255)
         whitePaint.isAntiAlias = true
-        dimmerPaint.color = Color.argb(100, 0, 0, 0)
+        dimmerPaint.color = Color.argb(150, 0, 0, 0)
 
 
         val activity = context as Activity
