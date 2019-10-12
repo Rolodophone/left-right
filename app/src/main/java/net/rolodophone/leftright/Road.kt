@@ -12,25 +12,25 @@ class Road {
     }
 
     var fuels = ItemType(
-        bitmaps.getValue("fuel"),
+        bitmaps.fuel,
         w(45),
         w(45) * 8f / 7f,
         10
     ) {
-        for (item in it.list) if (item.dim.bottom >= player.dim.top && item.dim.top < player.dim.bottom && item.lane == player.lane) {
+        for (item in it.list) if (item.dim.bottom > player.dim.top && item.dim.top < player.dim.bottom && item.dim.right > player.dim.left && item.dim.left < player.dim.right) {
             player.fuel += 50f
             it.toDel.add(item)
         }
     }
 
     var cones = ItemType(
-        bitmaps.getValue("cone"),
+        bitmaps.cone,
         w(45),
         w(45),
         10
     ) {
-        for (item in it.list) if (item.dim.bottom >= player.dim.top && item.dim.top < player.dim.bottom && item.lane == player.lane) {
-            player.die("Crashed into cone")
+        for (item in it.list) if (item.dim.bottom >= player.dim.top && item.dim.top < player.dim.bottom && item.dim.right > player.dim.left && item.dim.left < player.dim.right) {
+            player.die(DeathType.CONE, item)
         }
     }
 
@@ -65,9 +65,9 @@ class Road {
 
             y += lineH + lineGap
         }
+    }
 
-
-        //draw items
+    fun drawItems() {
         for (item in items) item.draw()
     }
 }

@@ -6,8 +6,6 @@ class Player {
     companion object {
         private val xSpeed = w(1800)
 
-        private var img = bitmaps.getValue("car1")
-
         //The x coordinate of the left side of the car, if it was in the Nth lane
         private var laneXs = mutableListOf<Float>()
         init {
@@ -16,6 +14,8 @@ class Player {
             }
         }
     }
+
+    private var img = bitmaps.car1
 
     var dim = RectF(
         w(135),
@@ -27,7 +27,8 @@ class Player {
     var ySpeed = w(360)
     var fuel = 50f
     var distance = 0f
-    var causeOfDeath = ""
+    var coins = 0
+    lateinit var causeOfDeath: DeathType
 
     var goingL = false
     var goingR = false
@@ -38,7 +39,7 @@ class Player {
 
     fun update() {
         fuel -= 2f / fps
-        if (fuel <= 0f) die("Ran out of fuel!")
+        if (fuel <= 0f) die(DeathType.FUEL, null)
 
         distance += (ySpeed / width * 4) / fps
 
@@ -69,8 +70,17 @@ class Player {
     }
 
 
-    fun die(msg: String) {
-        causeOfDeath = msg
+    fun die(deathType: DeathType, item: ItemType.Item?) {
+        causeOfDeath = deathType
+
+        if (item != null) {
+            img = when {
+                goingL -> bitmaps.car1_hit_l
+                goingR -> bitmaps.car1_hit_r
+                else -> bitmaps.car1_hit_m
+            }
+        }
+
         state = stateGameOver
     }
 }

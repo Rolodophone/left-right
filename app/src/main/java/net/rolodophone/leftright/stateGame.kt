@@ -13,6 +13,7 @@ object stateGame : State {
 
     override fun draw() {
         road.draw()
+        road.drawItems()
         player.draw()
         gui.status.draw()
         gui.game.draw()

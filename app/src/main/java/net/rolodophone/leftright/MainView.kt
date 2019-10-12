@@ -11,7 +11,6 @@ import android.view.SurfaceView
 import android.view.WindowManager
 
 
-lateinit var bitmaps: Map<String, Bitmap>
 val buttons = mutableListOf<Button>()
 
 var state: State = stateGame
@@ -92,14 +91,17 @@ class MainView(context: Context) : SurfaceView(context), Runnable {
         val bitmapOptions = BitmapFactory.Options()
         bitmapOptions.inScaled = false
 
-        bitmaps = mapOf(
-            "car1" to BitmapFactory.decodeResource(context.resources, R.drawable.car1, bitmapOptions),
-            "death_msg" to BitmapFactory.decodeResource(context.resources, R.drawable.death_msg, bitmapOptions),
-            "fuel" to BitmapFactory.decodeResource(context.resources, R.drawable.fuel, bitmapOptions),
-            "main_menu" to BitmapFactory.decodeResource(context.resources, R.drawable.main_menu, bitmapOptions),
-            "play_again" to BitmapFactory.decodeResource(context.resources, R.drawable.play_again, bitmapOptions),
-            "cone" to BitmapFactory.decodeResource(context.resources, R.drawable.cone, bitmapOptions)
-        )
+
+        bitmaps.car1 = BitmapFactory.decodeResource(context.resources, R.drawable.car1, bitmapOptions)
+        bitmaps.car1_hit_l = BitmapFactory.decodeResource(context.resources, R.drawable.car1_hit_l, bitmapOptions)
+        bitmaps.car1_hit_m = BitmapFactory.decodeResource(context.resources, R.drawable.car1_hit_m, bitmapOptions)
+        bitmaps.car1_hit_r = BitmapFactory.decodeResource(context.resources, R.drawable.car1_hit_r, bitmapOptions)
+        bitmaps.death_msg = BitmapFactory.decodeResource(context.resources, R.drawable.death_msg, bitmapOptions)
+        bitmaps.fuel = BitmapFactory.decodeResource(context.resources, R.drawable.fuel, bitmapOptions)
+        bitmaps.main_menu = BitmapFactory.decodeResource(context.resources, R.drawable.main_menu, bitmapOptions)
+        bitmaps.play_again = BitmapFactory.decodeResource(context.resources, R.drawable.play_again, bitmapOptions)
+        bitmaps.cone = BitmapFactory.decodeResource(context.resources, R.drawable.cone, bitmapOptions)
+
 
         state.reset()
 

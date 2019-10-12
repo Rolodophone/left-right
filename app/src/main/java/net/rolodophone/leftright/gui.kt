@@ -1,16 +1,11 @@
 package net.rolodophone.leftright
 
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.Path
-import android.graphics.RectF
+import android.graphics.*
 import android.os.SystemClock
 import kotlin.random.Random
 
 object gui {
     val padding = w(5)
-
-    var gameOver = GameOver()
 
     object game {
         val pause = Button(RectF(padding, height - padding - w(45), padding + w(45), height - padding), stateGame, {
@@ -70,8 +65,8 @@ object gui {
 
 
     object debug {
-        val showFps = true
-        val showGrid = true
+        const val showFps = true
+        const val showGrid = true
 
         val gridPaint = Paint()
 
@@ -91,7 +86,7 @@ object gui {
                 }
                 whitePaint.textAlign = Paint.Align.LEFT
                 whitePaint.textSize = w(22)
-                canvas.drawText("FPS: $viewFps", padding, w(50) + padding + statusBarHeight, whitePaint)
+                canvas.drawText("FPS: $viewFps", padding, w(55) + statusBarHeight, whitePaint)
             }
 
             //draw grid
@@ -126,7 +121,7 @@ object gui {
 
 
     object status {
-        var fuelImg = bitmaps.getValue("fuel")
+        var fuelImg = bitmaps.fuel
         val fuelW = w(22)
         val fuelH = fuelW * (16f / 14f)
         val fuelDim = RectF(
@@ -212,19 +207,19 @@ object gui {
 
     class GameOver {
         companion object {
-            var deathMsgImg = bitmaps.getValue("death_msg")
+            var deathMsgImg = bitmaps.death_msg
             val deathMsgDim = RectF(
                 w(30),
-                h(80),
+                h(40),
                 w(330),
-                h(80) + w(72.972972973f)
+                h(40) + w(72.972972973f)
             )
             val deathMsgPaint = Paint()
 
-            val playAgain = BitmapButton(bitmaps.getValue("play_again"), RectF(w(220), h(180), w(300), h(180) + w(80)), stateGameOver) {
+            val playAgain = BitmapButton(bitmaps.play_again, RectF(w(220), h(250), w(300), h(250) + w(80)), stateGameOver) {
                 state = stateGame
             }
-            val mainMenu = BitmapButton(bitmaps.getValue("main_menu"), RectF(w(60), h(180), w(140), h(180) + w(80)), stateGameOver) {
+            val mainMenu = BitmapButton(bitmaps.main_menu, RectF(w(60), h(250), w(140), h(250) + w(80)), stateGameOver) {
                 //state = stateMain
             }
 
@@ -232,6 +227,26 @@ object gui {
                 buttons.add(playAgain)
                 buttons.add(mainMenu)
             }
+
+            val comments = mapOf(
+                DeathType.CONE to listOf(
+                    listOf("Better luck next time!"),
+                    listOf("Oops, I forgot my seat belt..."),
+                    listOf("Death can be fatal..."),
+
+                    listOf("Who filled this cone", "with concrete?"),
+                    listOf("You hit a cone!")
+                ),
+                DeathType.FUEL to listOf(
+                    listOf("Better luck next time!"),
+                    listOf("Oops, I forgot my seat belt..."),
+                    listOf("Death can be fatal..."),
+
+                    listOf("No one ever told me this", "car explodes when it runs", "out of fuel!"),
+                    listOf("You ran out of fuel!"),
+                    listOf("Hmm, the accelerator pedal", "doesn't seem to be working")
+                )
+            )
         }
 
 
@@ -239,6 +254,8 @@ object gui {
         var rotation = 0f
         var maxRotation = -20f + Random.nextFloat() * 40f
         var scale = 0f
+
+        val comment = comments.getValue(player.causeOfDeath).random()
 
 
         fun update() {
@@ -262,10 +279,34 @@ object gui {
 
             //draw wasted image
             canvas.save()
-            canvas.rotate(rotation, halfWidth, h(80))
+            canvas.rotate(rotation, halfWidth, h(60))
             canvas.drawBitmap(deathMsgImg, null, deathMsgDim.scale(scale), deathMsgPaint)
             canvas.restore()
 
+            //draw comment
+            whitePaint.textAlign = Paint.Align.CENTER
+            whitePaint.typeface = Typeface.DEFAULT_BOLD
+            for ((i, line) in comment.withIndex()) canvas.drawText(line, halfWidth, h(120) + w(25 * i), whitePaint)
+            whitePaint.typeface = Typeface.DEFAULT
+
+            //draw stats
+            whitePaint.textAlign = Paint.Align.LEFT
+            canvas.drawText("Distance travelled:", w(30), h(160), whitePaint)
+            canvas.drawText("Fuel remaining:", w(30), h(160) + w(30), whitePaint)
+            canvas.drawText("Coins collected:", w(30), h(160) + w(60), whitePaint)
+            canvas.drawText("Total score:", w(30), h(160) + w(100), whitePaint)
+
+            whitePaint.textAlign = Paint.Align.RIGHT
+            canvas.drawText(player.distance.toInt().toString(), w(330), h(160), whitePaint)
+            canvas.drawText(player.fuel.toInt().toString(), w(330), h(160) + w(30), whitePaint)
+            canvas.drawText(player.coins.toString(), w(330), h(160) + w(60), whitePaint)
+            canvas.drawText((player.distance.toInt() + player.fuel.toInt() + player.coins).toString(), w(330), h(160) + w(100), whitePaint)
+
+            whitePaint.strokeWidth = 3f
+            canvas.drawLine(w(30), h(160) + w(72), w(330), h(160) + w(72), whitePaint)
+            whitePaint.strokeWidth = 1f
+
+            //draw buttons
             playAgain.draw()
             mainMenu.draw()
         }
