@@ -2,8 +2,8 @@ package net.rolodophone.leftright
 
 object stateGame : State {
     override fun reset() {
-        player = Player()
-        road = Road()
+        player.reset()
+        road.reset()
     }
 
     override fun update() {

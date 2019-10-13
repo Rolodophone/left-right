@@ -1,40 +1,55 @@
 package net.rolodophone.leftright
 
+import android.graphics.Bitmap
 import android.graphics.RectF
 
-class Player {
-    companion object {
-        private val xSpeed = w(1800)
+object player {
+    private val xSpeed = w(1800)
 
-        //The x coordinate of the left side of the car, if it was in the Nth lane
-        private var laneXs = mutableListOf<Float>()
-        init {
-            for (i in 0 until Road.numLanes) {
-                laneXs.add(centerOfLane(i) - w(45))
-            }
+    //The x coordinate of the left side of the car, if it was in the Nth lane
+    private var laneXs = mutableListOf<Float>()
+
+    init {
+        for (i in 0 until road.numLanes) {
+            laneXs.add(centerOfLane(i) - w(45))
         }
     }
 
-    private var img = bitmaps.car1
 
-    var dim = RectF(
-        w(135),
-        height - w(90),
-        w(225),
-        height + w(90)
-    )
-
-    var ySpeed = w(360)
-    var fuel = 50f
+    private lateinit var img: Bitmap
+    lateinit var dim: RectF
+    var ySpeed = 0f
+    var fuel = 0f
     var distance = 0f
     var coins = 0
     lateinit var causeOfDeath: DeathType
-
     var goingL = false
     var goingR = false
-
-    //what lane the car is in. 0 represents left most lane and so on
     var lane = 1
+
+
+    fun reset() {
+        img = bitmaps.car1
+
+        dim = RectF(
+            w(135),
+            height - w(90),
+            w(225),
+            height + w(90)
+        )
+
+        ySpeed = w(360)
+        fuel = 50f
+        distance = 0f
+        coins = 0
+        causeOfDeath = DeathType.NONE
+
+        goingL = false
+        goingR = false
+
+        //what lane the car is in. 0 represents left most lane and so on
+        lane = 1
+    }
 
 
     fun update() {

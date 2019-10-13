@@ -6,16 +6,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 
-
-var appOpen = true
-var width = 0f
-var height = 0f
-var halfWidth = 0f
-var halfHeight = 0f
-var wUnit = 0f
-var hUnit = 0f
-var statusBarHeight = 0
-
 class MainActivity : Activity() {
 
     private lateinit var mainView: MainView

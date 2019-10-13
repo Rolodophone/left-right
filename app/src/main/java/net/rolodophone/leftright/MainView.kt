@@ -3,36 +3,14 @@ package net.rolodophone.leftright
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
-import android.graphics.*
+import android.graphics.BitmapFactory
+import android.graphics.Color
+import android.graphics.PixelFormat
 import android.os.SystemClock
 import android.util.Log
 import android.view.MotionEvent
 import android.view.SurfaceView
 import android.view.WindowManager
-
-
-val buttons = mutableListOf<Button>()
-
-var state: State = stateGame
-    set(value) {
-
-        if (value == stateGameOver || value == stateGame && state != statePaused) {
-            value.reset()
-        }
-
-        field = value
-    }
-
-var fps = Float.POSITIVE_INFINITY
-var canvas = Canvas()
-
-var whitePaint = Paint()
-var dimmerPaint = Paint()
-
-lateinit var player: Player
-lateinit var road: Road
-
-const val isDebug = false
 
 
 class MainView(context: Context) : SurfaceView(context), Runnable {
@@ -113,7 +91,7 @@ class MainView(context: Context) : SurfaceView(context), Runnable {
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         if (event?.action == MotionEvent.ACTION_DOWN) {
-            for (button in buttons) if (button.handleClick(event.x, event.y)) return true
+            for (button in gui.buttons) if (button.handleClick(event.x, event.y)) return true
         }
 
         return false

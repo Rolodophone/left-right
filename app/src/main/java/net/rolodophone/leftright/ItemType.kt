@@ -41,7 +41,7 @@ class ItemType(val bitmap: Bitmap, val w: Float, val h: Float, val spawnRate: In
 
         //spawn new items
         if (fps != Float.POSITIVE_INFINITY && (0 until (spawnRate * fps.toInt())).random() == 0) {
-            list.add(Item((0 until Road.numLanes).random(), w, h))
+            spawn()
         }
 
         //perform custom update
@@ -51,5 +51,9 @@ class ItemType(val bitmap: Bitmap, val w: Float, val h: Float, val spawnRate: In
 
     fun draw() {
         for (item in list) canvas.drawBitmap(bitmap, null, item.dim, whitePaint)
+    }
+
+    fun spawn() {
+        list.add(Item((0 until road.numLanes).random(), w, h))
     }
 }

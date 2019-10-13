@@ -6,9 +6,10 @@ import kotlin.random.Random
 
 object gui {
     val padding = w(5)
+    val buttons = listOf(debug.spawnCone, debug.spawnFuel, debug.killPlayer, game.pause, paused.resume, gameOver.playAgain, gameOver.mainMenu, game.leftButton, game.rightButton)
 
     object game {
-        val pause = Button(RectF(padding, height - padding - w(45), padding + w(45), height - padding), stateGame, {
+        val pause = Button(RectF(padding, height - padding - w(45), padding + w(45), height - padding), { state == stateGame }, {
 
             canvas.drawRect(
                 padding,
@@ -29,7 +30,7 @@ object gui {
             state = statePaused
         }
 
-        val leftButton = Button(RectF(0f, 0f, halfWidth - 1f, height), stateGame, {}) {
+        val leftButton = Button(RectF(0f, 0f, halfWidth - 1f, height), { state == stateGame }, {}) {
 
             //if the player turns in between lanes, set the lane to the lane it would have gone to
             if (player.goingR) {
@@ -40,21 +41,15 @@ object gui {
             player.goingR = false
         }
 
-        val rightButton = Button(RectF(halfWidth, 0f, width, height), stateGame, {}) {
+        val rightButton = Button(RectF(halfWidth, 0f, width, height), { state == stateGame }, {}) {
 
             //if the player turns in between lanes, set the lane to the lane it would have gone to
             if (player.goingL) {
                 player.lane--
             }
 
-            if (player.lane != Road.numLanes - 1) player.goingR = true
+            if (player.lane != road.numLanes - 1) player.goingR = true
             player.goingL = false
-        }
-
-        init {
-            buttons.add(pause)
-            buttons.add(leftButton)
-            buttons.add(rightButton)
         }
 
 
@@ -65,13 +60,20 @@ object gui {
 
 
     object debug {
-        const val showFps = true
-        const val showGrid = true
-
         val gridPaint = Paint()
 
         var prevTime = SystemClock.elapsedRealtime()
         var viewFps = fps.toInt()
+
+        val killPlayer = ButtonText("kill player", Paint.Align.RIGHT, RectF(w(200), statusBarHeight + w(30), w(353), statusBarHeight + w(55)), { isDebug && state == stateGame }) {
+            player.die(DeathType.NONE, null)
+        }
+        val spawnCone = ButtonText("spawn cone", Paint.Align.RIGHT, RectF(w(200), statusBarHeight + w(60), w(353), statusBarHeight + w(85)), { isDebug && state == stateGame }) {
+            road.cones.spawn()
+        }
+        val spawnFuel = ButtonText("spawn fuel", Paint.Align.RIGHT, RectF(w(200), statusBarHeight + w(90), w(353), statusBarHeight + w(115)), { isDebug && state == stateGame }) {
+            road.fuels.spawn()
+        }
 
         init {
             gridPaint.color = Color.argb(100, 255, 255, 255)
@@ -79,42 +81,46 @@ object gui {
 
         fun draw() {
             //draw fps
-            if (showFps) {
-                if (SystemClock.elapsedRealtime() > prevTime + 500) {
-                    viewFps = fps.toInt()
-                    prevTime = SystemClock.elapsedRealtime()
-                }
-                whitePaint.textAlign = Paint.Align.LEFT
-                whitePaint.textSize = w(22)
-                canvas.drawText("FPS: $viewFps", padding, w(55) + statusBarHeight, whitePaint)
+
+            if (SystemClock.elapsedRealtime() > prevTime + 500) {
+                viewFps = fps.toInt()
+                prevTime = SystemClock.elapsedRealtime()
             }
+            whitePaint.textAlign = Paint.Align.LEFT
+            whitePaint.textSize = w(22)
+            canvas.drawText("FPS: $viewFps", padding, w(55) + statusBarHeight, whitePaint)
+
 
             //draw grid
-            if (showGrid) {
+            var x = w(20)
+            while (x <= w(340)) {
+                canvas.drawLine(x, 0f, x, height, gridPaint)
+                x += w(20)
+            }
 
-                var x = w(20)
-                while (x <= w(340)) {
-                    canvas.drawLine(x, 0f, x, height, gridPaint)
-                    x += w(20)
-                }
+            x = w(120)
+            while (x <= w(240)) {
+                canvas.drawLine(x, 0f, x, height, whitePaint)
+                x += w(120)
+            }
 
-                x = w(120)
-                while (x <= w(240)) {
-                    canvas.drawLine(x, 0f, x, height, whitePaint)
-                    x += w(120)
-                }
+            var y = h(20)
+            while (y <= h(340.001f)) {
+                canvas.drawLine(0f, y, width, y, gridPaint)
+                y += h(20)
+            }
 
-                var y = h(20)
-                while (y <= h(340.001f)) {
-                    canvas.drawLine(0f, y, width, y, gridPaint)
-                    y += h(20)
-                }
+            y = h(120)
+            while (y <= h(240)) {
+                canvas.drawLine(0f, y, width, y, whitePaint)
+                y += h(120)
+            }
 
-                y = h(120)
-                while (y <= h(240)) {
-                    canvas.drawLine(0f, y, width, y, whitePaint)
-                    y += h(120)
-                }
+            //draw buttons
+            if (state == stateGame) {
+                killPlayer.draw()
+                spawnCone.draw()
+                spawnFuel.draw()
             }
         }
     }
@@ -160,7 +166,7 @@ object gui {
 
 
     object paused {
-        var resume = Button(RectF(w(90), halfHeight + w(5), w(270), halfHeight + w(49)), statePaused, {
+        var resume = Button(RectF(w(90), halfHeight + w(5), w(270), halfHeight + w(49)), { state == statePaused }, {
             val path = Path()
             path.moveTo(w(87), halfHeight + w(5))
             path.lineTo(w(87), halfHeight + w(49))
@@ -173,10 +179,6 @@ object gui {
             canvas.drawText("Resume", w(132), halfHeight + w(39), whitePaint)
         }) {
             state = stateGame
-        }
-
-        init {
-            buttons.add(resume)
         }
 
 
@@ -205,57 +207,67 @@ object gui {
     }
 
 
-    class GameOver {
-        companion object {
-            var deathMsgImg = bitmaps.death_msg
-            val deathMsgDim = RectF(
-                w(30),
-                h(40),
-                w(330),
-                h(40) + w(72.972972973f)
-            )
-            val deathMsgPaint = Paint()
+    object gameOver {
+        var deathMsgImg = bitmaps.death_msg
+        val deathMsgDim = RectF(
+            w(30),
+            h(40),
+            w(330),
+            h(40) + w(72.972972973f)
+        )
+        val deathMsgPaint = Paint()
 
-            val playAgain = BitmapButton(bitmaps.play_again, RectF(w(220), h(250), w(300), h(250) + w(80)), stateGameOver) {
-                state = stateGame
-            }
-            val mainMenu = BitmapButton(bitmaps.main_menu, RectF(w(60), h(250), w(140), h(250) + w(80)), stateGameOver) {
-                //state = stateMain
-            }
-
-            init {
-                buttons.add(playAgain)
-                buttons.add(mainMenu)
-            }
-
-            val comments = mapOf(
-                DeathType.CONE to listOf(
-                    listOf("Better luck next time!"),
-                    listOf("Oops, I forgot my seat belt..."),
-                    listOf("Death can be fatal..."),
-
-                    listOf("Who filled this cone", "with concrete?"),
-                    listOf("You hit a cone!")
-                ),
-                DeathType.FUEL to listOf(
-                    listOf("Better luck next time!"),
-                    listOf("Oops, I forgot my seat belt..."),
-                    listOf("Death can be fatal..."),
-
-                    listOf("No one ever told me this", "car explodes when it runs", "out of fuel!"),
-                    listOf("You ran out of fuel!"),
-                    listOf("Hmm, the accelerator pedal", "doesn't seem to be working")
-                )
-            )
+        val playAgain = ButtonBitmap(bitmaps.play_again, RectF(w(220), h(250), w(300), h(250) + w(80)), { state == stateGameOver }) {
+            state = stateGame
+        }
+        val mainMenu = ButtonBitmap(bitmaps.main_menu, RectF(w(60), h(250), w(140), h(250) + w(80)), { state == stateGameOver }) {
+            //state = stateMain
         }
 
+        val comments = mapOf(
+            DeathType.NONE to listOf(
+                listOf("Better luck next time!"),
+                listOf("Oops, I forgot my seat belt..."),
+                listOf("Death can be fatal...")
+            ),
 
-        var alpha = 0f
-        var rotation = 0f
-        var maxRotation = -20f + Random.nextFloat() * 40f
-        var scale = 0f
+            DeathType.CONE to listOf(
+                listOf("Better luck next time!"),
+                listOf("Oops, I forgot my seat belt..."),
+                listOf("Death can be fatal..."),
 
-        val comment = comments.getValue(player.causeOfDeath).random()
+                listOf("Who filled this cone", "with concrete?"),
+                listOf("You hit a cone!")
+            ),
+
+            DeathType.FUEL to listOf(
+                listOf("Better luck next time!"),
+                listOf("Oops, I forgot my seat belt..."),
+                listOf("Death can be fatal..."),
+
+                listOf("No one ever told me this", "car explodes when it runs", "out of fuel!"),
+                listOf("You ran out of fuel!"),
+                listOf("Hmm, the accelerator pedal", "doesn't seem to be working")
+            )
+        )
+
+
+        private var alpha = 0f
+        private var rotation = 0f
+        private var maxRotation = 0f
+        private var scale = 0f
+
+        lateinit var comment: List<String>
+
+
+        fun reset() {
+            alpha = 0f
+            rotation = 0f
+            maxRotation = -20f + Random.nextFloat() * 40f
+            scale = 0f
+
+            comment = comments.getValue(player.causeOfDeath).random()
+        }
 
 
         fun update() {

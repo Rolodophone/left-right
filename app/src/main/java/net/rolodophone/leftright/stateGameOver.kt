@@ -2,14 +2,14 @@ package net.rolodophone.leftright
 
 object stateGameOver : State {
     var lengthMoved = 0f
-    var guiGameOver = gui.GameOver()
 
     override fun reset() {
-        guiGameOver = gui.GameOver()
+        lengthMoved = 0f
+        gui.gameOver.reset()
     }
 
     override fun update() {
-        guiGameOver.update()
+        gui.gameOver.update()
 
         if (lengthMoved < w(12)) {
             road.update()
@@ -21,7 +21,7 @@ object stateGameOver : State {
         road.draw()
         road.drawItems()
         player.draw()
-        guiGameOver.draw()
+        gui.gameOver.draw()
         if (isDebug) gui.debug.draw()
     }
 }

@@ -3,6 +3,6 @@ package net.rolodophone.leftright
 import android.graphics.Bitmap
 import android.graphics.RectF
 
-class BitmapButton(val bitmap: Bitmap, dim: RectF, activeState: State, onClick: () -> Unit) : Button(dim, activeState, {
+class ButtonBitmap(val bitmap: Bitmap, dim: RectF, condition: () -> Boolean, onClick: () -> Unit) : Button(dim, condition, {
     canvas.drawBitmap(bitmap, null, dim, whitePaint)
 }, onClick)
