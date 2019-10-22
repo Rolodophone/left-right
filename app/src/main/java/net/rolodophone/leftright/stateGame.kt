@@ -9,6 +9,7 @@ object stateGame : State {
     override fun update() {
         road.update()
         player.update()
+//        gui.game.update()
     }
 
     override fun draw() {

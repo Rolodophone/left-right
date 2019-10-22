@@ -53,8 +53,22 @@ object gui {
         }
 
 
+        fun update() {
+            //when (time) {
+            //    in 0.3f..0.5f ->
+            //}
+
+            //time += (1f/300f) / fps
+        }
+
+
         fun draw() {
             pause.draw()
+
+            //draw time of day
+            //if ()
+            //canvas.drawARGB(80, 5, 100, 15)
+
         }
     }
 
