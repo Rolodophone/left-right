@@ -1,26 +1,27 @@
 package net.rolodophone.leftright
 
 object stateGameOver : State {
-    var lengthMoved = 0f
+    var moved = false
 
     override fun reset() {
-        lengthMoved = 0f
+        moved = false
         gui.gameOver.reset()
     }
 
     override fun update() {
         gui.gameOver.update()
 
-        if (lengthMoved < w(12)) {
+        if (!moved) {
             road.update()
-            lengthMoved += player.ySpeed / fps
+            moved = true
         }
     }
 
     override fun draw() {
         road.draw()
-        road.drawItems()
+        road.draw()
         player.draw()
+        weather.draw()
         gui.gameOver.draw()
         if (isDebug) gui.debug.draw()
     }

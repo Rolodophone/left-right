@@ -9,13 +9,13 @@ object stateGame : State {
     override fun update() {
         road.update()
         player.update()
-//        gui.game.update()
     }
 
     override fun draw() {
         road.draw()
-        road.drawItems()
+        road.draw()
         player.draw()
+        weather.draw()
         gui.status.draw()
         gui.game.draw()
         if (isDebug) gui.debug.draw()

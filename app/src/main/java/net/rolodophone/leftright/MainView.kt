@@ -70,10 +70,18 @@ class MainView(context: Context) : SurfaceView(context), Runnable {
         bitmapOptions.inScaled = false
 
 
-        bitmaps.car1 = BitmapFactory.decodeResource(context.resources, R.drawable.car1, bitmapOptions)
-        bitmaps.car1_hit_l = BitmapFactory.decodeResource(context.resources, R.drawable.car1_hit_l, bitmapOptions)
-        bitmaps.car1_hit_m = BitmapFactory.decodeResource(context.resources, R.drawable.car1_hit_m, bitmapOptions)
-        bitmaps.car1_hit_r = BitmapFactory.decodeResource(context.resources, R.drawable.car1_hit_r, bitmapOptions)
+        bitmaps.car1.clean = BitmapFactory.decodeResource(context.resources, R.drawable.car1, bitmapOptions)
+        bitmaps.car1.hit = BitmapFactory.decodeResource(context.resources, R.drawable.car1_hit, bitmapOptions)
+        bitmaps.car2.clean = BitmapFactory.decodeResource(context.resources, R.drawable.car2, bitmapOptions)
+        bitmaps.car2.hit = BitmapFactory.decodeResource(context.resources, R.drawable.car2_hit, bitmapOptions)
+        bitmaps.car3.clean = BitmapFactory.decodeResource(context.resources, R.drawable.car3, bitmapOptions)
+        bitmaps.car3.hit = BitmapFactory.decodeResource(context.resources, R.drawable.car3_hit, bitmapOptions)
+        bitmaps.car4.clean = BitmapFactory.decodeResource(context.resources, R.drawable.car4, bitmapOptions)
+        bitmaps.car4.hit = BitmapFactory.decodeResource(context.resources, R.drawable.car4_hit, bitmapOptions)
+        bitmaps.car5.clean = BitmapFactory.decodeResource(context.resources, R.drawable.car5, bitmapOptions)
+        bitmaps.car5.hit = BitmapFactory.decodeResource(context.resources, R.drawable.car5_hit, bitmapOptions)
+        bitmaps.car6.clean = BitmapFactory.decodeResource(context.resources, R.drawable.car6, bitmapOptions)
+        bitmaps.car6.hit = BitmapFactory.decodeResource(context.resources, R.drawable.car6_hit, bitmapOptions)
         bitmaps.death_msg = BitmapFactory.decodeResource(context.resources, R.drawable.death_msg, bitmapOptions)
         bitmaps.fuel = BitmapFactory.decodeResource(context.resources, R.drawable.fuel, bitmapOptions)
         bitmaps.main_menu = BitmapFactory.decodeResource(context.resources, R.drawable.main_menu, bitmapOptions)

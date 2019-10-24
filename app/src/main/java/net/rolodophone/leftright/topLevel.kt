@@ -30,7 +30,7 @@ var canvas = Canvas()
 var whitePaint = Paint()
 var dimmerPaint = Paint()
 
-const val isDebug = false
+const val isDebug = true
 
 
 fun centerOfLane(lane: Int): Float {
@@ -50,6 +50,10 @@ fun RectF.scale(factor: Float): RectF {
     val mRight = right + diffHorizontal / 2f
 
     return RectF(mLeft, mTop, mRight, mBottom)
+}
+
+fun randomChance(chance: Int): Boolean {
+    return (0 until ((chance / player.ySpeedMps.toInt()) * fps.toInt())).random() == 0
 }
 
 

@@ -53,22 +53,8 @@ object gui {
         }
 
 
-        fun update() {
-            //when (time) {
-            //    in 0.3f..0.5f ->
-            //}
-
-            //time += (1f/300f) / fps
-        }
-
-
         fun draw() {
             pause.draw()
-
-            //draw time of day
-            //if ()
-            //canvas.drawARGB(80, 5, 100, 15)
-
         }
     }
 
@@ -83,10 +69,10 @@ object gui {
             player.die(DeathType.NONE, null)
         }
         val spawnCone = ButtonText("spawn cone", Paint.Align.RIGHT, RectF(w(200), statusBarHeight + w(60), w(353), statusBarHeight + w(85)), { isDebug && state == stateGame }) {
-            road.cones.spawn()
+            road.items.add(road.Cone())
         }
         val spawnFuel = ButtonText("spawn fuel", Paint.Align.RIGHT, RectF(w(200), statusBarHeight + w(90), w(353), statusBarHeight + w(115)), { isDebug && state == stateGame }) {
-            road.fuels.spawn()
+            road.items.add(road.Fuel())
         }
 
         init {
@@ -262,6 +248,12 @@ object gui {
                 listOf("No one ever told me this", "car explodes when it runs", "out of fuel!"),
                 listOf("You ran out of fuel!"),
                 listOf("Hmm, the accelerator pedal", "doesn't seem to be working")
+            ),
+
+            DeathType.CAR to listOf(
+                listOf("Better luck next time!"),
+                listOf("Oops, I forgot my seat belt..."),
+                listOf("Death can be fatal...")
             )
         )
 

@@ -27,9 +27,16 @@ object player {
     var goingR = false
     var lane = 1
 
+    //helper variable to use ySpeed in m/s
+    var ySpeedMps
+        get() = (ySpeed / width) * 4
+        set(value) {
+            ySpeed = (value / 4) * width
+        }
+
 
     fun reset() {
-        img = bitmaps.car1
+        img = bitmaps.car1.clean
 
         dim = RectF(
             w(135),
@@ -56,7 +63,7 @@ object player {
         fuel -= 2f / fps
         if (fuel <= 0f) die(DeathType.FUEL, null)
 
-        distance += (ySpeed / width * 4) / fps
+        distance += ySpeedMps / fps
 
         //speed up over time
         ySpeed += w(3) / fps
@@ -85,14 +92,19 @@ object player {
     }
 
 
-    fun die(deathType: DeathType, item: ItemType.Item?) {
+    fun die(deathType: DeathType, item: road.Item?) {
         causeOfDeath = deathType
 
         if (item != null) {
-            img = when {
-                goingL -> bitmaps.car1_hit_l
-                goingR -> bitmaps.car1_hit_r
-                else -> bitmaps.car1_hit_m
+            this.img = bitmaps.car1.hit
+
+            when (item) {
+                is road.Car1 -> item.img = bitmaps.car1.hit
+                is road.Car2 -> item.img = bitmaps.car2.hit
+                is road.Car3 -> item.img = bitmaps.car3.hit
+                is road.Car4 -> item.img = bitmaps.car4.hit
+                is road.Car5 -> item.img = bitmaps.car5.hit
+                is road.Car6 -> item.img = bitmaps.car6.hit
             }
         }
 
