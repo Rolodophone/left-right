@@ -224,7 +224,9 @@ object gui {
             DeathType.NONE to listOf(
                 listOf("Better luck next time!"),
                 listOf("Oops, I forgot my seat belt..."),
-                listOf("Death can be fatal...")
+                listOf("Death can be fatal..."),
+
+                listOf("Magic!")
             ),
 
             DeathType.CONE to listOf(
