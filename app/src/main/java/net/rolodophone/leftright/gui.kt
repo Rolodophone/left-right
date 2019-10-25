@@ -5,24 +5,23 @@ import android.os.SystemClock
 import kotlin.random.Random
 
 object gui {
-    val padding = w(5)
     val buttons = listOf(debug.spawnCone, debug.spawnFuel, debug.killPlayer, game.pause, paused.resume, gameOver.playAgain, gameOver.mainMenu, game.leftButton, game.rightButton)
 
     object game {
-        val pause = Button(RectF(padding, height - padding - w(45), padding + w(45), height - padding), { state == stateGame }, {
+        val pause = Button(RectF(w(5), height - w(50), w(50), height - w(5)), { state == stateGame }, {
 
             canvas.drawRect(
-                padding,
-                height - padding - w(45),
-                padding + w(15),
-                height - padding,
+                w(5),
+                height - w(50),
+                w(20),
+                height - w(5),
                 whitePaint
             )
             canvas.drawRect(
-                padding + w(30),
-                height - padding - w(45),
-                padding + w(45),
-                height - padding,
+                w(35),
+                height - w(50),
+                w(50),
+                height - w(5),
                 whitePaint
             )
 
@@ -88,30 +87,30 @@ object gui {
             }
             whitePaint.textAlign = Paint.Align.LEFT
             whitePaint.textSize = w(22)
-            canvas.drawText("FPS: $viewFps", padding, w(55) + statusBarHeight, whitePaint)
+            canvas.drawText("FPS: $viewFps", w(5), w(55) + statusBarHeight, whitePaint)
 
 
             //draw grid
             var x = w(20)
-            while (x <= w(340)) {
+            while (x < width) {
                 canvas.drawLine(x, 0f, x, height, gridPaint)
                 x += w(20)
             }
 
             x = w(120)
-            while (x <= w(240)) {
+            while (x < width) {
                 canvas.drawLine(x, 0f, x, height, whitePaint)
                 x += w(120)
             }
 
             var y = h(20)
-            while (y <= h(340.001f)) {
+            while (y < height) {
                 canvas.drawLine(0f, y, width, y, gridPaint)
                 y += h(20)
             }
 
             y = h(120)
-            while (y <= h(240)) {
+            while (y < height) {
                 canvas.drawLine(0f, y, width, y, whitePaint)
                 y += h(120)
             }
@@ -127,14 +126,11 @@ object gui {
 
 
     object status {
-        var fuelImg = bitmaps.fuel
-        val fuelW = w(22)
-        val fuelH = fuelW * (16f / 14f)
         val fuelDim = RectF(
-            width - fuelW - padding,
-            padding + statusBarHeight,
-            width - padding,
-            padding + fuelH + statusBarHeight
+            w(333),
+            w(4) + statusBarHeight,
+            w(355),
+            w(29.1428571429f) + statusBarHeight
         )
 
 
@@ -143,12 +139,12 @@ object gui {
 
 
             //draw fuel meter
-            canvas.drawBitmap(fuelImg, null, fuelDim, whitePaint)
+            canvas.drawBitmap(bitmaps.fuel, null, fuelDim, whitePaint)
 
             whitePaint.textAlign = Paint.Align.RIGHT
             canvas.drawText(
                 player.fuel.toInt().toString(),
-                width - fuelW - w(9),
+                w(329),
                 w(25) + statusBarHeight,
                 whitePaint
             )

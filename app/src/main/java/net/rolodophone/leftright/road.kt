@@ -93,7 +93,7 @@ object road {
 
         override val dim = RectF(
             centerOfLane(lane) - w(22.5f),
-            -w(45),
+            -w(51.4285714286f),
             centerOfLane(lane) + w(22.5f),
             0f
         )
