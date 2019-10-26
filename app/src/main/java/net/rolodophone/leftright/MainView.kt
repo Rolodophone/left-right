@@ -53,6 +53,7 @@ class MainView(context: Context) : SurfaceView(context), Runnable {
 
         holder.setFormat(PixelFormat.RGB_565)
 
+        //initialize paints
         whitePaint.color = Color.rgb(255, 255, 255)
         whitePaint.isAntiAlias = true
         dimmerPaint.color = Color.argb(150, 0, 0, 0)
@@ -66,9 +67,9 @@ class MainView(context: Context) : SurfaceView(context), Runnable {
         window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_IN_OVERSCAN)
 
 
+        //load bitmaps
         val bitmapOptions = BitmapFactory.Options()
         bitmapOptions.inScaled = false
-
 
         bitmaps.car1.clean = BitmapFactory.decodeResource(context.resources, R.drawable.car1, bitmapOptions)
         bitmaps.car1.hit = BitmapFactory.decodeResource(context.resources, R.drawable.car1_hit, bitmapOptions)
@@ -89,6 +90,14 @@ class MainView(context: Context) : SurfaceView(context), Runnable {
         bitmaps.cone = BitmapFactory.decodeResource(context.resources, R.drawable.cone, bitmapOptions)
 
 
+        //load sounds
+        sounds.hit = sounds.soundPool.load(context, R.raw.hit, 1)
+        sounds.select = sounds.soundPool.load(context, R.raw.select, 1)
+        sounds.tap = sounds.soundPool.load(context, R.raw.tap, 1)
+        sounds.fuel = sounds.soundPool.load(context, R.raw.fuel, 1)
+
+
+        //initialize state
         state.reset()
 
         Log.i("View", "</--------INIT--------->")

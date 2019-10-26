@@ -27,6 +27,7 @@ object gui {
 
         }) {
             state = statePaused
+            sounds.playSelect()
         }
 
         val leftButton = Button(RectF(0f, 0f, halfWidth - 1f, height), { state == stateGame }, {}) {
@@ -36,7 +37,11 @@ object gui {
                 player.lane++
             }
 
-            if (player.lane != 0) player.goingL = true
+            if (player.lane != 0) {
+                player.goingL = true
+                sounds.playTap()
+            }
+
             player.goingR = false
         }
 
@@ -47,7 +52,11 @@ object gui {
                 player.lane--
             }
 
-            if (player.lane != road.numLanes - 1) player.goingR = true
+            if (player.lane != road.numLanes - 1) {
+                player.goingR = true
+                sounds.playTap()
+            }
+
             player.goingL = false
         }
 
@@ -175,6 +184,7 @@ object gui {
             canvas.drawText("Resume", w(132), halfHeight + w(39), whitePaint)
         }) {
             state = stateGame
+            sounds.playSelect()
         }
 
 
@@ -204,14 +214,13 @@ object gui {
 
 
     object gameOver {
-        var deathMsgImg = bitmaps.death_msg
-        val deathMsgDim = RectF(
+        private val deathMsgDim = RectF(
             w(30),
             h(40),
             w(330),
             h(40) + w(72.972972973f)
         )
-        val deathMsgPaint = Paint()
+        private val deathMsgPaint = Paint()
 
         val playAgain = ButtonBitmap(bitmaps.play_again, RectF(w(220), h(250), w(300), h(250) + w(80)), { state == stateGameOver }) {
             state = stateGame
@@ -220,7 +229,7 @@ object gui {
             //state = stateMain
         }
 
-        val comments = mapOf(
+        private val comments = mapOf(
             DeathType.NONE to listOf(
                 listOf("Better luck next time!"),
                 listOf("Oops, I forgot my seat belt..."),
@@ -296,7 +305,7 @@ object gui {
             //draw wasted image
             canvas.save()
             canvas.rotate(rotation, halfWidth, h(60))
-            canvas.drawBitmap(deathMsgImg, null, deathMsgDim.scale(scale), deathMsgPaint)
+            canvas.drawBitmap(bitmaps.death_msg, null, deathMsgDim.scale(scale), deathMsgPaint)
             canvas.restore()
 
             //draw comment

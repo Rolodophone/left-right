@@ -96,6 +96,8 @@ object player {
         causeOfDeath = deathType
 
         if (item != null) {
+            sounds.playHit()
+
             this.img = bitmaps.car1.hit
 
             when (item) {

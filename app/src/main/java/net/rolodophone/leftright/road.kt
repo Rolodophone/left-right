@@ -85,6 +85,7 @@ object road {
         override fun onTouch() {
             player.fuel += 50f
             itemsToDel.add(this)
+            sounds.playFuel()
         }
     }
 
@@ -234,7 +235,6 @@ object road {
             dim.offset(0f, w(210) / fps)
         }
     }
-
 
     val numLanes = 3
 
