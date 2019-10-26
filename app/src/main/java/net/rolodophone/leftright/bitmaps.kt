@@ -37,4 +37,5 @@ object bitmaps {
     lateinit var main_menu: Bitmap
     lateinit var play_again: Bitmap
     lateinit var cone: Bitmap
+    lateinit var oil: Bitmap
 }

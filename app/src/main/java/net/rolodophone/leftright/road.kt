@@ -44,6 +44,7 @@ object road {
     abstract class Item {
 
         val lane = (0 until numLanes).random()
+        var disabled = false
 
         open val rotation = 0f
 
@@ -61,7 +62,7 @@ object road {
             if (dim.top > height) itemsToDel.add(this)
 
             //perform onTouch()
-            if (dim.bottom > player.dim.top && dim.top < player.dim.bottom && dim.right > player.dim.left && dim.left < player.dim.right) onTouch()
+            if (dim.bottom > player.dim.top && dim.top < player.dim.bottom && dim.right > player.dim.left && dim.left < player.dim.right && !disabled) onTouch()
         }
 
         open fun draw() {
@@ -101,6 +102,23 @@ object road {
 
         override fun onTouch() {
             player.die(DeathType.CONE, this)
+        }
+    }
+
+    class Oil : Item() {
+        override var img = bitmaps.oil
+
+        override val dim = RectF(
+            centerOfLane(lane) - w(67.5f),
+            -w(135),
+            centerOfLane(lane) + w(67.5f),
+            0f
+        )
+
+        override fun onTouch() {
+            player.oil()
+            this.disabled = true
+            sounds.playOil()
         }
     }
 
@@ -236,6 +254,7 @@ object road {
         }
     }
 
+
     val numLanes = 3
 
     lateinit var items: MutableList<Item>
@@ -253,14 +272,15 @@ object road {
 
         //spawn new items
         if (fps != Float.POSITIVE_INFINITY) {
-            if (randomChance(32)) items.add(Fuel())
-            if (randomChance(40)) items.add(Cone())
-            if (randomChance(160)) items.add(Car1())
-            if (randomChance(240)) items.add(Car2())
-            if (randomChance(320)) items.add(Car3())
-            if (randomChance(410)) items.add(Car4())
-            if (randomChance(520)) items.add(Car5())
-            if (randomChance(700)) items.add(Car6())
+            if (randomChance(256)) items.add(Fuel())
+            if (randomChance(320)) items.add(Cone())
+            if (randomChance(640)) items.add(Oil())
+            if (randomChance(1280)) items.add(Car1())
+            if (randomChance(1920)) items.add(Car2())
+            if (randomChance(2560)) items.add(Car3())
+            if (randomChance(3280)) items.add(Car4())
+            if (randomChance(4160)) items.add(Car5())
+            if (randomChance(5600)) items.add(Car6())
         }
 
         for (item in items) item.update()

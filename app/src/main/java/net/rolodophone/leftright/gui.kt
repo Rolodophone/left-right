@@ -5,7 +5,7 @@ import android.os.SystemClock
 import kotlin.random.Random
 
 object gui {
-    val buttons = listOf(debug.spawnCone, debug.spawnFuel, debug.killPlayer, game.pause, paused.resume, gameOver.playAgain, gameOver.mainMenu, game.leftButton, game.rightButton)
+    val buttons = listOf(debug.moreFuel, game.pause, paused.resume, gameOver.playAgain, gameOver.mainMenu, game.leftButton, game.rightButton)
 
     object game {
         val pause = Button(RectF(w(5), height - w(50), w(50), height - w(5)), { state == stateGame }, {
@@ -73,14 +73,8 @@ object gui {
         var prevTime = SystemClock.elapsedRealtime()
         var viewFps = fps.toInt()
 
-        val killPlayer = ButtonText("kill player", Paint.Align.RIGHT, RectF(w(200), statusBarHeight + w(30), w(353), statusBarHeight + w(55)), { isDebug && state == stateGame }) {
-            player.die(DeathType.NONE, null)
-        }
-        val spawnCone = ButtonText("spawn cone", Paint.Align.RIGHT, RectF(w(200), statusBarHeight + w(60), w(353), statusBarHeight + w(85)), { isDebug && state == stateGame }) {
-            road.items.add(road.Cone())
-        }
-        val spawnFuel = ButtonText("spawn fuel", Paint.Align.RIGHT, RectF(w(200), statusBarHeight + w(90), w(353), statusBarHeight + w(115)), { isDebug && state == stateGame }) {
-            road.items.add(road.Fuel())
+        val moreFuel = ButtonText("more fuel", Paint.Align.RIGHT, RectF(w(200), statusBarHeight + w(30), w(353), statusBarHeight + w(55)), { isDebug && state == stateGame }) {
+            player.fuel += 1000
         }
 
         init {
@@ -100,35 +94,33 @@ object gui {
 
 
             //draw grid
-            var x = w(20)
-            while (x < width) {
-                canvas.drawLine(x, 0f, x, height, gridPaint)
-                x += w(20)
-            }
-
-            x = w(120)
-            while (x < width) {
-                canvas.drawLine(x, 0f, x, height, whitePaint)
-                x += w(120)
-            }
-
-            var y = h(20)
-            while (y < height) {
-                canvas.drawLine(0f, y, width, y, gridPaint)
-                y += h(20)
-            }
-
-            y = h(120)
-            while (y < height) {
-                canvas.drawLine(0f, y, width, y, whitePaint)
-                y += h(120)
-            }
+//            var x = w(20)
+//            while (x < width) {
+//                canvas.drawLine(x, 0f, x, height, gridPaint)
+//                x += w(20)
+//            }
+//
+//            x = w(120)
+//            while (x < width) {
+//                canvas.drawLine(x, 0f, x, height, whitePaint)
+//                x += w(120)
+//            }
+//
+//            var y = h(20)
+//            while (y < height) {
+//                canvas.drawLine(0f, y, width, y, gridPaint)
+//                y += h(20)
+//            }
+//
+//            y = h(120)
+//            while (y < height) {
+//                canvas.drawLine(0f, y, width, y, whitePaint)
+//                y += h(120)
+//            }
 
             //draw buttons
             if (state == stateGame) {
-                killPlayer.draw()
-                spawnCone.draw()
-                spawnFuel.draw()
+                moreFuel.draw()
             }
         }
     }

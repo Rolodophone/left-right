@@ -25,13 +25,16 @@ object player {
     lateinit var causeOfDeath: DeathType
     var goingL = false
     var goingR = false
+    var spinSpeed = 0f
+    var rotation = 0f
+    var deceleration = 0f
     var lane = 1
 
     //helper variable to use ySpeed in m/s
     var ySpeedMps
-        get() = (ySpeed / width) * 4
+        get() = (ySpeed / width) * 16f
         set(value) {
-            ySpeed = (value / 4) * width
+            ySpeed = (value / 16f) * width
         }
 
 
@@ -45,7 +48,7 @@ object player {
             height + w(90)
         )
 
-        ySpeed = w(360)
+        ySpeedMps = 0.1f
         fuel = 50f
         distance = 0f
         coins = 0
@@ -54,20 +57,30 @@ object player {
         goingL = false
         goingR = false
 
+        //for the oil item
+        spinSpeed = 0f
+        rotation = 0f
+        deceleration = 0f
+
         //what lane the car is in. 0 represents left most lane and so on
         lane = 1
     }
 
 
     fun update() {
+        //handle fuel
         fuel -= 2f / fps
         if (fuel <= 0f) die(DeathType.FUEL, null)
 
+        //increase distance travelled
         distance += ySpeedMps / fps
 
-        //speed up over time
-        ySpeed += w(3) / fps
+        //speed up over time (but speed up slower as speed increases)
+        if (spinSpeed == 0f) {
+            ySpeedMps += (50f / ySpeedMps) / fps
+        }
 
+        //handle turning
         if (goingL) {
             dim.offset(-xSpeed / fps, 0f)
 
@@ -85,10 +98,25 @@ object player {
                 lane += 1
             }
         }
+
+        //handle oil
+        if (spinSpeed != 0f) {
+            rotation += spinSpeed / fps
+            spinSpeed -= 144 / fps
+            ySpeed -= deceleration / fps
+
+            if (spinSpeed < 0f) {
+                spinSpeed = 0f
+                rotation = 0f
+            }
+        }
     }
 
     fun draw() {
+        canvas.save()
+        canvas.rotate(rotation, dim.centerX(), dim.centerY())
         canvas.drawBitmap(img, null, dim, whitePaint)
+        canvas.restore()
     }
 
 
@@ -111,5 +139,15 @@ object player {
         }
 
         state = stateGameOver
+    }
+
+
+    fun oil() {
+        //one full turn every second
+        spinSpeed = 720f
+        //lose half your speed over 5 seconds
+        deceleration = (ySpeed / 2f) / 5f
+        //reset rotation
+        rotation = 0f
     }
 }

@@ -88,6 +88,7 @@ class MainView(context: Context) : SurfaceView(context), Runnable {
         bitmaps.main_menu = BitmapFactory.decodeResource(context.resources, R.drawable.main_menu, bitmapOptions)
         bitmaps.play_again = BitmapFactory.decodeResource(context.resources, R.drawable.play_again, bitmapOptions)
         bitmaps.cone = BitmapFactory.decodeResource(context.resources, R.drawable.cone, bitmapOptions)
+        bitmaps.oil = BitmapFactory.decodeResource(context.resources, R.drawable.oil, bitmapOptions)
 
 
         //load sounds
@@ -95,6 +96,7 @@ class MainView(context: Context) : SurfaceView(context), Runnable {
         sounds.select = sounds.soundPool.load(context, R.raw.select, 1)
         sounds.tap = sounds.soundPool.load(context, R.raw.tap, 1)
         sounds.fuel = sounds.soundPool.load(context, R.raw.fuel, 1)
+        sounds.oil = sounds.soundPool.load(context, R.raw.oil, 1)
 
 
         //initialize state
