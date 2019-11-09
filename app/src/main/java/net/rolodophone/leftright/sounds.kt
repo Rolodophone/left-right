@@ -3,7 +3,7 @@ package net.rolodophone.leftright
 import android.media.SoundPool
 
 object sounds {
-    val soundPool = SoundPool.Builder().setMaxStreams(3).build()
+    val soundPool = SoundPool.Builder().setMaxStreams(10).build()
 
     var hit = 0
     var select = 0

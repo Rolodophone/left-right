@@ -31,33 +31,15 @@ object gui {
         }
 
         val leftButton = Button(RectF(0f, 0f, halfWidth - 1f, height), { state == stateGame }, {}) {
-
-            //if the player turns in between lanes, set the lane to the lane it would have gone to
-            if (player.goingR) {
-                player.lane++
-            }
-
-            if (player.lane != 0) {
-                player.goingL = true
-                sounds.playTap()
-            }
-
-            player.goingR = false
+            val degree = player.rotation % 360f
+            if (degree < 90f || degree > 270f) player.turnLeft()
+            else player.turnRight()
         }
 
         val rightButton = Button(RectF(halfWidth, 0f, width, height), { state == stateGame }, {}) {
-
-            //if the player turns in between lanes, set the lane to the lane it would have gone to
-            if (player.goingL) {
-                player.lane--
-            }
-
-            if (player.lane != road.numLanes - 1) {
-                player.goingR = true
-                sounds.playTap()
-            }
-
-            player.goingL = false
+            val degree = player.rotation % 360f
+            if (degree < 90f || degree > 270f) player.turnRight()
+            else player.turnLeft()
         }
 
 

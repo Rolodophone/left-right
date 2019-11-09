@@ -32,9 +32,9 @@ object player {
 
     //helper variable to use ySpeed in m/s
     var ySpeedMps
-        get() = (ySpeed / width) * 16f
+        get() = (ySpeed / width)
         set(value) {
-            ySpeed = (value / 16f) * width
+            ySpeed = (value) * width
         }
 
 
@@ -48,7 +48,7 @@ object player {
             height + w(90)
         )
 
-        ySpeedMps = 0.1f
+        ySpeedMps = 0f
         fuel = 50f
         distance = 0f
         coins = 0
@@ -75,9 +75,10 @@ object player {
         //increase distance travelled
         distance += ySpeedMps / fps
 
-        //speed up over time (but speed up slower as speed increases)
+        //speed up over time (except at top speed)
         if (spinSpeed == 0f) {
-            ySpeedMps += (50f / ySpeedMps) / fps
+            ySpeedMps += 0.3f / fps
+            if (ySpeedMps > 2f) ySpeedMps = 2f
         }
 
         //handle turning
@@ -149,5 +150,35 @@ object player {
         deceleration = (ySpeed / 2f) / 5f
         //reset rotation
         rotation = 0f
+    }
+
+
+    fun turnLeft() {
+        //if the player turns in between lanes, set the lane to the lane it would have gone to
+        if (goingR) {
+            lane++
+        }
+
+        if (lane != 0) {
+            goingL = true
+            sounds.playTap()
+        }
+
+        goingR = false
+    }
+
+
+    fun turnRight() {
+        //if the player turns in between lanes, set the lane to the lane it would have gone to
+        if (goingL) {
+            lane--
+        }
+
+        if (lane != road.numLanes - 1) {
+            goingR = true
+            sounds.playTap()
+        }
+
+        goingL = false
     }
 }

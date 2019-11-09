@@ -41,6 +41,8 @@ object road {
         }
     }
 
+    val laneOccupied = mutableSetOf(0, 1, 2)
+
     abstract class Item {
 
         val lane = (0 until numLanes).random()
@@ -272,15 +274,15 @@ object road {
 
         //spawn new items
         if (fps != Float.POSITIVE_INFINITY) {
-            if (randomChance(256)) items.add(Fuel())
-            if (randomChance(320)) items.add(Cone())
-            if (randomChance(640)) items.add(Oil())
-            if (randomChance(1280)) items.add(Car1())
-            if (randomChance(1920)) items.add(Car2())
-            if (randomChance(2560)) items.add(Car3())
-            if (randomChance(3280)) items.add(Car4())
-            if (randomChance(4160)) items.add(Car5())
-            if (randomChance(5600)) items.add(Car6())
+            if (randomChance(15)) items.add(Fuel())
+            if (randomChance(30)) items.add(Cone())
+            if (randomChance(50)) items.add(Oil())
+            if (randomChance(100)) items.add(Car1())
+            if (randomChance(150)) items.add(Car2())
+            if (randomChance(200)) items.add(Car3())
+            if (randomChance(250)) items.add(Car4())
+            if (randomChance(300)) items.add(Car5())
+            if (randomChance(400)) items.add(Car6())
         }
 
         for (item in items) item.update()
