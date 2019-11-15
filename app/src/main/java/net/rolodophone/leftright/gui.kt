@@ -5,7 +5,7 @@ import android.os.SystemClock
 import kotlin.random.Random
 
 object gui {
-    val buttons = listOf(debug.moreFuel, game.pause, paused.resume, gameOver.playAgain, gameOver.mainMenu, game.leftButton, game.rightButton)
+    val buttons = listOf(debug.moreFuel, debug.frenzyOn, debug.frenzyOff, game.pause, paused.resume, gameOver.playAgain, gameOver.mainMenu, game.leftButton, game.rightButton)
 
     object game {
         val pause = Button(RectF(w(5), height - w(50), w(50), height - w(5)), { state == stateGame }, {
@@ -58,6 +58,20 @@ object gui {
         val moreFuel = ButtonText("more fuel", Paint.Align.RIGHT, RectF(w(200), statusBarHeight + w(30), w(353), statusBarHeight + w(55)), { isDebug && state == stateGame }) {
             player.fuel += 1000
         }
+        val frenzyOn = ButtonText(
+            "frenzy on",
+            Paint.Align.RIGHT,
+            RectF(w(200), statusBarHeight + w(60), w(353), statusBarHeight + w(85)),
+            { isDebug && state == stateGame && !road.isFrenzy }) {
+            road.isFrenzy = true
+        }
+        val frenzyOff = ButtonText(
+            "frenzy off",
+            Paint.Align.RIGHT,
+            RectF(w(200), statusBarHeight + w(60), w(353), statusBarHeight + w(85)),
+            { isDebug && state == stateGame && road.isFrenzy }) {
+            road.isFrenzy = false
+        }
 
         init {
             gridPaint.color = Color.argb(100, 255, 255, 255)
@@ -101,9 +115,9 @@ object gui {
 //            }
 
             //draw buttons
-            if (state == stateGame) {
-                moreFuel.draw()
-            }
+            if (moreFuel.condition()) moreFuel.draw()
+            if (frenzyOn.condition()) frenzyOn.draw()
+            if (frenzyOff.condition()) frenzyOff.draw()
         }
     }
 
@@ -197,9 +211,11 @@ object gui {
         private val deathMsgPaint = Paint()
 
         val playAgain = ButtonBitmap(bitmaps.play_again, RectF(w(220), h(250), w(300), h(250) + w(80)), { state == stateGameOver }) {
+            sounds.playSelect()
             state = stateGame
         }
         val mainMenu = ButtonBitmap(bitmaps.main_menu, RectF(w(60), h(250), w(140), h(250) + w(80)), { state == stateGameOver }) {
+            sounds.playSelect()
             //state = stateMain
         }
 

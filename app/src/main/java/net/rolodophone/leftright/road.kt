@@ -6,6 +6,8 @@ import android.support.annotation.CallSuper
 
 object road {
 
+    var isFrenzy = false
+
     object background {
         private val lineW = w(3)
         private val lineH = w(100)
@@ -41,17 +43,60 @@ object road {
         }
     }
 
-    val laneOccupied = mutableSetOf(0, 1, 2)
 
     abstract class Item {
 
-        val lane = (0 until numLanes).random()
         var disabled = false
 
         open val rotation = 0f
 
+        abstract val isObstacle: Boolean
+
+        abstract var lane: Int
         abstract var img: Bitmap
         abstract val dim: RectF
+
+        fun randomLane(): Int {
+            val remainingLanes = mutableSetOf<Int>()
+            remainingLanes.addAll(0 until numLanes)
+
+            var newLane: Int
+            while (true) {
+                if (remainingLanes.isEmpty()) {
+                    itemsToDel.add(this)
+                    return 0
+                }
+
+                newLane = remainingLanes.random()
+                remainingLanes.remove(newLane)
+
+                if (checkValidLane(newLane)) {
+                    return newLane
+                }
+            }
+        }
+
+        private fun checkValidLane(laneToCheck: Int): Boolean {
+
+            //touching another item
+            for (item in items) if (item.lane == laneToCheck && item.dim.top < w(5)) {
+                return false
+            }
+
+            //making it impossible for player to pass (an obstacle in each lane)
+
+            val remainingLanes = mutableSetOf<Int>()
+            remainingLanes.addAll(0 until numLanes)
+            remainingLanes.remove(laneToCheck)
+
+            for (item in items) {
+                if (item.isObstacle) remainingLanes.remove(item.lane)
+            }
+
+            if (remainingLanes.isEmpty()) return false
+
+            return true
+        }
 
         abstract fun onTouch()
 
@@ -77,6 +122,8 @@ object road {
 
     class Fuel : Item() {
         override var img = bitmaps.fuel
+        override var lane = randomLane()
+        override val isObstacle = false
 
         override val dim = RectF(
             centerOfLane(lane) - w(22.5f),
@@ -94,6 +141,8 @@ object road {
 
     class Cone : Item() {
         override var img = bitmaps.cone
+        override var lane = randomLane()
+        override val isObstacle = true
 
         override val dim = RectF(
             centerOfLane(lane) - w(22.5f),
@@ -109,6 +158,8 @@ object road {
 
     class Oil : Item() {
         override var img = bitmaps.oil
+        override var lane = randomLane()
+        override val isObstacle = false
 
         override val dim = RectF(
             centerOfLane(lane) - w(67.5f),
@@ -126,6 +177,8 @@ object road {
 
     class Car1 : Item() {
         override var img = bitmaps.car1.clean
+        override var lane = randomLane()
+        override val isObstacle = true
         override val rotation = 180f
 
         override val dim = RectF(
@@ -148,6 +201,8 @@ object road {
 
     class Car2 : Item() {
         override var img = bitmaps.car2.clean
+        override var lane = randomLane()
+        override val isObstacle = true
         override val rotation = 180f
 
         override val dim = RectF(
@@ -170,6 +225,8 @@ object road {
 
     class Car3 : Item() {
         override var img = bitmaps.car3.clean
+        override var lane = randomLane()
+        override val isObstacle = true
         override val rotation = 180f
 
         override val dim = RectF(
@@ -192,6 +249,8 @@ object road {
 
     class Car4 : Item() {
         override var img = bitmaps.car4.clean
+        override var lane = randomLane()
+        override val isObstacle = true
         override val rotation = 180f
 
         override val dim = RectF(
@@ -214,6 +273,8 @@ object road {
 
     class Car5 : Item() {
         override var img = bitmaps.car5.clean
+        override var lane = randomLane()
+        override val isObstacle = true
         override val rotation = 180f
 
         override val dim = RectF(
@@ -236,6 +297,8 @@ object road {
 
     class Car6 : Item() {
         override var img = bitmaps.car6.clean
+        override var lane = randomLane()
+        override val isObstacle = true
         override val rotation = 180f
 
         override val dim = RectF(
@@ -274,15 +337,27 @@ object road {
 
         //spawn new items
         if (fps != Float.POSITIVE_INFINITY) {
-            if (randomChance(15)) items.add(Fuel())
-            if (randomChance(30)) items.add(Cone())
-            if (randomChance(50)) items.add(Oil())
-            if (randomChance(100)) items.add(Car1())
-            if (randomChance(150)) items.add(Car2())
-            if (randomChance(200)) items.add(Car3())
-            if (randomChance(250)) items.add(Car4())
-            if (randomChance(300)) items.add(Car5())
-            if (randomChance(400)) items.add(Car6())
+            if (!isFrenzy) {
+                if (randomChance(15)) items.add(Fuel())
+                if (randomChance(15)) items.add(Cone())
+                if (randomChance(25)) items.add(Oil())
+                if (randomChance(50)) items.add(Car1())
+                if (randomChance(75)) items.add(Car2())
+                if (randomChance(100)) items.add(Car3())
+                if (randomChance(125)) items.add(Car4())
+                if (randomChance(150)) items.add(Car5())
+                if (randomChance(200)) items.add(Car6())
+            } else {
+                if (randomChance(3)) items.add(Fuel())
+                if (randomChance(6)) items.add(Cone())
+                if (randomChance(10)) items.add(Oil())
+                if (randomChance(20)) items.add(Car1())
+                if (randomChance(30)) items.add(Car2())
+                if (randomChance(40)) items.add(Car3())
+                if (randomChance(50)) items.add(Car4())
+                if (randomChance(60)) items.add(Car5())
+                if (randomChance(80)) items.add(Car6())
+            }
         }
 
         for (item in items) item.update()

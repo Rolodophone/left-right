@@ -9,7 +9,6 @@ object statePaused : State {
 
     override fun draw() {
         road.draw()
-        road.draw()
         player.draw()
         weather.draw()
         gui.status.draw()
