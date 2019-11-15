@@ -30,7 +30,7 @@ var canvas = Canvas()
 var whitePaint = Paint()
 var dimmerPaint = Paint()
 
-const val isDebug = true
+const val isDebug = false
 
 
 fun centerOfLane(lane: Int): Float {
