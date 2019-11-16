@@ -9,10 +9,12 @@ class ButtonText(val text: String, val align: Paint.Align, dim: RectF, condition
         Paint.Align.RIGHT -> dim.right
         else -> (dim.left + dim.right) / 2
     }
+    private val textSize = dim.height() - w(3)
 
     init {
         draw = {
             whitePaint.textAlign = align
+            whitePaint.textSize = textSize
             canvas.drawText(text, x, dim.bottom, whitePaint)
         }
     }

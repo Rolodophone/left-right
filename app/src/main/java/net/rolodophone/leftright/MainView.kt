@@ -37,7 +37,7 @@ class MainView(context: Context) : SurfaceView(context), Runnable {
                 //calculate fps
                 val timeElapsed = SystemClock.elapsedRealtime() - initialTime
                 fps = if (timeElapsed == 0L) 2000f else 1000f / timeElapsed
-                if (isDebug && fps < 30f) fps = 30f
+                if (gui.showDebug && fps < 30f) fps = 30f
             }
 
 

@@ -5,7 +5,20 @@ import android.os.SystemClock
 import kotlin.random.Random
 
 object gui {
-    val buttons = listOf(debug.moreFuel, debug.frenzyOn, debug.frenzyOff, game.pause, paused.resume, gameOver.playAgain, gameOver.mainMenu, game.leftButton, game.rightButton)
+    var showDebug = false
+    val buttons = listOf(
+        debug.moreFuel,
+        debug.frenzyOn,
+        debug.frenzyOff,
+        game.pause,
+        paused.resume,
+        paused.btnShowDebug,
+        paused.btnHideDebug,
+        gameOver.playAgain,
+        gameOver.mainMenu,
+        game.leftButton,
+        game.rightButton
+    )
 
     object game {
         val pause = Button(RectF(w(5), height - w(50), w(50), height - w(5)), { state == stateGame }, {
@@ -55,21 +68,21 @@ object gui {
         var prevTime = SystemClock.elapsedRealtime()
         var viewFps = fps.toInt()
 
-        val moreFuel = ButtonText("more fuel", Paint.Align.RIGHT, RectF(w(200), statusBarHeight + w(30), w(353), statusBarHeight + w(55)), { isDebug && state == stateGame }) {
+        val moreFuel = ButtonText("more fuel", Paint.Align.RIGHT, RectF(w(200), statusBarHeight + w(30), w(353), statusBarHeight + w(55)), { showDebug && state == stateGame }) {
             player.fuel += 1000
         }
         val frenzyOn = ButtonText(
             "frenzy on",
             Paint.Align.RIGHT,
             RectF(w(200), statusBarHeight + w(60), w(353), statusBarHeight + w(85)),
-            { isDebug && state == stateGame && !road.isFrenzy }) {
+            { showDebug && state == stateGame && !road.isFrenzy }) {
             road.isFrenzy = true
         }
         val frenzyOff = ButtonText(
             "frenzy off",
             Paint.Align.RIGHT,
             RectF(w(200), statusBarHeight + w(60), w(353), statusBarHeight + w(85)),
-            { isDebug && state == stateGame && road.isFrenzy }) {
+            { showDebug && state == stateGame && road.isFrenzy }) {
             road.isFrenzy = false
         }
 
@@ -174,6 +187,20 @@ object gui {
             state = stateGame
             sounds.playSelect()
         }
+        val btnShowDebug = ButtonText(
+            "debug",
+            Paint.Align.RIGHT,
+            RectF(w(200), height - w(35), w(348), height - w(10)),
+            { state == statePaused && !showDebug }) {
+            showDebug = true
+        }
+        val btnHideDebug = ButtonText(
+            "debug",
+            Paint.Align.RIGHT,
+            RectF(w(200), height - w(35), w(348), height - w(10)),
+            { state == statePaused && showDebug }) {
+            showDebug = false
+        }
 
 
         fun draw() {
@@ -197,6 +224,8 @@ object gui {
             )
 
             resume.draw()
+            btnShowDebug.draw()
+            btnHideDebug.draw()
         }
     }
 

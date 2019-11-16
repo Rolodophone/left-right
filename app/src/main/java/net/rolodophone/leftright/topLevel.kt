@@ -30,8 +30,6 @@ var canvas = Canvas()
 var whitePaint = Paint()
 var dimmerPaint = Paint()
 
-const val isDebug = false
-
 
 fun centerOfLane(lane: Int): Float {
     require(lane < road.numLanes) { "lane index must be less than road.numLanes" }

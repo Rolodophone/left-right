@@ -13,6 +13,6 @@ object statePaused : State {
         weather.draw()
         gui.status.draw()
         gui.paused.draw()
-        if (isDebug) gui.debug.draw()
+        if (gui.showDebug) gui.debug.draw()
     }
 }
