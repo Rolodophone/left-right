@@ -20,44 +20,61 @@ object gui {
         game.rightButton
     )
 
-    object game {
-        val pause = Button(RectF(w(5), height - w(50), w(50), height - w(5)), { state == stateGame }, {
+    fun updateButtons() {
+        for (button in buttons) button.update()
+    }
 
-            canvas.drawRect(
+    object game {
+        val pause = object : Button() {
+            override val dim = RectF(w(5), height - w(50), w(50), height - w(5))
+            override val onClick = {
+                sounds.playSelect()
+                state = statePaused
+            }
+
+            override fun draw() {
+                super.draw()
+
+                canvas.drawRect(
                 w(5),
                 height - w(50),
                 w(20),
                 height - w(5),
                 whitePaint
-            )
-            canvas.drawRect(
-                w(35),
-                height - w(50),
-                w(50),
-                height - w(5),
-                whitePaint
-            )
-
-        }) {
-            state = statePaused
-            sounds.playSelect()
+                )
+                canvas.drawRect(
+                    w(35),
+                    height - w(50),
+                    w(50),
+                    height - w(5),
+                    whitePaint
+                )
+            }
         }
 
-        val leftButton = Button(RectF(0f, 0f, halfWidth - 1f, height), { state == stateGame }, {}) {
-            val degree = player.rotation % 360f
-            if (degree < 90f || degree > 270f) player.turnLeft()
-            else player.turnRight()
+        val leftButton = object : Button() {
+            override val dim = RectF(0f, 0f, halfWidth - 1f, height)
+            override val onClick = {
+                val degree = player.rotation % 360f
+                if (degree < 90f || degree > 270f) player.turnLeft()
+                else player.turnRight()
+            }
         }
 
-        val rightButton = Button(RectF(halfWidth, 0f, width, height), { state == stateGame }, {}) {
-            val degree = player.rotation % 360f
-            if (degree < 90f || degree > 270f) player.turnRight()
-            else player.turnLeft()
+        val rightButton = object : Button() {
+            override val dim = RectF(halfWidth, 0f, width, height)
+            override val onClick = {
+                val degree = player.rotation % 360f
+                if (degree < 90f || degree > 270f) player.turnRight()
+                else player.turnLeft()
+            }
         }
 
 
         fun draw() {
             pause.draw()
+            leftButton.draw()
+            rightButton.draw()
         }
     }
 
@@ -103,22 +120,21 @@ object gui {
             var prevTime = SystemClock.elapsedRealtime()
             var viewFps = fps.toInt()
 
-            val moreFuel =
-                ButtonText("more fuel", Paint.Align.RIGHT, RectF(w(200), statusBarHeight + w(30), w(353), statusBarHeight + w(55)), { showDebug && state == stateGame }) {
-                    player.fuel += 1000
-                }
+            val moreFuel = ButtonText("more fuel", Paint.Align.RIGHT, RectF(w(200), statusBarHeight + w(30), w(353), statusBarHeight + w(55))) {
+                player.fuel += 1000
+            }
             val frenzyOn = ButtonText(
                 "frenzy on",
                 Paint.Align.RIGHT,
-                RectF(w(200), statusBarHeight + w(60), w(353), statusBarHeight + w(85)),
-                { showDebug && state == stateGame && !road.isFrenzy }) {
+                RectF(w(200), statusBarHeight + w(60), w(353), statusBarHeight + w(85))
+            ) {
                 road.isFrenzy = true
             }
             val frenzyOff = ButtonText(
                 "frenzy off",
                 Paint.Align.RIGHT,
-                RectF(w(200), statusBarHeight + w(60), w(353), statusBarHeight + w(85)),
-                { showDebug && state == stateGame && road.isFrenzy }) {
+                RectF(w(200), statusBarHeight + w(60), w(353), statusBarHeight + w(85))
+            ) {
                 road.isFrenzy = false
             }
 
@@ -133,9 +149,9 @@ object gui {
                 canvas.drawText("FPS: $viewFps", w(5), w(55) + statusBarHeight, whitePaint)
 
                 //draw buttons
-                if (moreFuel.condition()) moreFuel.draw()
-                if (frenzyOn.condition()) frenzyOn.draw()
-                if (frenzyOff.condition()) frenzyOff.draw()
+                moreFuel.draw()
+                if (!road.isFrenzy) frenzyOn.draw()
+                if (road.isFrenzy) frenzyOff.draw()
             }
         }
 
@@ -177,33 +193,40 @@ object gui {
 
 
     object paused {
-        var resume = Button(RectF(w(90), halfHeight + w(5), w(270), halfHeight + w(49)), { state == statePaused }, {
-            val path = Path()
-            path.moveTo(w(87), halfHeight + w(5))
-            path.lineTo(w(87), halfHeight + w(49))
-            path.lineTo(w(120), halfHeight + w(27))
-            path.close()
+        var resume = object : Button() {
+            override val dim = RectF(w(90), halfHeight + w(5), w(270), halfHeight + w(49))
+            override val onClick = {
+                sounds.playSelect()
+                state = stateGame
+            }
 
-            canvas.drawPath(path, whitePaint)
-            whitePaint.textSize = w(40)
-            whitePaint.textAlign = Paint.Align.LEFT
-            canvas.drawText("Resume", w(132), halfHeight + w(39), whitePaint)
-        }) {
-            state = stateGame
-            sounds.playSelect()
+            override fun draw() {
+                super.draw()
+
+                val path = Path()
+                path.moveTo(w(87), halfHeight + w(5))
+                path.lineTo(w(87), halfHeight + w(49))
+                path.lineTo(w(120), halfHeight + w(27))
+                path.close()
+
+                canvas.drawPath(path, whitePaint)
+                whitePaint.textSize = w(40)
+                whitePaint.textAlign = Paint.Align.LEFT
+                canvas.drawText("Resume", w(132), halfHeight + w(39), whitePaint)
+            }
         }
         val btnShowDebug = ButtonText(
             "debug",
             Paint.Align.RIGHT,
-            RectF(w(200), height - w(35), w(348), height - w(10)),
-            { state == statePaused && !showDebug }) {
+            RectF(w(200), height - w(35), w(348), height - w(10))
+        ) {
             showDebug = true
         }
         val btnHideDebug = ButtonText(
             "debug",
             Paint.Align.RIGHT,
-            RectF(w(200), height - w(35), w(348), height - w(10)),
-            { state == statePaused && showDebug }) {
+            RectF(w(200), height - w(35), w(348), height - w(10))
+        ) {
             showDebug = false
         }
 
@@ -244,11 +267,11 @@ object gui {
         )
         private val deathMsgPaint = Paint()
 
-        val playAgain = ButtonBitmap(bitmaps.play_again, RectF(w(220), h(250), w(300), h(250) + w(80)), { state == stateGameOver }) {
+        val playAgain = ButtonBitmap(bitmaps.play_again, RectF(w(220), h(250), w(300), h(250) + w(80))) {
             sounds.playSelect()
             state = stateGame
         }
-        val mainMenu = ButtonBitmap(bitmaps.main_menu, RectF(w(60), h(250), w(140), h(250) + w(80)), { state == stateGameOver }) {
+        val mainMenu = ButtonBitmap(bitmaps.main_menu, RectF(w(60), h(250), w(140), h(250) + w(80))) {
             sounds.playSelect()
             //state = stateMain
         }
@@ -308,7 +331,7 @@ object gui {
 
 
         fun update() {
-            //update wasted image
+            //updateButtons wasted image
             alpha += 2040f / fps
             rotation += (maxRotation * 8f) / fps
             scale += 8f / fps

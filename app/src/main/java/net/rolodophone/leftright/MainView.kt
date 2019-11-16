@@ -23,6 +23,7 @@ class MainView(context: Context) : SurfaceView(context), Runnable {
 
                 //update
                 state.update()
+                gui.updateButtons()
 
                 //draw
                 val c = holder.lockCanvas()
@@ -110,7 +111,10 @@ class MainView(context: Context) : SurfaceView(context), Runnable {
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         if (event?.action == MotionEvent.ACTION_DOWN) {
-            for (button in gui.buttons) if (button.handleClick(event.x, event.y)) return true
+            for (button in gui.buttons) if (button.checkClick(event.x, event.y)) {
+                button.onClick()
+                return true
+            }
         }
 
         return false
