@@ -22,6 +22,5 @@ object stateGameOver : State {
         player.draw()
         weather.draw()
         gui.gameOver.draw()
-        if (gui.showDebug) gui.debug.draw()
     }
 }

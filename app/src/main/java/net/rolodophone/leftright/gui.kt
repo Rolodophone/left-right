@@ -7,9 +7,9 @@ import kotlin.random.Random
 object gui {
     var showDebug = false
     val buttons = listOf(
-        debug.moreFuel,
-        debug.frenzyOn,
-        debug.frenzyOff,
+        status.debug.moreFuel,
+        status.debug.frenzyOn,
+        status.debug.frenzyOff,
         game.pause,
         paused.resume,
         paused.btnShowDebug,
@@ -62,80 +62,83 @@ object gui {
     }
 
 
-    object debug {
+    object grid {
         val gridPaint = Paint()
-
-        var prevTime = SystemClock.elapsedRealtime()
-        var viewFps = fps.toInt()
-
-        val moreFuel = ButtonText("more fuel", Paint.Align.RIGHT, RectF(w(200), statusBarHeight + w(30), w(353), statusBarHeight + w(55)), { showDebug && state == stateGame }) {
-            player.fuel += 1000
-        }
-        val frenzyOn = ButtonText(
-            "frenzy on",
-            Paint.Align.RIGHT,
-            RectF(w(200), statusBarHeight + w(60), w(353), statusBarHeight + w(85)),
-            { showDebug && state == stateGame && !road.isFrenzy }) {
-            road.isFrenzy = true
-        }
-        val frenzyOff = ButtonText(
-            "frenzy off",
-            Paint.Align.RIGHT,
-            RectF(w(200), statusBarHeight + w(60), w(353), statusBarHeight + w(85)),
-            { showDebug && state == stateGame && road.isFrenzy }) {
-            road.isFrenzy = false
-        }
 
         init {
             gridPaint.color = Color.argb(100, 255, 255, 255)
         }
 
         fun draw() {
-            //draw fps
-
-            if (SystemClock.elapsedRealtime() > prevTime + 500) {
-                viewFps = fps.toInt()
-                prevTime = SystemClock.elapsedRealtime()
+            var x = w(20)
+            while (x < width) {
+                canvas.drawLine(x, 0f, x, height, gridPaint)
+                x += w(20)
             }
-            whitePaint.textAlign = Paint.Align.LEFT
-            whitePaint.textSize = w(22)
-            canvas.drawText("FPS: $viewFps", w(5), w(55) + statusBarHeight, whitePaint)
 
+            x = w(120)
+            while (x < width) {
+                canvas.drawLine(x, 0f, x, height, whitePaint)
+                x += w(120)
+            }
 
-            //draw grid
-//            var x = w(20)
-//            while (x < width) {
-//                canvas.drawLine(x, 0f, x, height, gridPaint)
-//                x += w(20)
-//            }
-//
-//            x = w(120)
-//            while (x < width) {
-//                canvas.drawLine(x, 0f, x, height, whitePaint)
-//                x += w(120)
-//            }
-//
-//            var y = h(20)
-//            while (y < height) {
-//                canvas.drawLine(0f, y, width, y, gridPaint)
-//                y += h(20)
-//            }
-//
-//            y = h(120)
-//            while (y < height) {
-//                canvas.drawLine(0f, y, width, y, whitePaint)
-//                y += h(120)
-//            }
+            var y = h(20)
+            while (y < height) {
+                canvas.drawLine(0f, y, width, y, gridPaint)
+                y += h(20)
+            }
 
-            //draw buttons
-            if (moreFuel.condition()) moreFuel.draw()
-            if (frenzyOn.condition()) frenzyOn.draw()
-            if (frenzyOff.condition()) frenzyOff.draw()
+            y = h(120)
+            while (y < height) {
+                canvas.drawLine(0f, y, width, y, whitePaint)
+                y += h(120)
+            }
         }
     }
 
 
     object status {
+
+        object debug {
+            var prevTime = SystemClock.elapsedRealtime()
+            var viewFps = fps.toInt()
+
+            val moreFuel =
+                ButtonText("more fuel", Paint.Align.RIGHT, RectF(w(200), statusBarHeight + w(30), w(353), statusBarHeight + w(55)), { showDebug && state == stateGame }) {
+                    player.fuel += 1000
+                }
+            val frenzyOn = ButtonText(
+                "frenzy on",
+                Paint.Align.RIGHT,
+                RectF(w(200), statusBarHeight + w(60), w(353), statusBarHeight + w(85)),
+                { showDebug && state == stateGame && !road.isFrenzy }) {
+                road.isFrenzy = true
+            }
+            val frenzyOff = ButtonText(
+                "frenzy off",
+                Paint.Align.RIGHT,
+                RectF(w(200), statusBarHeight + w(60), w(353), statusBarHeight + w(85)),
+                { showDebug && state == stateGame && road.isFrenzy }) {
+                road.isFrenzy = false
+            }
+
+            fun draw() {
+                //draw fps
+                if (SystemClock.elapsedRealtime() > prevTime + 500) {
+                    viewFps = fps.toInt()
+                    prevTime = SystemClock.elapsedRealtime()
+                }
+                whitePaint.textAlign = Paint.Align.LEFT
+                whitePaint.textSize = w(22)
+                canvas.drawText("FPS: $viewFps", w(5), w(55) + statusBarHeight, whitePaint)
+
+                //draw buttons
+                if (moreFuel.condition()) moreFuel.draw()
+                if (frenzyOn.condition()) frenzyOn.draw()
+                if (frenzyOff.condition()) frenzyOff.draw()
+            }
+        }
+
         val fuelDim = RectF(
             w(333),
             w(4) + statusBarHeight,
@@ -167,6 +170,8 @@ object gui {
                 w(25) + statusBarHeight,
                 whitePaint
             )
+
+            if (showDebug) debug.draw()
         }
     }
 

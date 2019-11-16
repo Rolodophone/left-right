@@ -17,6 +17,5 @@ object stateGame : State {
         weather.draw()
         gui.status.draw()
         gui.game.draw()
-        if (gui.showDebug) gui.debug.draw()
     }
 }
