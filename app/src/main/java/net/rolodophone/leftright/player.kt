@@ -39,7 +39,7 @@ object player {
 
 
     fun reset() {
-        img = bitmaps.car1.clean
+        img = bitmaps.car1
 
         dim = RectF(
             w(135),
@@ -127,15 +127,15 @@ object player {
         if (item != null) {
             sounds.playHit()
 
-            this.img = bitmaps.car1.hit
+            this.img = bitmaps.car1_hit
 
             when (item) {
-                is road.Car1 -> item.img = bitmaps.car1.hit
-                is road.Car2 -> item.img = bitmaps.car2.hit
-                is road.Car3 -> item.img = bitmaps.car3.hit
-                is road.Car4 -> item.img = bitmaps.car4.hit
-                is road.Car5 -> item.img = bitmaps.car5.hit
-                is road.Car6 -> item.img = bitmaps.car6.hit
+                is road.Car1 -> item.img = bitmaps.car1_hit
+                is road.Car2 -> item.img = bitmaps.car2_hit
+                is road.Car3 -> item.img = bitmaps.car3_hit
+                is road.Car4 -> item.img = bitmaps.car4_hit
+                is road.Car5 -> item.img = bitmaps.car5_hit
+                is road.Car6 -> item.img = bitmaps.car6_hit
             }
         }
 

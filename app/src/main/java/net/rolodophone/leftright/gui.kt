@@ -150,8 +150,7 @@ object gui {
 
                 //draw buttons
                 moreFuel.draw()
-                if (!road.isFrenzy) frenzyOn.draw()
-                if (road.isFrenzy) frenzyOff.draw()
+                if (road.isFrenzy) frenzyOff.draw() else frenzyOn.draw()
             }
         }
 
@@ -252,8 +251,7 @@ object gui {
             )
 
             resume.draw()
-            btnShowDebug.draw()
-            btnHideDebug.draw()
+            if (showDebug) btnHideDebug.draw() else btnShowDebug.draw()
         }
     }
 

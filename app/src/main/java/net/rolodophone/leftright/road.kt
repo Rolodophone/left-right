@@ -2,6 +2,7 @@ package net.rolodophone.leftright
 
 import android.graphics.Bitmap
 import android.graphics.RectF
+import android.os.SystemClock
 import android.support.annotation.CallSuper
 
 object road {
@@ -51,10 +52,18 @@ object road {
         open val rotation = 0f
 
         abstract val isObstacle: Boolean
-
         abstract var lane: Int
         abstract var img: Bitmap
         abstract val dim: RectF
+
+        fun rectFFromDim(width: Float, height: Float): RectF {
+            return RectF(
+                centerOfLane(lane) - width / 2,
+                -height,
+                centerOfLane(lane) + width / 2,
+                0f
+            )
+        }
 
         fun randomLane(): Int {
             val remainingLanes = mutableSetOf<Int>()
@@ -124,13 +133,7 @@ object road {
         override var img = bitmaps.fuel
         override var lane = randomLane()
         override val isObstacle = false
-
-        override val dim = RectF(
-            centerOfLane(lane) - w(22.5f),
-            -w(51.4285714286f),
-            centerOfLane(lane) + w(22.5f),
-            0f
-        )
+        override val dim = rectFFromDim(w(45), w(51.4285714286f))
 
         override fun onTouch() {
             player.fuel += 50f
@@ -143,13 +146,7 @@ object road {
         override var img = bitmaps.cone
         override var lane = randomLane()
         override val isObstacle = true
-
-        override val dim = RectF(
-            centerOfLane(lane) - w(22.5f),
-            -w(51.4285714286f),
-            centerOfLane(lane) + w(22.5f),
-            0f
-        )
+        override val dim = rectFFromDim(w(45), w(51.4285714286f))
 
         override fun onTouch() {
             player.die(DeathType.CONE, this)
@@ -160,13 +157,7 @@ object road {
         override var img = bitmaps.oil
         override var lane = randomLane()
         override val isObstacle = false
-
-        override val dim = RectF(
-            centerOfLane(lane) - w(67.5f),
-            -w(135),
-            centerOfLane(lane) + w(67.5f),
-            0f
-        )
+        override val dim = rectFFromDim(w(135), w(135))
 
         override fun onTouch() {
             player.oil()
@@ -176,17 +167,11 @@ object road {
     }
 
     class Car1 : Item() {
-        override var img = bitmaps.car1.clean
+        override var img = bitmaps.car1
         override var lane = randomLane()
         override val isObstacle = true
         override val rotation = 180f
-
-        override val dim = RectF(
-            centerOfLane(lane) - w(45),
-            -w(180),
-            centerOfLane(lane) + w(45),
-            0f
-        )
+        override val dim = rectFFromDim(w(90), w(180))
 
         override fun onTouch() {
             player.die(DeathType.CAR, this)
@@ -200,17 +185,11 @@ object road {
     }
 
     class Car2 : Item() {
-        override var img = bitmaps.car2.clean
+        override var img = bitmaps.car2
         override var lane = randomLane()
         override val isObstacle = true
         override val rotation = 180f
-
-        override val dim = RectF(
-            centerOfLane(lane) - w(45),
-            -w(180),
-            centerOfLane(lane) + w(45),
-            0f
-        )
+        override val dim = rectFFromDim(w(90), w(180))
 
         override fun onTouch() {
             player.die(DeathType.CAR, this)
@@ -224,17 +203,11 @@ object road {
     }
 
     class Car3 : Item() {
-        override var img = bitmaps.car3.clean
+        override var img = bitmaps.car3
         override var lane = randomLane()
         override val isObstacle = true
         override val rotation = 180f
-
-        override val dim = RectF(
-            centerOfLane(lane) - w(45),
-            -w(180),
-            centerOfLane(lane) + w(45),
-            0f
-        )
+        override val dim = rectFFromDim(w(90), w(180))
 
         override fun onTouch() {
             player.die(DeathType.CAR, this)
@@ -248,17 +221,11 @@ object road {
     }
 
     class Car4 : Item() {
-        override var img = bitmaps.car4.clean
+        override var img = bitmaps.car4
         override var lane = randomLane()
         override val isObstacle = true
         override val rotation = 180f
-
-        override val dim = RectF(
-            centerOfLane(lane) - w(45),
-            -w(180),
-            centerOfLane(lane) + w(45),
-            0f
-        )
+        override val dim = rectFFromDim(w(90), w(180))
 
         override fun onTouch() {
             player.die(DeathType.CAR, this)
@@ -272,17 +239,11 @@ object road {
     }
 
     class Car5 : Item() {
-        override var img = bitmaps.car5.clean
+        override var img = bitmaps.car5
         override var lane = randomLane()
         override val isObstacle = true
         override val rotation = 180f
-
-        override val dim = RectF(
-            centerOfLane(lane) - w(45),
-            -w(180),
-            centerOfLane(lane) + w(45),
-            0f
-        )
+        override val dim = rectFFromDim(w(90), w(180))
 
         override fun onTouch() {
             player.die(DeathType.CAR, this)
@@ -296,17 +257,11 @@ object road {
     }
 
     class Car6 : Item() {
-        override var img = bitmaps.car6.clean
+        override var img = bitmaps.car6
         override var lane = randomLane()
         override val isObstacle = true
         override val rotation = 180f
-
-        override val dim = RectF(
-            centerOfLane(lane) - w(45),
-            -w(180),
-            centerOfLane(lane) + w(45),
-            0f
-        )
+        override val dim = rectFFromDim(w(90), w(180))
 
         override fun onTouch() {
             player.die(DeathType.CAR, this)
@@ -316,6 +271,43 @@ object road {
             super.update()
 
             dim.offset(0f, w(210) / fps)
+        }
+    }
+
+    class Coin : Item() {
+        override var img = bitmaps.coin
+        override var lane = randomLane()
+        override val isObstacle = false
+        override val dim = rectFFromDim(w(45), w(45))
+
+        init {
+            dim.offset(-w(5), 0f)
+        }
+
+        var animationStage = 0f
+        var timeSpriteLastChanged = 0L
+        var shineNum = -2
+
+        override fun onTouch() {
+            player.coins += 1
+            sounds.playCoin()
+            itemsToDel.add(this)
+        }
+
+        override fun update() {
+            super.update()
+
+            if (animationStage % 2 <= 1) dim.offset(w(20) / fps, 0f) else dim.offset(w(-20) / fps, 0f)
+
+            if (SystemClock.elapsedRealtime() - timeSpriteLastChanged > 70) {
+                if (shineNum <= 6) {
+                    shineNum += 1
+                    if (shineNum >= 0) img = bitmaps.coinShining[shineNum]
+                    timeSpriteLastChanged = SystemClock.elapsedRealtime()
+                } else img = bitmaps.coin
+            }
+
+            animationStage += 2f / fps
         }
     }
 
@@ -339,14 +331,15 @@ object road {
         if (fps != Float.POSITIVE_INFINITY) {
             if (!isFrenzy) {
                 if (randomChance(15)) items.add(Fuel())
-                if (randomChance(15)) items.add(Cone())
-                if (randomChance(25)) items.add(Oil())
-                if (randomChance(50)) items.add(Car1())
-                if (randomChance(75)) items.add(Car2())
-                if (randomChance(100)) items.add(Car3())
-                if (randomChance(125)) items.add(Car4())
-                if (randomChance(150)) items.add(Car5())
-                if (randomChance(200)) items.add(Car6())
+                if (randomChance(60)) items.add(Cone())
+                if (randomChance(80)) items.add(Oil())
+                if (randomChance(15)) items.add(Car1())
+                if (randomChance(20)) items.add(Car2())
+                if (randomChance(25)) items.add(Car3())
+                if (randomChance(30)) items.add(Car4())
+                if (randomChance(35)) items.add(Car5())
+                if (randomChance(40)) items.add(Car6())
+                if (randomChance(3)) items.add(Coin())
             } else {
                 if (randomChance(3)) items.add(Fuel())
                 if (randomChance(6)) items.add(Cone())
@@ -357,6 +350,7 @@ object road {
                 if (randomChance(50)) items.add(Car4())
                 if (randomChance(60)) items.add(Car5())
                 if (randomChance(80)) items.add(Car6())
+                if (randomChance(2)) items.add(Coin())
             }
         }
 
