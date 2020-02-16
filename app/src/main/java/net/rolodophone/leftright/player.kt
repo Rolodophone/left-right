@@ -11,7 +11,7 @@ object player {
 
     init {
         for (i in 0 until road.numLanes) {
-            laneXs.add(centerOfLane(i) - w(45))
+            laneXs.add(centerOfLane(i) - w(35))
         }
     }
 
@@ -42,10 +42,10 @@ object player {
         img = bitmaps.car1
 
         dim = RectF(
-            w(135),
-            height - w(90),
-            w(225),
-            height + w(90)
+            w(145),
+            height - w(70),
+            w(215),
+            height + w(70)
         )
 
         ySpeedMps = 0f

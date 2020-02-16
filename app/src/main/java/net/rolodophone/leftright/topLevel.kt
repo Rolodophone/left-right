@@ -37,7 +37,7 @@ fun centerOfLane(lane: Int): Float {
     return (width * (lane + 1) - halfWidth) / (road.numLanes)
 }
 
-fun RectF.scale(factor: Float): RectF {
+fun RectF.scaled(factor: Float): RectF {
     val diffHorizontal = (right - left) * (factor - 1f)
     val diffVertical = (bottom - top) * (factor - 1f)
 

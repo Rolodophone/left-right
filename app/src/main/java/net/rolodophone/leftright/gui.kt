@@ -350,7 +350,7 @@ object gui {
             //draw wasted image
             canvas.save()
             canvas.rotate(rotation, halfWidth, h(60))
-            canvas.drawBitmap(bitmaps.death_msg, null, deathMsgDim.scale(scale), deathMsgPaint)
+            canvas.drawBitmap(bitmaps.death_msg, null, deathMsgDim.scaled(scale), deathMsgPaint)
             canvas.restore()
 
             //draw comment

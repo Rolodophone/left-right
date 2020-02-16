@@ -171,7 +171,7 @@ object road {
         override var lane = randomLane()
         override val isObstacle = true
         override val rotation = 180f
-        override val dim = rectFFromDim(w(90), w(180))
+        override val dim = rectFFromDim(w(87.5f), w(175))
 
         override fun onTouch() {
             player.die(DeathType.CAR, this)
@@ -189,7 +189,7 @@ object road {
         override var lane = randomLane()
         override val isObstacle = true
         override val rotation = 180f
-        override val dim = rectFFromDim(w(90), w(180))
+        override val dim = rectFFromDim(w(87.5f), w(175))
 
         override fun onTouch() {
             player.die(DeathType.CAR, this)
@@ -207,7 +207,7 @@ object road {
         override var lane = randomLane()
         override val isObstacle = true
         override val rotation = 180f
-        override val dim = rectFFromDim(w(90), w(180))
+        override val dim = rectFFromDim(w(87.5f), w(175))
 
         override fun onTouch() {
             player.die(DeathType.CAR, this)
@@ -225,7 +225,7 @@ object road {
         override var lane = randomLane()
         override val isObstacle = true
         override val rotation = 180f
-        override val dim = rectFFromDim(w(90), w(180))
+        override val dim = rectFFromDim(w(87.5f), w(175))
 
         override fun onTouch() {
             player.die(DeathType.CAR, this)
@@ -243,7 +243,7 @@ object road {
         override var lane = randomLane()
         override val isObstacle = true
         override val rotation = 180f
-        override val dim = rectFFromDim(w(90), w(180))
+        override val dim = rectFFromDim(w(87.5f), w(175))
 
         override fun onTouch() {
             player.die(DeathType.CAR, this)
@@ -261,7 +261,7 @@ object road {
         override var lane = randomLane()
         override val isObstacle = true
         override val rotation = 180f
-        override val dim = rectFFromDim(w(90), w(180))
+        override val dim = rectFFromDim(w(87.5f), w(175))
 
         override fun onTouch() {
             player.die(DeathType.CAR, this)
