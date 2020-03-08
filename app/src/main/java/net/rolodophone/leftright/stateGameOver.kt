@@ -1,20 +1,13 @@
 package net.rolodophone.leftright
 
 object stateGameOver : State {
-    var moved = false
 
     override fun reset() {
-        moved = false
         gui.gameOver.reset()
     }
 
     override fun update() {
         gui.gameOver.update()
-
-        if (!moved) {
-            road.update()
-            moved = true
-        }
     }
 
     override fun draw() {

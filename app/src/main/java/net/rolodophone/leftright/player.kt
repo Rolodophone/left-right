@@ -18,6 +18,15 @@ object player {
 
     private lateinit var img: Bitmap
     lateinit var dim: RectF
+
+    //the image dim (the visible dimensions of the car) is always 1/4 larger than dim
+    // (meaning the hitbox, dim, is always 20% smaller than imgDim
+    var imgDim: RectF
+        get() = dim.scaled(10/8f)
+        set(value) {
+            dim = value.scaled(8/10f)
+        }
+
     var ySpeed = 0f
     var fuel = 0f
     var distance = 0f
@@ -81,7 +90,7 @@ object player {
             if (ySpeedMps > 2f) ySpeedMps = 2f
         }
 
-        //handle turning
+        //handle switching lane
         if (goingL) {
             dim.offset(-xSpeed / fps, 0f)
 
@@ -116,7 +125,7 @@ object player {
     fun draw() {
         canvas.save()
         canvas.rotate(rotation, dim.centerX(), dim.centerY())
-        canvas.drawBitmap(img, null, dim, whitePaint)
+        canvas.drawBitmap(img, null, imgDim, whitePaint)
         canvas.restore()
     }
 
