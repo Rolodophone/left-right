@@ -13,11 +13,11 @@ android {
             keyAlias = '***REMOVED***'
         }
     }
-    compileSdkVersion 28
+    compileSdkVersion 29
     defaultConfig {
         applicationId "net.rolodophone.leftright"
         minSdkVersion 21
-        targetSdkVersion 28
+        targetSdkVersion 29
         versionCode 1
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
