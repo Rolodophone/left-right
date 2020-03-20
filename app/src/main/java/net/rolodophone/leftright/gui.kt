@@ -167,7 +167,7 @@ object gui {
 
 
             //draw fuel meter
-            canvas.drawBitmap(bitmaps.fuel, null, fuelDim, whitePaint)
+            canvas.drawBitmap(bitmaps.fuel, null, fuelDim, bitmapPaint)
 
             whitePaint.textAlign = Paint.Align.RIGHT
             canvas.drawText(
@@ -263,7 +263,7 @@ object gui {
             w(330),
             h(40) + w(72.972972973f)
         )
-        private val deathMsgPaint = Paint()
+        private val deathMsgPaint = Paint(bitmapPaint)
 
         val playAgain = ButtonBitmap(bitmaps.play_again, RectF(w(220), h(250), w(300), h(250) + w(80))) {
             sounds.playSelect()

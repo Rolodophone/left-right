@@ -28,6 +28,7 @@ var fps = Float.POSITIVE_INFINITY
 var canvas = Canvas()
 
 var whitePaint = Paint()
+var bitmapPaint = Paint()
 var dimmerPaint = Paint()
 
 

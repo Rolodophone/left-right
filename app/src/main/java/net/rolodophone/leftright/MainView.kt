@@ -57,6 +57,9 @@ class MainView(context: Context) : SurfaceView(context), Runnable {
         //initialize paints
         whitePaint.color = Color.rgb(255, 255, 255)
         whitePaint.isAntiAlias = true
+        whitePaint.isFilterBitmap = true
+        bitmapPaint.isAntiAlias = true
+        bitmapPaint.isFilterBitmap = false
         dimmerPaint.color = Color.argb(150, 0, 0, 0)
 
 

@@ -125,7 +125,7 @@ object player {
     fun draw() {
         canvas.save()
         canvas.rotate(rotation, dim.centerX(), dim.centerY())
-        canvas.drawBitmap(img, null, imgDim, whitePaint)
+        canvas.drawBitmap(img, null, imgDim, bitmapPaint)
         canvas.restore()
     }
 

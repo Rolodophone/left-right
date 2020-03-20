@@ -16,7 +16,7 @@ android {
     compileSdkVersion 29
     defaultConfig {
         applicationId "net.rolodophone.leftright"
-        minSdkVersion 21
+        minSdkVersion 29
         targetSdkVersion 29
         versionCode 1
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"

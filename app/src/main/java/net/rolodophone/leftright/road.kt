@@ -124,7 +124,7 @@ object road {
         open fun draw() {
             canvas.save()
             canvas.rotate(rotation, dim.centerX(), dim.centerY())
-            canvas.drawBitmap(img, null, dim, whitePaint)
+            canvas.drawBitmap(img, null, dim, bitmapPaint)
             canvas.restore()
         }
     }
