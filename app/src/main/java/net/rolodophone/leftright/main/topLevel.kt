@@ -20,6 +20,8 @@ var wUnit = 0f
 var hUnit = 0f
 var statusBarHeight = 0
 
+const val isDebug = true
+
 var state: State = stateGame
     set(value) {
 

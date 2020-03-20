@@ -12,7 +12,7 @@ import android.view.MotionEvent
 import android.view.SurfaceView
 import android.view.WindowManager
 import net.rolodophone.leftright.R
-import net.rolodophone.leftright.components.gui
+import net.rolodophone.leftright.components.buttons
 import net.rolodophone.leftright.resources.bitmaps
 import net.rolodophone.leftright.resources.sounds
 import net.rolodophone.leftright.state.stateGame
@@ -29,7 +29,7 @@ class MainView(context: Context) : SurfaceView(context), Runnable {
 
                 //update
                 state.update()
-                gui.updateButtons()
+                buttons.updateButtons()
 
                 //draw
                 val c = holder.lockCanvas()
@@ -44,7 +44,7 @@ class MainView(context: Context) : SurfaceView(context), Runnable {
                 //calculate fps
                 val timeElapsed = SystemClock.elapsedRealtime() - initialTime
                 fps = if (timeElapsed == 0L) 2000f else 1000f / timeElapsed
-                if (gui.showDebug && fps < 30f) fps = 30f
+                if (isDebug && fps < 30f) fps = 30f
             }
 
 
@@ -132,7 +132,7 @@ class MainView(context: Context) : SurfaceView(context), Runnable {
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         if (event?.action == MotionEvent.ACTION_DOWN) {
-            for (button in gui.buttons) if (button.checkClick(event.x, event.y)) {
+            for (button in buttons.buttons) if (button.checkClick(event.x, event.y)) {
                 button.onClick()
                 return true
             }

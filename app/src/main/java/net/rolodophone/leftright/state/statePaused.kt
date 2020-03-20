@@ -1,9 +1,6 @@
 package net.rolodophone.leftright.state
 
-import net.rolodophone.leftright.components.gui
-import net.rolodophone.leftright.components.player
-import net.rolodophone.leftright.components.road
-import net.rolodophone.leftright.components.weather
+import net.rolodophone.leftright.components.*
 
 object statePaused : State {
     override fun reset() {
@@ -16,7 +13,7 @@ object statePaused : State {
         road.draw()
         player.draw()
         weather.draw()
-        gui.status.draw()
-        gui.paused.draw()
+        statusBar.draw()
+        pausedOverlay.draw()
     }
 }
