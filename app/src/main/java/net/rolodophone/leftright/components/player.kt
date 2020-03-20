@@ -1,7 +1,11 @@
-package net.rolodophone.leftright
+package net.rolodophone.leftright.components
 
 import android.graphics.Bitmap
 import android.graphics.RectF
+import net.rolodophone.leftright.main.*
+import net.rolodophone.leftright.resources.bitmaps
+import net.rolodophone.leftright.resources.sounds
+import net.rolodophone.leftright.state.stateGameOver
 
 object player {
     private val xSpeed = w(1800)
@@ -125,7 +129,11 @@ object player {
     fun draw() {
         canvas.save()
         canvas.rotate(rotation, dim.centerX(), dim.centerY())
-        canvas.drawBitmap(img, null, imgDim, bitmapPaint)
+        canvas.drawBitmap(
+            img, null,
+            imgDim,
+            bitmapPaint
+        )
         canvas.restore()
     }
 
@@ -136,7 +144,7 @@ object player {
         if (item != null) {
             sounds.playHit()
 
-            this.img = bitmaps.car1_hit
+            img = bitmaps.car1_hit
 
             when (item) {
                 is road.Car1 -> item.img = bitmaps.car1_hit

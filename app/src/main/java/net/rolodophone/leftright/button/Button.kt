@@ -1,4 +1,4 @@
-package net.rolodophone.leftright
+package net.rolodophone.leftright.button
 
 import android.graphics.RectF
 import android.support.annotation.CallSuper

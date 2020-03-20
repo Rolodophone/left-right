@@ -1,8 +1,14 @@
-package net.rolodophone.leftright
+package net.rolodophone.leftright.main
 
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.RectF
+import net.rolodophone.leftright.components.player
+import net.rolodophone.leftright.components.road
+import net.rolodophone.leftright.state.State
+import net.rolodophone.leftright.state.stateGame
+import net.rolodophone.leftright.state.stateGameOver
+import net.rolodophone.leftright.state.statePaused
 
 
 var appOpen = true

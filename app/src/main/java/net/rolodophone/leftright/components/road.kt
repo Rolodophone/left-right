@@ -1,9 +1,12 @@
-package net.rolodophone.leftright
+package net.rolodophone.leftright.components
 
 import android.graphics.Bitmap
 import android.graphics.RectF
 import android.os.SystemClock
 import android.support.annotation.CallSuper
+import net.rolodophone.leftright.main.*
+import net.rolodophone.leftright.resources.bitmaps
+import net.rolodophone.leftright.resources.sounds
 
 object road {
 
@@ -297,7 +300,10 @@ object road {
         override fun update() {
             super.update()
 
-            if (animationStage % 2 <= 1) dim.offset(w(20) / fps, 0f) else dim.offset(w(-20) / fps, 0f)
+            if (animationStage % 2 <= 1) dim.offset(w(20) / fps, 0f) else dim.offset(
+                w(
+                    -20
+                ) / fps, 0f)
 
             if (SystemClock.elapsedRealtime() - timeSpriteLastChanged > 70) {
                 if (shineNum <= 6) {

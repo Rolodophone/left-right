@@ -1,7 +1,15 @@
-package net.rolodophone.leftright
+package net.rolodophone.leftright.components
 
 import android.graphics.*
 import android.os.SystemClock
+import net.rolodophone.leftright.button.Button
+import net.rolodophone.leftright.button.ButtonBitmap
+import net.rolodophone.leftright.button.ButtonText
+import net.rolodophone.leftright.main.*
+import net.rolodophone.leftright.resources.bitmaps
+import net.rolodophone.leftright.resources.sounds
+import net.rolodophone.leftright.state.stateGame
+import net.rolodophone.leftright.state.statePaused
 import kotlin.random.Random
 
 object gui {
@@ -26,7 +34,10 @@ object gui {
 
     object game {
         val pause = object : Button() {
-            override val dim = RectF(w(5), height - w(50), w(50), height - w(5))
+            override val dim = RectF(
+                w(5), height - w(50),
+                w(50), height - w(5)
+            )
             override val onClick = {
                 sounds.playSelect()
                 state = statePaused
@@ -36,11 +47,11 @@ object gui {
                 super.draw()
 
                 canvas.drawRect(
-                w(5),
+                    w(5),
                 height - w(50),
-                w(20),
+                    w(20),
                 height - w(5),
-                whitePaint
+                    whitePaint
                 )
                 canvas.drawRect(
                     w(35),
@@ -120,20 +131,30 @@ object gui {
             var prevTime = SystemClock.elapsedRealtime()
             var viewFps = fps.toInt()
 
-            val moreFuel = ButtonText("more fuel", Paint.Align.RIGHT, RectF(w(200), statusBarHeight + w(30), w(353), statusBarHeight + w(55))) {
+            val moreFuel = ButtonText("more fuel", Paint.Align.RIGHT, RectF(
+                w(200), statusBarHeight + w(
+                    30
+                ), w(353), statusBarHeight + w(55)
+            )) {
                 player.fuel += 1000
             }
             val frenzyOn = ButtonText(
                 "frenzy on",
                 Paint.Align.RIGHT,
-                RectF(w(200), statusBarHeight + w(60), w(353), statusBarHeight + w(85))
+                RectF(
+                    w(200), statusBarHeight + w(60),
+                    w(353), statusBarHeight + w(85)
+                )
             ) {
                 road.isFrenzy = true
             }
             val frenzyOff = ButtonText(
                 "frenzy off",
                 Paint.Align.RIGHT,
-                RectF(w(200), statusBarHeight + w(60), w(353), statusBarHeight + w(85))
+                RectF(
+                    w(200), statusBarHeight + w(60),
+                    w(353), statusBarHeight + w(85)
+                )
             ) {
                 road.isFrenzy = false
             }
@@ -146,7 +167,10 @@ object gui {
                 }
                 whitePaint.textAlign = Paint.Align.LEFT
                 whitePaint.textSize = w(22)
-                canvas.drawText("FPS: $viewFps", w(5), w(55) + statusBarHeight, whitePaint)
+                canvas.drawText("FPS: $viewFps",
+                    w(5), w(55) + statusBarHeight,
+                    whitePaint
+                )
 
                 //draw buttons
                 moreFuel.draw()
@@ -193,7 +217,10 @@ object gui {
 
     object paused {
         var resume = object : Button() {
-            override val dim = RectF(w(90), halfHeight + w(5), w(270), halfHeight + w(49))
+            override val dim = RectF(
+                w(90), halfHeight + w(5),
+                w(270), halfHeight + w(49)
+            )
             override val onClick = {
                 sounds.playSelect()
                 state = stateGame
@@ -211,20 +238,29 @@ object gui {
                 canvas.drawPath(path, whitePaint)
                 whitePaint.textSize = w(40)
                 whitePaint.textAlign = Paint.Align.LEFT
-                canvas.drawText("Resume", w(132), halfHeight + w(39), whitePaint)
+                canvas.drawText("Resume",
+                    w(132), halfHeight + w(39),
+                    whitePaint
+                )
             }
         }
         val btnShowDebug = ButtonText(
             "debug",
             Paint.Align.RIGHT,
-            RectF(w(200), height - w(35), w(348), height - w(10))
+            RectF(
+                w(200), height - w(35),
+                w(348), height - w(10)
+            )
         ) {
             showDebug = true
         }
         val btnHideDebug = ButtonText(
             "debug",
             Paint.Align.RIGHT,
-            RectF(w(200), height - w(35), w(348), height - w(10))
+            RectF(
+                w(200), height - w(35),
+                w(348), height - w(10)
+            )
         ) {
             showDebug = false
         }
@@ -232,7 +268,11 @@ object gui {
 
         fun draw() {
             //dim rest of screen
-            canvas.drawRect(0f, 0f, width, height, dimmerPaint)
+            canvas.drawRect(0f, 0f,
+                width,
+                height,
+                dimmerPaint
+            )
 
             //draw paused icon
             canvas.drawRect(
@@ -265,11 +305,19 @@ object gui {
         )
         private val deathMsgPaint = Paint(bitmapPaint)
 
-        val playAgain = ButtonBitmap(bitmaps.play_again, RectF(w(220), h(250), w(300), h(250) + w(80))) {
+        val playAgain = ButtonBitmap(bitmaps.play_again, RectF(
+            w(220),
+            h(250),
+            w(300), h(250) + w(80)
+        )) {
             sounds.playSelect()
             state = stateGame
         }
-        val mainMenu = ButtonBitmap(bitmaps.main_menu, RectF(w(60), h(250), w(140), h(250) + w(80))) {
+        val mainMenu = ButtonBitmap(bitmaps.main_menu, RectF(
+            w(60),
+            h(250),
+            w(140), h(250) + w(80)
+        )) {
             sounds.playSelect()
             //state = stateMain
         }
@@ -335,7 +383,8 @@ object gui {
             scale += 8f / fps
 
             if (alpha > 255f) alpha = 255f
-            if (maxRotation > 0f && rotation > maxRotation || maxRotation < 0f && rotation < maxRotation) rotation = maxRotation
+            if (maxRotation > 0f && rotation > maxRotation || maxRotation < 0f && rotation < maxRotation) rotation =
+                maxRotation
             if (scale > 1f) scale = 1f
 
             deathMsgPaint.alpha = alpha.toInt()
@@ -344,36 +393,82 @@ object gui {
 
         fun draw() {
             //dim rest of screen
-            canvas.drawRect(0f, 0f, width, height, dimmerPaint)
+            canvas.drawRect(0f, 0f,
+                width,
+                height,
+                dimmerPaint
+            )
 
 
             //draw wasted image
             canvas.save()
-            canvas.rotate(rotation, halfWidth, h(60))
-            canvas.drawBitmap(bitmaps.death_msg, null, deathMsgDim.scaled(scale), deathMsgPaint)
+            canvas.rotate(
+                rotation,
+                halfWidth,
+                h(60)
+            )
+            canvas.drawBitmap(bitmaps.death_msg, null, deathMsgDim.scaled(scale),
+                deathMsgPaint
+            )
             canvas.restore()
 
             //draw comment
             whitePaint.textAlign = Paint.Align.CENTER
             whitePaint.typeface = Typeface.DEFAULT_BOLD
-            for ((i, line) in comment.withIndex()) canvas.drawText(line, halfWidth, h(120) + w(25 * i), whitePaint)
+            for ((i, line) in comment.withIndex()) canvas.drawText(line,
+                halfWidth, h(120) + w(25 * i),
+                whitePaint
+            )
             whitePaint.typeface = Typeface.DEFAULT
 
             //draw stats
             whitePaint.textAlign = Paint.Align.LEFT
-            canvas.drawText("Distance travelled:", w(30), h(160), whitePaint)
-            canvas.drawText("Fuel remaining:", w(30), h(160) + w(30), whitePaint)
-            canvas.drawText("Coins collected:", w(30), h(160) + w(60), whitePaint)
-            canvas.drawText("Total score:", w(30), h(160) + w(100), whitePaint)
+            canvas.drawText("Distance travelled:",
+                w(30),
+                h(160),
+                whitePaint
+            )
+            canvas.drawText("Fuel remaining:",
+                w(30), h(160) + w(30),
+                whitePaint
+            )
+            canvas.drawText("Coins collected:",
+                w(30), h(160) + w(60),
+                whitePaint
+            )
+            canvas.drawText("Total score:",
+                w(30), h(160) + w(100),
+                whitePaint
+            )
 
             whitePaint.textAlign = Paint.Align.RIGHT
-            canvas.drawText(player.distance.toInt().toString(), w(330), h(160), whitePaint)
-            canvas.drawText(player.fuel.toInt().toString(), w(330), h(160) + w(30), whitePaint)
-            canvas.drawText(player.coins.toString(), w(330), h(160) + w(60), whitePaint)
-            canvas.drawText((player.distance.toInt() + player.fuel.toInt() + player.coins).toString(), w(330), h(160) + w(100), whitePaint)
+            canvas.drawText(
+                player.distance.toInt().toString(),
+                w(330),
+                h(160),
+                whitePaint
+            )
+            canvas.drawText(
+                player.fuel.toInt().toString(),
+                w(330), h(160) + w(30),
+                whitePaint
+            )
+            canvas.drawText(
+                player.coins.toString(),
+                w(330), h(160) + w(60),
+                whitePaint
+            )
+            canvas.drawText((player.distance.toInt() + player.fuel.toInt() + player.coins).toString(),
+                w(330), h(160) + w(100),
+                whitePaint
+            )
 
             whitePaint.strokeWidth = 3f
-            canvas.drawLine(w(30), h(160) + w(72), w(330), h(160) + w(72), whitePaint)
+            canvas.drawLine(
+                w(30), h(160) + w(72),
+                w(330), h(160) + w(72),
+                whitePaint
+            )
             whitePaint.strokeWidth = 1f
 
             //draw buttons

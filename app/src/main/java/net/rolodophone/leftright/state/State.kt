@@ -1,4 +1,4 @@
-package net.rolodophone.leftright
+package net.rolodophone.leftright.state
 
 interface State {
     fun reset()

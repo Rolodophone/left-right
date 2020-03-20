@@ -1,4 +1,4 @@
-package net.rolodophone.leftright
+package net.rolodophone.leftright.components
 
 enum class DeathType {
     NONE, CONE, FUEL, CAR

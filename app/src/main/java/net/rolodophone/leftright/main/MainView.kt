@@ -1,4 +1,4 @@
-package net.rolodophone.leftright
+package net.rolodophone.leftright.main
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -11,6 +11,12 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.SurfaceView
 import android.view.WindowManager
+import net.rolodophone.leftright.R
+import net.rolodophone.leftright.components.gui
+import net.rolodophone.leftright.resources.bitmaps
+import net.rolodophone.leftright.resources.sounds
+import net.rolodophone.leftright.state.stateGame
+import net.rolodophone.leftright.state.statePaused
 
 
 class MainView(context: Context) : SurfaceView(context), Runnable {

@@ -1,7 +1,8 @@
-package net.rolodophone.leftright
+package net.rolodophone.leftright.components
 
 import android.graphics.Color
 import android.graphics.Paint
+import net.rolodophone.leftright.main.w
 
 object weather {
     private val rainPaint = Paint()

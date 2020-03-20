@@ -1,7 +1,9 @@
-package net.rolodophone.leftright
+package net.rolodophone.leftright.button
 
 import android.graphics.Bitmap
 import android.graphics.RectF
+import net.rolodophone.leftright.main.canvas
+import net.rolodophone.leftright.main.whitePaint
 
 class ButtonBitmap(val bitmap: Bitmap, override val dim: RectF, override val onClick: () -> Unit) : Button() {
     override fun draw() {

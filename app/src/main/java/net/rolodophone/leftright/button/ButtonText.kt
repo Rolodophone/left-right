@@ -1,7 +1,10 @@
-package net.rolodophone.leftright
+package net.rolodophone.leftright.button
 
 import android.graphics.Paint
 import android.graphics.RectF
+import net.rolodophone.leftright.main.canvas
+import net.rolodophone.leftright.main.w
+import net.rolodophone.leftright.main.whitePaint
 
 class ButtonText(val text: String, val align: Paint.Align, override val dim: RectF, override val onClick: () -> Unit) : Button() {
 

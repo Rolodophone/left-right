@@ -1,4 +1,4 @@
-package net.rolodophone.leftright
+package net.rolodophone.leftright.main
 
 import android.app.Activity
 import android.graphics.Point
