@@ -3,18 +3,19 @@ package net.rolodophone.leftright.components
 import android.graphics.Bitmap
 import android.graphics.RectF
 import net.rolodophone.leftright.main.*
+import net.rolodophone.leftright.main.MainView.c
 import net.rolodophone.leftright.resources.bitmaps
 import net.rolodophone.leftright.resources.sounds
 import net.rolodophone.leftright.state.stateGameOver
 
-object player {
+class Player {
     private val xSpeed = w(1800)
 
     //The x coordinate of the left side of the car, if it was in the Nth lane
     private var laneXs = mutableListOf<Float>()
 
     init {
-        for (i in 0 until road.numLanes) {
+        for (i in 0 until c.road.numLanes) {
             laneXs.add(centerOfLane(i) - w(35))
         }
     }
@@ -138,7 +139,7 @@ object player {
     }
 
 
-    fun die(deathType: DeathType, item: road.Item?) {
+    fun die(deathType: DeathType, item: Road.Item?) {
         causeOfDeath = deathType
 
         if (item != null) {
@@ -147,12 +148,12 @@ object player {
             img = bitmaps.car1_hit
 
             when (item) {
-                is road.Car1 -> item.img = bitmaps.car1_hit
-                is road.Car2 -> item.img = bitmaps.car2_hit
-                is road.Car3 -> item.img = bitmaps.car3_hit
-                is road.Car4 -> item.img = bitmaps.car4_hit
-                is road.Car5 -> item.img = bitmaps.car5_hit
-                is road.Car6 -> item.img = bitmaps.car6_hit
+                is Road.Car1 -> item.img = bitmaps.car1_hit
+                is Road.Car2 -> item.img = bitmaps.car2_hit
+                is Road.Car3 -> item.img = bitmaps.car3_hit
+                is Road.Car4 -> item.img = bitmaps.car4_hit
+                is Road.Car5 -> item.img = bitmaps.car5_hit
+                is Road.Car6 -> item.img = bitmaps.car6_hit
             }
         }
 
@@ -191,7 +192,7 @@ object player {
             lane--
         }
 
-        if (lane != road.numLanes - 1) {
+        if (lane != c.road.numLanes - 1) {
             goingR = true
             sounds.playTap()
         }

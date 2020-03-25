@@ -1,23 +1,23 @@
 package net.rolodophone.leftright.state
 
-import net.rolodophone.leftright.components.*
+import net.rolodophone.leftright.main.MainView.c
 
 object stateGame : State {
     override fun reset() {
-        player.reset()
-        road.reset()
+        c.player.reset()
+        c.road.reset()
     }
 
     override fun update() {
-        road.update()
-        player.update()
+        c.road.update()
+        c.player.update()
     }
 
     override fun draw() {
-        road.draw()
-        player.draw()
-        weather.draw()
-        statusBar.draw()
-        gameOverlay.draw()
+        c.road.draw()
+        c.player.draw()
+        c.weather.draw()
+        c.statusBar.draw()
+        c.gameOverlay.draw()
     }
 }

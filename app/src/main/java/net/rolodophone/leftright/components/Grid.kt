@@ -4,8 +4,8 @@ import android.graphics.Color
 import android.graphics.Paint
 import net.rolodophone.leftright.main.*
 
-object grid {
-    val gridPaint = Paint()
+class Grid {
+    private val gridPaint = Paint()
 
     init {
         gridPaint.color = Color.argb(100, 255, 255, 255)

@@ -3,8 +3,7 @@ package net.rolodophone.leftright.main
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.RectF
-import net.rolodophone.leftright.components.player
-import net.rolodophone.leftright.components.road
+import net.rolodophone.leftright.main.MainView.c
 import net.rolodophone.leftright.state.State
 import net.rolodophone.leftright.state.stateGame
 import net.rolodophone.leftright.state.stateGameOver
@@ -41,9 +40,9 @@ var dimmerPaint = Paint()
 
 
 fun centerOfLane(lane: Int): Float {
-    require(lane < road.numLanes) { "lane index must be less than road.numLanes" }
+    require(lane < c.road.numLanes) { "lane index must be less than road.numLanes" }
 
-    return (width * (lane + 1) - halfWidth) / (road.numLanes)
+    return (width * (lane + 1) - halfWidth) / (c.road.numLanes)
 }
 
 fun RectF.scaled(factor: Float): RectF {
@@ -60,7 +59,7 @@ fun RectF.scaled(factor: Float): RectF {
 }
 
 fun randomChance(averageMetres: Int): Boolean {
-    return (0 until ((averageMetres / player.ySpeedMps) * fps).toInt()).random() == 0
+    return (0 until ((averageMetres / c.player.ySpeedMps) * fps).toInt()).random() == 0
 }
 
 

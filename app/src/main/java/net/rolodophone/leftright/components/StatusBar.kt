@@ -5,43 +5,53 @@ import android.graphics.RectF
 import android.os.SystemClock
 import net.rolodophone.leftright.button.ButtonText
 import net.rolodophone.leftright.main.*
+import net.rolodophone.leftright.main.MainView.c
 import net.rolodophone.leftright.resources.bitmaps
 
-object statusBar {
+class StatusBar {
     var showDebug = false
 
-    object debug {
+    val debug = Debug()
+
+    inner class Debug {
         var prevTime = SystemClock.elapsedRealtime()
         var viewFps = fps.toInt()
 
         val moreFuel = ButtonText(
-            "more fuel", Paint.Align.RIGHT, RectF(
-                w(200), statusBarHeight + w(
-                    30
-                ), w(353), statusBarHeight + w(55)
+            "more fuel", Paint.Align.RIGHT, c, RectF(
+                w(200),
+                statusBarHeight + w(30),
+                w(353),
+                statusBarHeight + w(55)
             )
         ) {
-            player.fuel += 1000
+            c.player.fuel += 1000
         }
         val frenzyOn = ButtonText(
             "frenzy on",
             Paint.Align.RIGHT,
+            c,
             RectF(
-                w(200), statusBarHeight + w(60),
-                w(353), statusBarHeight + w(85)
+                w(200),
+                statusBarHeight + w(60),
+                w(353),
+                statusBarHeight + w(85)
             )
         ) {
-            road.isFrenzy = true
+            c.road.isFrenzy = true
         }
         val frenzyOff = ButtonText(
             "frenzy off",
             Paint.Align.RIGHT,
+            c,
             RectF(
-                w(200), statusBarHeight + w(60),
-                w(353), statusBarHeight + w(85)
+                w(200),
+                statusBarHeight + w(60),
+                w(353),
+                statusBarHeight + w(85)
             )
         ) {
-            road.isFrenzy = false
+            c.road.isFrenzy = false
         }
 
         fun draw() {
@@ -59,7 +69,7 @@ object statusBar {
 
             //draw buttons
             moreFuel.draw()
-            if (road.isFrenzy) frenzyOff.draw() else frenzyOn.draw()
+            if (c.road.isFrenzy) frenzyOff.draw() else frenzyOn.draw()
         }
     }
 
@@ -80,7 +90,7 @@ object statusBar {
 
         whitePaint.textAlign = Paint.Align.RIGHT
         canvas.drawText(
-            player.fuel.toInt().toString(),
+            c.player.fuel.toInt().toString(),
             w(329),
             w(25) + statusBarHeight,
             whitePaint
@@ -89,7 +99,7 @@ object statusBar {
         //draw distance
         whitePaint.textAlign = Paint.Align.LEFT
         canvas.drawText(
-            player.distance.toInt().toString() + "m",
+            c.player.distance.toInt().toString() + "m",
             w(7),
             w(25) + statusBarHeight,
             whitePaint

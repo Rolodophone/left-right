@@ -12,7 +12,7 @@ import android.view.MotionEvent
 import android.view.SurfaceView
 import android.view.WindowManager
 import net.rolodophone.leftright.R
-import net.rolodophone.leftright.components.buttons
+import net.rolodophone.leftright.components.*
 import net.rolodophone.leftright.resources.bitmaps
 import net.rolodophone.leftright.resources.sounds
 import net.rolodophone.leftright.state.stateGame
@@ -20,6 +20,19 @@ import net.rolodophone.leftright.state.statePaused
 
 
 class MainView(context: Context) : SurfaceView(context), Runnable {
+
+    object c {
+        lateinit var buttons: Buttons
+        lateinit var gameOverlay: GameOverlay
+        lateinit var gameOverOverlay: GameOverOverlay
+        lateinit var grid: Grid
+        lateinit var pausedOverlay: PausedOverlay
+        lateinit var player: Player
+        lateinit var road: Road
+        lateinit var statusBar: StatusBar
+        lateinit var weather: Weather
+    }
+
 
     override fun run() {
         while (appOpen) {
@@ -29,7 +42,7 @@ class MainView(context: Context) : SurfaceView(context), Runnable {
 
                 //update
                 state.update()
-                buttons.updateButtons()
+                c.buttons.updateButtons()
 
                 //draw
                 val c = holder.lockCanvas()
@@ -69,11 +82,10 @@ class MainView(context: Context) : SurfaceView(context), Runnable {
         dimmerPaint.color = Color.argb(150, 0, 0, 0)
 
 
+        //configure window
         val activity = context as Activity
         val window = activity.window
-
         window.statusBarColor = Color.argb(0, 0, 0, 0)
-
         window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_IN_OVERSCAN)
 
 
@@ -121,6 +133,18 @@ class MainView(context: Context) : SurfaceView(context), Runnable {
         sounds.coin = sounds.soundPool.load(context, R.raw.coin, 1)
 
 
+        //initialize components
+        c.gameOverlay = GameOverlay()
+        c.gameOverOverlay = GameOverOverlay(context)
+        c.grid = Grid()
+        c.pausedOverlay = PausedOverlay()
+        c.road = Road()
+        c.player = Player()
+        c.statusBar = StatusBar()
+        c.weather = Weather()
+        c.buttons = Buttons()
+
+
         //initialize state
         state.reset()
 
@@ -132,7 +156,7 @@ class MainView(context: Context) : SurfaceView(context), Runnable {
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         if (event?.action == MotionEvent.ACTION_DOWN) {
-            for (button in buttons.buttons) if (button.checkClick(event.x, event.y)) {
+            for (button in c.buttons.buttons) if (button.checkClick(event.x, event.y)) {
                 button.onClick()
                 return true
             }

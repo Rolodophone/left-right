@@ -1,16 +1,18 @@
 package net.rolodophone.leftright.components
 
+import android.content.Context
 import android.graphics.Paint
 import android.graphics.RectF
 import android.graphics.Typeface
 import net.rolodophone.leftright.button.ButtonBitmap
 import net.rolodophone.leftright.main.*
+import net.rolodophone.leftright.main.MainView.c
 import net.rolodophone.leftright.resources.bitmaps
 import net.rolodophone.leftright.resources.sounds
 import net.rolodophone.leftright.state.stateGame
 import kotlin.random.Random
 
-object gameOverOverlay {
+class GameOverOverlay(context: Context) {
     private val deathMsgDim = RectF(
         w(30),
         h(40),
@@ -20,7 +22,7 @@ object gameOverOverlay {
     private val deathMsgPaint = Paint(bitmapPaint)
 
     val playAgain = ButtonBitmap(
-        bitmaps.play_again, RectF(
+        bitmaps.play_again, c, RectF(
             w(220),
             h(250),
             w(300), h(250) + w(80)
@@ -30,7 +32,7 @@ object gameOverOverlay {
         state = stateGame
     }
     val mainMenu = ButtonBitmap(
-        bitmaps.main_menu, RectF(
+        bitmaps.main_menu, c, RectF(
             w(60),
             h(250),
             w(140), h(250) + w(80)
@@ -91,7 +93,7 @@ object gameOverOverlay {
         maxRotation = -20f + Random.nextFloat() * 40f
         scale = 0f
 
-        comment = comments.getValue(player.causeOfDeath).random()
+        comment = comments.getValue(c.player.causeOfDeath).random()
 
         //context.openFileInput
 
@@ -171,28 +173,28 @@ object gameOverOverlay {
 
         whitePaint.textAlign = Paint.Align.RIGHT
         canvas.drawText(
-            player.distance.toInt().toString(),
+            c.player.distance.toInt().toString(),
             w(330),
             h(160),
             whitePaint
         )
         canvas.drawText(
-            player.fuel.toInt().toString(),
+            c.player.fuel.toInt().toString(),
             w(330), h(160) + w(30),
             whitePaint
         )
         canvas.drawText(
-            player.coins.toString(),
+            c.player.coins.toString(),
             w(330), h(160) + w(60),
             whitePaint
         )
         canvas.drawText(
-            (player.distance.toInt() + player.fuel.toInt() + player.coins).toString(),
+            (c.player.distance.toInt() + c.player.fuel.toInt() + c.player.coins).toString(),
             w(330), h(160) + w(100),
             whitePaint
         )
         canvas.drawText(
-            "42",
+            highscore.toString(),
             w(330), h(160) + w(130),
             whitePaint
         )
