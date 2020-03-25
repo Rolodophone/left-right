@@ -8,6 +8,7 @@ import net.rolodophone.leftright.button.ButtonBitmap
 import net.rolodophone.leftright.main.*
 import net.rolodophone.leftright.resources.bitmaps
 import net.rolodophone.leftright.resources.sounds
+import java.io.FileNotFoundException
 import kotlin.random.Random
 
 class GameOverOverlay(override val ctx: MainActivity) : Component {
@@ -84,7 +85,7 @@ class GameOverOverlay(override val ctx: MainActivity) : Component {
     lateinit var comment: List<String>
     var highscore = 0
     var score = 0
-    var newHighscore = false
+    var isNewHighscore = false
 
 
     fun reset() {
@@ -95,14 +96,19 @@ class GameOverOverlay(override val ctx: MainActivity) : Component {
 
         comment = comments.getValue(ctx.player.causeOfDeath).random()
         score = ctx.player.distance.toInt() + ctx.player.fuel.toInt() + ctx.player.coins
-//        try {
-            highscore = ctx.openFileInput("highscore").bufferedReader().useLines { lines -> lines.fold("") { some, text -> "$some\n$text" } }.toInt()
-//        } catch  {
-//
-//        }
+
+        highscore = try {
+            ctx.openFileInput("highscore").bufferedReader().readText().toInt()
+        }
+        catch (e: FileNotFoundException) {
+            ctx.openFileOutput("highscore", Context.MODE_PRIVATE).use {
+                it.write("0".toByteArray())
+            }
+            0
+        }
 
         if (score > highscore) {
-            newHighscore = true
+            isNewHighscore = true
             ctx.openFileOutput("highscore", Context.MODE_PRIVATE).use {
                 it.write(score.toString().toByteArray())
             }
@@ -209,12 +215,14 @@ class GameOverOverlay(override val ctx: MainActivity) : Component {
             whitePaint
         )
 
-        whitePaint.textAlign = Paint.Align.CENTER
-        canvas.drawText(
-            "New highscore!",
-            halfWidth, h(160) + w(160),
-            whitePaint
-        )
+        if (isNewHighscore) {
+            whitePaint.textAlign = Paint.Align.CENTER
+            canvas.drawText(
+                "New highscore!",
+                halfWidth, h(160) + w(160),
+                whitePaint
+            )
+        }
 
         whitePaint.strokeWidth = 3f
         canvas.drawLine(
