@@ -6,19 +6,17 @@ import android.graphics.RectF
 import net.rolodophone.leftright.button.Button
 import net.rolodophone.leftright.button.ButtonText
 import net.rolodophone.leftright.main.*
-import net.rolodophone.leftright.main.MainView.c
 import net.rolodophone.leftright.resources.sounds
-import net.rolodophone.leftright.state.stateGame
 
-class PausedOverlay {
+class PausedOverlay(override val ctx: MainActivity) : Component {
     var resume = object : Button(
-        c,
+        ctx,
         RectF(
             w(90), halfHeight + w(5),
             w(270), halfHeight + w(49)
         ), {
             sounds.playSelect()
-            state = stateGame
+            ctx.state = ctx.stateGame
         }
     ) {
         override fun draw() {
@@ -42,24 +40,24 @@ class PausedOverlay {
     val btnShowDebug = ButtonText(
         "debug",
         Paint.Align.RIGHT,
-        c,
+        ctx,
         RectF(
             w(200), height - w(35),
             w(348), height - w(10)
         )
     ) {
-        c.statusBar.showDebug = true
+        ctx.statusBar.showDebug = true
     }
     val btnHideDebug = ButtonText(
         "debug",
         Paint.Align.RIGHT,
-        c,
+        ctx,
         RectF(
             w(200), height - w(35),
             w(348), height - w(10)
         )
     ) {
-        c.statusBar.showDebug = false
+        ctx.statusBar.showDebug = false
     }
 
 
@@ -88,6 +86,6 @@ class PausedOverlay {
         )
 
         resume.draw()
-        if (c.statusBar.showDebug) btnHideDebug.draw() else btnShowDebug.draw()
+        if (ctx.statusBar.showDebug) btnHideDebug.draw() else btnShowDebug.draw()
     }
 }

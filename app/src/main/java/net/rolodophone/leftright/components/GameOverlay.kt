@@ -3,20 +3,18 @@ package net.rolodophone.leftright.components
 import android.graphics.RectF
 import net.rolodophone.leftright.button.Button
 import net.rolodophone.leftright.main.*
-import net.rolodophone.leftright.main.MainView.c
 import net.rolodophone.leftright.resources.sounds
-import net.rolodophone.leftright.state.statePaused
 
-class GameOverlay {
+class GameOverlay(override val ctx: MainActivity) : Component {
     val pause = object : Button(
-        c,
+        ctx,
         RectF(
             w(5), height - w(50),
             w(50), height - w(5)
         ),
         {
             sounds.playSelect()
-            state = statePaused
+            ctx.state = ctx.statePaused
         }
     ) {
         override fun draw() {
@@ -39,16 +37,16 @@ class GameOverlay {
         }
     }
 
-    val leftButton = Button(c, RectF(0f, 0f, halfWidth - 1f, height)) {
-        val degree = c.player.rotation % 360f
-        if (degree < 90f || degree > 270f) c.player.turnLeft()
-        else c.player.turnRight()
+    val leftButton = Button(ctx, RectF(0f, 0f, halfWidth - 1f, height)) {
+        val degree = ctx.player.rotation % 360f
+        if (degree < 90f || degree > 270f) ctx.player.turnLeft()
+        else ctx.player.turnRight()
     }
 
-    val rightButton = Button(c, RectF(halfWidth, 0f, width, height)) {
-        val degree = c.player.rotation % 360f
-        if (degree < 90f || degree > 270f) c.player.turnRight()
-        else c.player.turnLeft()
+    val rightButton = Button(ctx, RectF(halfWidth, 0f, width, height)) {
+        val degree = ctx.player.rotation % 360f
+        if (degree < 90f || degree > 270f) ctx.player.turnRight()
+        else ctx.player.turnLeft()
     }
 
 

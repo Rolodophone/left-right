@@ -4,7 +4,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import net.rolodophone.leftright.main.*
 
-class Grid {
+class Grid(override val ctx: MainActivity) : Component {
     private val gridPaint = Paint()
 
     init {

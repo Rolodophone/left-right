@@ -2,9 +2,10 @@ package net.rolodophone.leftright.components
 
 import android.graphics.Color
 import android.graphics.Paint
+import net.rolodophone.leftright.main.MainActivity
 import net.rolodophone.leftright.main.w
 
-class Weather {
+class Weather(override val ctx: MainActivity) : Component {
     private val rainPaint = Paint()
 
     init {

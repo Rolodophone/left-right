@@ -3,20 +3,18 @@ package net.rolodophone.leftright.components
 import android.graphics.Bitmap
 import android.graphics.RectF
 import net.rolodophone.leftright.main.*
-import net.rolodophone.leftright.main.MainView.c
 import net.rolodophone.leftright.resources.bitmaps
 import net.rolodophone.leftright.resources.sounds
-import net.rolodophone.leftright.state.stateGameOver
 
-class Player {
+class Player(override val ctx: MainActivity) : Component {
     private val xSpeed = w(1800)
 
     //The x coordinate of the left side of the car, if it was in the Nth lane
     private var laneXs = mutableListOf<Float>()
 
     init {
-        for (i in 0 until c.road.numLanes) {
-            laneXs.add(centerOfLane(i) - w(35))
+        for (i in 0 until ctx.road.numLanes) {
+            laneXs.add(ctx.road.centerOfLane(i) - w(35))
         }
     }
 
@@ -157,7 +155,7 @@ class Player {
             }
         }
 
-        state = stateGameOver
+        ctx.state = ctx.stateGameOver
     }
 
 
@@ -192,7 +190,7 @@ class Player {
             lane--
         }
 
-        if (lane != c.road.numLanes - 1) {
+        if (lane != ctx.road.numLanes - 1) {
             goingR = true
             sounds.playTap()
         }

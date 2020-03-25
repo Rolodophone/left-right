@@ -5,11 +5,21 @@ import android.graphics.RectF
 import android.os.SystemClock
 import android.support.annotation.CallSuper
 import net.rolodophone.leftright.main.*
-import net.rolodophone.leftright.main.MainView.c
 import net.rolodophone.leftright.resources.bitmaps
 import net.rolodophone.leftright.resources.sounds
 
-class Road {
+class Road(override val ctx: MainActivity) : Component {
+
+    fun centerOfLane(lane: Int): Float {
+        require(lane < numLanes) { "lane index must be less than road.numLanes" }
+
+        return (width * (lane + 1) - halfWidth) / numLanes
+    }
+
+    private fun randomChance(averageMetres: Int): Boolean {
+        return (0 until ((averageMetres / ctx.player.ySpeedMps) * fps).toInt()).random() == 0
+    }
+
     var isFrenzy = false
 
     val background = Background()
@@ -22,7 +32,7 @@ class Road {
         var topLineBottom = 0f
 
         fun update() {
-            topLineBottom += c.player.ySpeed / fps
+            topLineBottom += ctx.player.ySpeed / fps
             topLineBottom %= lineH + lineGap
         }
 
@@ -72,7 +82,7 @@ class Road {
 
         fun randomLane(): Int {
             val remainingLanes = mutableSetOf<Int>()
-            remainingLanes.addAll(0 until c.road.numLanes)
+            remainingLanes.addAll(0 until ctx.road.numLanes)
 
             var newLane: Int
             while (true) {
@@ -117,13 +127,13 @@ class Road {
         @CallSuper
         open fun update() {
             //move item down
-            dim.offset(0f, c.player.ySpeed / fps)
+            dim.offset(0f, ctx.player.ySpeed / fps)
 
             //mark offscreen item for deletion
             if (dim.top > height) itemsToDel.add(this)
 
             //perform onTouch()
-            if (dim.bottom > c.player.dim.top && dim.top < c.player.dim.bottom && dim.right > c.player.dim.left && dim.left < c.player.dim.right && !disabled) onTouch()
+            if (dim.bottom > ctx.player.dim.top && dim.top < ctx.player.dim.bottom && dim.right > ctx.player.dim.left && dim.left < ctx.player.dim.right && !disabled) onTouch()
         }
 
         open fun draw() {
@@ -141,7 +151,7 @@ class Road {
         override val dim = rectFFromDim(w(45), w(51.4285714286f))
 
         override fun onTouch() {
-            c.player.fuel += 50f
+            ctx.player.fuel += 50f
             itemsToDel.add(this)
             sounds.playFuel()
         }
@@ -154,7 +164,7 @@ class Road {
         override val dim = rectFFromDim(w(45), w(51.4285714286f))
 
         override fun onTouch() {
-            c.player.die(DeathType.CONE, this)
+            ctx.player.die(DeathType.CONE, this)
         }
     }
 
@@ -165,7 +175,7 @@ class Road {
         override val dim = rectFFromDim(w(135), w(135))
 
         override fun onTouch() {
-            c.player.oil()
+            ctx.player.oil()
             this.disabled = true
             sounds.playOil()
         }
@@ -179,7 +189,7 @@ class Road {
         override val dim = rectFFromDim(w(87.5f), w(175))
 
         override fun onTouch() {
-            c.player.die(DeathType.CAR, this)
+            ctx.player.die(DeathType.CAR, this)
         }
 
         override fun update() {
@@ -197,7 +207,7 @@ class Road {
         override val dim = rectFFromDim(w(87.5f), w(175))
 
         override fun onTouch() {
-            c.player.die(DeathType.CAR, this)
+            ctx.player.die(DeathType.CAR, this)
         }
 
         override fun update() {
@@ -215,7 +225,7 @@ class Road {
         override val dim = rectFFromDim(w(87.5f), w(175))
 
         override fun onTouch() {
-            c.player.die(DeathType.CAR, this)
+            ctx.player.die(DeathType.CAR, this)
         }
 
         override fun update() {
@@ -233,7 +243,7 @@ class Road {
         override val dim = rectFFromDim(w(87.5f), w(175))
 
         override fun onTouch() {
-            c.player.die(DeathType.CAR, this)
+            ctx.player.die(DeathType.CAR, this)
         }
 
         override fun update() {
@@ -251,7 +261,7 @@ class Road {
         override val dim = rectFFromDim(w(87.5f), w(175))
 
         override fun onTouch() {
-            c.player.die(DeathType.CAR, this)
+            ctx.player.die(DeathType.CAR, this)
         }
 
         override fun update() {
@@ -269,7 +279,7 @@ class Road {
         override val dim = rectFFromDim(w(87.5f), w(175))
 
         override fun onTouch() {
-            c.player.die(DeathType.CAR, this)
+            ctx.player.die(DeathType.CAR, this)
         }
 
         override fun update() {
@@ -294,7 +304,7 @@ class Road {
         var shineNum = -2
 
         override fun onTouch() {
-            c.player.coins += 1
+            ctx.player.coins += 1
             sounds.playCoin()
             itemsToDel.add(this)
         }

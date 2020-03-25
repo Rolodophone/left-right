@@ -2,7 +2,6 @@ package net.rolodophone.leftright.main
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.Context
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.PixelFormat
@@ -15,24 +14,12 @@ import net.rolodophone.leftright.R
 import net.rolodophone.leftright.components.*
 import net.rolodophone.leftright.resources.bitmaps
 import net.rolodophone.leftright.resources.sounds
-import net.rolodophone.leftright.state.stateGame
-import net.rolodophone.leftright.state.statePaused
+import net.rolodophone.leftright.state.StateGameOver
+import net.rolodophone.leftright.state.StatePaused
 
 
-class MainView(context: Context) : SurfaceView(context), Runnable {
-
-    object c {
-        lateinit var buttons: Buttons
-        lateinit var gameOverlay: GameOverlay
-        lateinit var gameOverOverlay: GameOverOverlay
-        lateinit var grid: Grid
-        lateinit var pausedOverlay: PausedOverlay
-        lateinit var player: Player
-        lateinit var road: Road
-        lateinit var statusBar: StatusBar
-        lateinit var weather: Weather
-    }
-
+@SuppressLint("ViewConstructor")
+class MainView(private val ctx: MainActivity) : SurfaceView(ctx), Runnable {
 
     override fun run() {
         while (appOpen) {
@@ -41,15 +28,15 @@ class MainView(context: Context) : SurfaceView(context), Runnable {
             if (holder.surface.isValid) {
 
                 //update
-                state.update()
-                c.buttons.updateButtons()
+                ctx.state.update()
+                ctx.buttons.updateButtons()
 
                 //draw
                 val c = holder.lockCanvas()
                 if (c != null) {
                     canvas = c
 
-                    state.draw()
+                    ctx.state.draw()
 
                     holder.unlockCanvasAndPost(canvas)
                 }
@@ -83,7 +70,7 @@ class MainView(context: Context) : SurfaceView(context), Runnable {
 
 
         //configure window
-        val activity = context as Activity
+        val activity = ctx as Activity
         val window = activity.window
         window.statusBarColor = Color.argb(0, 0, 0, 0)
         window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_IN_OVERSCAN)
@@ -93,60 +80,65 @@ class MainView(context: Context) : SurfaceView(context), Runnable {
         val bitmapOptions = BitmapFactory.Options()
         bitmapOptions.inScaled = false
 
-        bitmaps.car1 = BitmapFactory.decodeResource(context.resources, R.drawable.car1, bitmapOptions)
-        bitmaps.car1_hit = BitmapFactory.decodeResource(context.resources, R.drawable.car1_hit, bitmapOptions)
-        bitmaps.car2 = BitmapFactory.decodeResource(context.resources, R.drawable.car2, bitmapOptions)
-        bitmaps.car2_hit = BitmapFactory.decodeResource(context.resources, R.drawable.car2_hit, bitmapOptions)
-        bitmaps.car3 = BitmapFactory.decodeResource(context.resources, R.drawable.car3, bitmapOptions)
-        bitmaps.car3_hit = BitmapFactory.decodeResource(context.resources, R.drawable.car3_hit, bitmapOptions)
-        bitmaps.car4 = BitmapFactory.decodeResource(context.resources, R.drawable.car4, bitmapOptions)
-        bitmaps.car4_hit = BitmapFactory.decodeResource(context.resources, R.drawable.car4_hit, bitmapOptions)
-        bitmaps.car5 = BitmapFactory.decodeResource(context.resources, R.drawable.car5, bitmapOptions)
-        bitmaps.car5_hit = BitmapFactory.decodeResource(context.resources, R.drawable.car5_hit, bitmapOptions)
-        bitmaps.car6 = BitmapFactory.decodeResource(context.resources, R.drawable.car6, bitmapOptions)
-        bitmaps.car6_hit = BitmapFactory.decodeResource(context.resources, R.drawable.car6_hit, bitmapOptions)
-        bitmaps.death_msg = BitmapFactory.decodeResource(context.resources, R.drawable.death_msg, bitmapOptions)
-        bitmaps.fuel = BitmapFactory.decodeResource(context.resources, R.drawable.fuel, bitmapOptions)
-        bitmaps.main_menu = BitmapFactory.decodeResource(context.resources, R.drawable.main_menu, bitmapOptions)
-        bitmaps.play_again = BitmapFactory.decodeResource(context.resources, R.drawable.play_again, bitmapOptions)
-        bitmaps.cone = BitmapFactory.decodeResource(context.resources, R.drawable.cone, bitmapOptions)
-        bitmaps.oil = BitmapFactory.decodeResource(context.resources, R.drawable.oil, bitmapOptions)
-        bitmaps.coin = BitmapFactory.decodeResource(context.resources, R.drawable.coin, bitmapOptions)
+        bitmaps.car1 = BitmapFactory.decodeResource(ctx.resources, R.drawable.car1, bitmapOptions)
+        bitmaps.car1_hit = BitmapFactory.decodeResource(ctx.resources, R.drawable.car1_hit, bitmapOptions)
+        bitmaps.car2 = BitmapFactory.decodeResource(ctx.resources, R.drawable.car2, bitmapOptions)
+        bitmaps.car2_hit = BitmapFactory.decodeResource(ctx.resources, R.drawable.car2_hit, bitmapOptions)
+        bitmaps.car3 = BitmapFactory.decodeResource(ctx.resources, R.drawable.car3, bitmapOptions)
+        bitmaps.car3_hit = BitmapFactory.decodeResource(ctx.resources, R.drawable.car3_hit, bitmapOptions)
+        bitmaps.car4 = BitmapFactory.decodeResource(ctx.resources, R.drawable.car4, bitmapOptions)
+        bitmaps.car4_hit = BitmapFactory.decodeResource(ctx.resources, R.drawable.car4_hit, bitmapOptions)
+        bitmaps.car5 = BitmapFactory.decodeResource(ctx.resources, R.drawable.car5, bitmapOptions)
+        bitmaps.car5_hit = BitmapFactory.decodeResource(ctx.resources, R.drawable.car5_hit, bitmapOptions)
+        bitmaps.car6 = BitmapFactory.decodeResource(ctx.resources, R.drawable.car6, bitmapOptions)
+        bitmaps.car6_hit = BitmapFactory.decodeResource(ctx.resources, R.drawable.car6_hit, bitmapOptions)
+        bitmaps.death_msg = BitmapFactory.decodeResource(ctx.resources, R.drawable.death_msg, bitmapOptions)
+        bitmaps.fuel = BitmapFactory.decodeResource(ctx.resources, R.drawable.fuel, bitmapOptions)
+        bitmaps.main_menu = BitmapFactory.decodeResource(ctx.resources, R.drawable.main_menu, bitmapOptions)
+        bitmaps.play_again = BitmapFactory.decodeResource(ctx.resources, R.drawable.play_again, bitmapOptions)
+        bitmaps.cone = BitmapFactory.decodeResource(ctx.resources, R.drawable.cone, bitmapOptions)
+        bitmaps.oil = BitmapFactory.decodeResource(ctx.resources, R.drawable.oil, bitmapOptions)
+        bitmaps.coin = BitmapFactory.decodeResource(ctx.resources, R.drawable.coin, bitmapOptions)
         bitmaps.coinShining = listOf(
-            BitmapFactory.decodeResource(context.resources, R.drawable.coin0, bitmapOptions),
-            BitmapFactory.decodeResource(context.resources, R.drawable.coin1, bitmapOptions),
-            BitmapFactory.decodeResource(context.resources, R.drawable.coin2, bitmapOptions),
-            BitmapFactory.decodeResource(context.resources, R.drawable.coin3, bitmapOptions),
-            BitmapFactory.decodeResource(context.resources, R.drawable.coin4, bitmapOptions),
-            BitmapFactory.decodeResource(context.resources, R.drawable.coin5, bitmapOptions),
-            BitmapFactory.decodeResource(context.resources, R.drawable.coin6, bitmapOptions),
-            BitmapFactory.decodeResource(context.resources, R.drawable.coin7, bitmapOptions)
+            BitmapFactory.decodeResource(ctx.resources, R.drawable.coin0, bitmapOptions),
+            BitmapFactory.decodeResource(ctx.resources, R.drawable.coin1, bitmapOptions),
+            BitmapFactory.decodeResource(ctx.resources, R.drawable.coin2, bitmapOptions),
+            BitmapFactory.decodeResource(ctx.resources, R.drawable.coin3, bitmapOptions),
+            BitmapFactory.decodeResource(ctx.resources, R.drawable.coin4, bitmapOptions),
+            BitmapFactory.decodeResource(ctx.resources, R.drawable.coin5, bitmapOptions),
+            BitmapFactory.decodeResource(ctx.resources, R.drawable.coin6, bitmapOptions),
+            BitmapFactory.decodeResource(ctx.resources, R.drawable.coin7, bitmapOptions)
         )
 
 
         //load sounds
-        sounds.hit = sounds.soundPool.load(context, R.raw.hit, 1)
-        sounds.select = sounds.soundPool.load(context, R.raw.select, 1)
-        sounds.tap = sounds.soundPool.load(context, R.raw.tap, 1)
-        sounds.fuel = sounds.soundPool.load(context, R.raw.fuel, 1)
-        sounds.oil = sounds.soundPool.load(context, R.raw.oil, 1)
-        sounds.coin = sounds.soundPool.load(context, R.raw.coin, 1)
+        sounds.hit = sounds.soundPool.load(ctx, R.raw.hit, 1)
+        sounds.select = sounds.soundPool.load(ctx, R.raw.select, 1)
+        sounds.tap = sounds.soundPool.load(ctx, R.raw.tap, 1)
+        sounds.fuel = sounds.soundPool.load(ctx, R.raw.fuel, 1)
+        sounds.oil = sounds.soundPool.load(ctx, R.raw.oil, 1)
+        sounds.coin = sounds.soundPool.load(ctx, R.raw.coin, 1)
 
 
         //initialize components
-        c.gameOverlay = GameOverlay()
-        c.gameOverOverlay = GameOverOverlay(context)
-        c.grid = Grid()
-        c.pausedOverlay = PausedOverlay()
-        c.road = Road()
-        c.player = Player()
-        c.statusBar = StatusBar()
-        c.weather = Weather()
-        c.buttons = Buttons()
+        ctx.gameOverlay = GameOverlay(ctx)
+        ctx.gameOverOverlay = GameOverOverlay(ctx)
+        ctx.grid = Grid(ctx)
+        ctx.pausedOverlay = PausedOverlay(ctx)
+        ctx.road = Road(ctx)
+        ctx.player = Player(ctx)
+        ctx.statusBar = StatusBar(ctx)
+        ctx.weather = Weather(ctx)
+        ctx.buttons = Buttons(ctx)
+
+
+        //initialize states
+        ctx.stateGameOver = StateGameOver(ctx)
+        ctx.statePaused = StatePaused(ctx)
 
 
         //initialize state
-        state.reset()
+        ctx.state.reset()
 
         Log.i("View", "</--------INIT--------->")
     }
@@ -156,7 +148,7 @@ class MainView(context: Context) : SurfaceView(context), Runnable {
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         if (event?.action == MotionEvent.ACTION_DOWN) {
-            for (button in c.buttons.buttons) if (button.checkClick(event.x, event.y)) {
+            for (button in ctx.buttons.buttons) if (button.checkClick(event.x, event.y)) {
                 button.onClick()
                 return true
             }
@@ -167,7 +159,7 @@ class MainView(context: Context) : SurfaceView(context), Runnable {
 
 
     fun pause() {
-        if (state == stateGame) state = statePaused
+        if (ctx.state == ctx.stateGame) ctx.state = ctx.statePaused
         Log.i("View", "Paused")
     }
 }

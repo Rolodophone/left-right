@@ -5,10 +5,9 @@ import android.graphics.RectF
 import android.os.SystemClock
 import net.rolodophone.leftright.button.ButtonText
 import net.rolodophone.leftright.main.*
-import net.rolodophone.leftright.main.MainView.c
 import net.rolodophone.leftright.resources.bitmaps
 
-class StatusBar {
+class StatusBar(override val ctx: MainActivity) : Component {
     var showDebug = false
 
     val debug = Debug()
@@ -18,19 +17,19 @@ class StatusBar {
         var viewFps = fps.toInt()
 
         val moreFuel = ButtonText(
-            "more fuel", Paint.Align.RIGHT, c, RectF(
+            "more fuel", Paint.Align.RIGHT, ctx, RectF(
                 w(200),
                 statusBarHeight + w(30),
                 w(353),
                 statusBarHeight + w(55)
             )
         ) {
-            c.player.fuel += 1000
+            ctx.player.fuel += 1000
         }
         val frenzyOn = ButtonText(
             "frenzy on",
             Paint.Align.RIGHT,
-            c,
+            ctx,
             RectF(
                 w(200),
                 statusBarHeight + w(60),
@@ -38,12 +37,12 @@ class StatusBar {
                 statusBarHeight + w(85)
             )
         ) {
-            c.road.isFrenzy = true
+            ctx.road.isFrenzy = true
         }
         val frenzyOff = ButtonText(
             "frenzy off",
             Paint.Align.RIGHT,
-            c,
+            ctx,
             RectF(
                 w(200),
                 statusBarHeight + w(60),
@@ -51,7 +50,7 @@ class StatusBar {
                 statusBarHeight + w(85)
             )
         ) {
-            c.road.isFrenzy = false
+            ctx.road.isFrenzy = false
         }
 
         fun draw() {
@@ -69,7 +68,7 @@ class StatusBar {
 
             //draw buttons
             moreFuel.draw()
-            if (c.road.isFrenzy) frenzyOff.draw() else frenzyOn.draw()
+            if (ctx.road.isFrenzy) frenzyOff.draw() else frenzyOn.draw()
         }
     }
 
@@ -90,7 +89,7 @@ class StatusBar {
 
         whitePaint.textAlign = Paint.Align.RIGHT
         canvas.drawText(
-            c.player.fuel.toInt().toString(),
+            ctx.player.fuel.toInt().toString(),
             w(329),
             w(25) + statusBarHeight,
             whitePaint
@@ -99,7 +98,7 @@ class StatusBar {
         //draw distance
         whitePaint.textAlign = Paint.Align.LEFT
         canvas.drawText(
-            c.player.distance.toInt().toString() + "m",
+            ctx.player.distance.toInt().toString() + "m",
             w(7),
             w(25) + statusBarHeight,
             whitePaint

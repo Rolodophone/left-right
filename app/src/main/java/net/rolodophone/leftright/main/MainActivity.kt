@@ -5,8 +5,37 @@ import android.graphics.Point
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import net.rolodophone.leftright.components.*
+import net.rolodophone.leftright.state.State
+import net.rolodophone.leftright.state.StateGame
+import net.rolodophone.leftright.state.StateGameOver
+import net.rolodophone.leftright.state.StatePaused
 
 class MainActivity : Activity() {
+
+    lateinit var buttons: Buttons
+    lateinit var gameOverlay: GameOverlay
+    lateinit var gameOverOverlay: GameOverOverlay
+    lateinit var grid: Grid
+    lateinit var pausedOverlay: PausedOverlay
+    lateinit var player: Player
+    lateinit var road: Road
+    lateinit var statusBar: StatusBar
+    lateinit var weather: Weather
+
+    var stateGame: StateGame = StateGame(this)
+    lateinit var stateGameOver: StateGameOver
+    lateinit var statePaused: StatePaused
+
+    var state: State = stateGame
+        set(value) {
+
+            if (value == stateGameOver || value == stateGame && state != statePaused) {
+                value.reset()
+            }
+
+            field = value
+        }
 
     private lateinit var mainView: MainView
     private lateinit var thread: Thread

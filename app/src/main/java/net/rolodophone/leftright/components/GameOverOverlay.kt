@@ -6,13 +6,11 @@ import android.graphics.RectF
 import android.graphics.Typeface
 import net.rolodophone.leftright.button.ButtonBitmap
 import net.rolodophone.leftright.main.*
-import net.rolodophone.leftright.main.MainView.c
 import net.rolodophone.leftright.resources.bitmaps
 import net.rolodophone.leftright.resources.sounds
-import net.rolodophone.leftright.state.stateGame
 import kotlin.random.Random
 
-class GameOverOverlay(context: Context) {
+class GameOverOverlay(override val ctx: MainActivity) : Component {
     private val deathMsgDim = RectF(
         w(30),
         h(40),
@@ -22,17 +20,17 @@ class GameOverOverlay(context: Context) {
     private val deathMsgPaint = Paint(bitmapPaint)
 
     val playAgain = ButtonBitmap(
-        bitmaps.play_again, c, RectF(
+        bitmaps.play_again, ctx, RectF(
             w(220),
             h(250),
             w(300), h(250) + w(80)
         )
     ) {
         sounds.playSelect()
-        state = stateGame
+        ctx.state = ctx.stateGame
     }
     val mainMenu = ButtonBitmap(
-        bitmaps.main_menu, c, RectF(
+        bitmaps.main_menu, ctx, RectF(
             w(60),
             h(250),
             w(140), h(250) + w(80)
@@ -85,6 +83,8 @@ class GameOverOverlay(context: Context) {
 
     lateinit var comment: List<String>
     var highscore = 0
+    var score = 0
+    var newHighscore = false
 
 
     fun reset() {
@@ -93,11 +93,21 @@ class GameOverOverlay(context: Context) {
         maxRotation = -20f + Random.nextFloat() * 40f
         scale = 0f
 
-        comment = comments.getValue(c.player.causeOfDeath).random()
+        comment = comments.getValue(ctx.player.causeOfDeath).random()
+        score = ctx.player.distance.toInt() + ctx.player.fuel.toInt() + ctx.player.coins
+//        try {
+            highscore = ctx.openFileInput("highscore").bufferedReader().useLines { lines -> lines.fold("") { some, text -> "$some\n$text" } }.toInt()
+//        } catch  {
+//
+//        }
 
-        //context.openFileInput
+        if (score > highscore) {
+            newHighscore = true
+            ctx.openFileOutput("highscore", Context.MODE_PRIVATE).use {
+                it.write(score.toString().toByteArray())
+            }
+        }
 
-        //highscore =
     }
 
 
@@ -173,29 +183,36 @@ class GameOverOverlay(context: Context) {
 
         whitePaint.textAlign = Paint.Align.RIGHT
         canvas.drawText(
-            c.player.distance.toInt().toString(),
+            ctx.player.distance.toInt().toString(),
             w(330),
             h(160),
             whitePaint
         )
         canvas.drawText(
-            c.player.fuel.toInt().toString(),
+            ctx.player.fuel.toInt().toString(),
             w(330), h(160) + w(30),
             whitePaint
         )
         canvas.drawText(
-            c.player.coins.toString(),
+            ctx.player.coins.toString(),
             w(330), h(160) + w(60),
             whitePaint
         )
         canvas.drawText(
-            (c.player.distance.toInt() + c.player.fuel.toInt() + c.player.coins).toString(),
+            (score).toString(),
             w(330), h(160) + w(100),
             whitePaint
         )
         canvas.drawText(
             highscore.toString(),
             w(330), h(160) + w(130),
+            whitePaint
+        )
+
+        whitePaint.textAlign = Paint.Align.CENTER
+        canvas.drawText(
+            "New highscore!",
+            halfWidth, h(160) + w(160),
             whitePaint
         )
 

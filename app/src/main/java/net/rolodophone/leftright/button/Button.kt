@@ -2,9 +2,9 @@ package net.rolodophone.leftright.button
 
 import android.graphics.RectF
 import android.support.annotation.CallSuper
-import net.rolodophone.leftright.main.MainView
+import net.rolodophone.leftright.main.MainActivity
 
-open class Button(open val c: MainView.c, open val dim: RectF, open val onClick: () -> Unit) {
+open class Button(open val ctx: MainActivity, open val dim: RectF, open val onClick: () -> Unit) {
     private var drawnThisFrame = false
     var visible = false
 
