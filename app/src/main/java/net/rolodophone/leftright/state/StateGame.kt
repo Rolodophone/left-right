@@ -6,6 +6,7 @@ class StateGame(override val ctx: MainActivity) : State {
     override fun reset() {
         ctx.player.reset()
         ctx.road.reset()
+        ctx.music.playGame()
     }
 
     override fun update() {

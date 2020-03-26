@@ -5,7 +5,6 @@ import android.graphics.RectF
 import android.os.SystemClock
 import net.rolodophone.leftright.button.ButtonText
 import net.rolodophone.leftright.main.*
-import net.rolodophone.leftright.resources.bitmaps
 
 class StatusBar(override val ctx: MainActivity) : Component {
     var showDebug = false
@@ -85,7 +84,7 @@ class StatusBar(override val ctx: MainActivity) : Component {
 
 
         //draw fuel meter
-        canvas.drawBitmap(bitmaps.fuel, null, fuelDim, bitmapPaint)
+        canvas.drawBitmap(ctx.bitmaps.fuel, null, fuelDim, bitmapPaint)
 
         whitePaint.textAlign = Paint.Align.RIGHT
         canvas.drawText(

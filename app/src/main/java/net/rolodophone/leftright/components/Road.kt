@@ -5,8 +5,6 @@ import android.graphics.RectF
 import android.os.SystemClock
 import android.support.annotation.CallSuper
 import net.rolodophone.leftright.main.*
-import net.rolodophone.leftright.resources.bitmaps
-import net.rolodophone.leftright.resources.sounds
 
 class Road(override val ctx: MainActivity) : Component {
 
@@ -20,7 +18,12 @@ class Road(override val ctx: MainActivity) : Component {
         return (0 until ((averageMetres / ctx.player.ySpeedMps) * fps).toInt()).random() == 0
     }
 
+
     var isFrenzy = false
+    val numLanes = 3
+    lateinit var items: MutableList<Item>
+    lateinit var itemsToDel: MutableList<Item>
+
 
     val background = Background()
 
@@ -145,7 +148,7 @@ class Road(override val ctx: MainActivity) : Component {
     }
 
     inner class Fuel : Item() {
-        override var img = bitmaps.fuel
+        override var img = ctx.bitmaps.fuel
         override var lane = randomLane()
         override val isObstacle = false
         override val dim = rectFFromDim(w(45), w(51.4285714286f))
@@ -153,12 +156,12 @@ class Road(override val ctx: MainActivity) : Component {
         override fun onTouch() {
             ctx.player.fuel += 50f
             itemsToDel.add(this)
-            sounds.playFuel()
+            ctx.sounds.playFuel()
         }
     }
 
     inner class Cone : Item() {
-        override var img = bitmaps.cone
+        override var img = ctx.bitmaps.cone
         override var lane = randomLane()
         override val isObstacle = true
         override val dim = rectFFromDim(w(45), w(51.4285714286f))
@@ -169,7 +172,7 @@ class Road(override val ctx: MainActivity) : Component {
     }
 
     inner class Oil : Item() {
-        override var img = bitmaps.oil
+        override var img = ctx.bitmaps.oil
         override var lane = randomLane()
         override val isObstacle = false
         override val dim = rectFFromDim(w(135), w(135))
@@ -177,12 +180,12 @@ class Road(override val ctx: MainActivity) : Component {
         override fun onTouch() {
             ctx.player.oil()
             this.disabled = true
-            sounds.playOil()
+            ctx.sounds.playOil()
         }
     }
 
     inner class Car1 : Item() {
-        override var img = bitmaps.car1
+        override var img = ctx.bitmaps.car1
         override var lane = randomLane()
         override val isObstacle = true
         override val rotation = 180f
@@ -200,7 +203,7 @@ class Road(override val ctx: MainActivity) : Component {
     }
 
     inner class Car2 : Item() {
-        override var img = bitmaps.car2
+        override var img = ctx.bitmaps.car2
         override var lane = randomLane()
         override val isObstacle = true
         override val rotation = 180f
@@ -218,7 +221,7 @@ class Road(override val ctx: MainActivity) : Component {
     }
 
     inner class Car3 : Item() {
-        override var img = bitmaps.car3
+        override var img = ctx.bitmaps.car3
         override var lane = randomLane()
         override val isObstacle = true
         override val rotation = 180f
@@ -236,7 +239,7 @@ class Road(override val ctx: MainActivity) : Component {
     }
 
     inner class Car4 : Item() {
-        override var img = bitmaps.car4
+        override var img = ctx.bitmaps.car4
         override var lane = randomLane()
         override val isObstacle = true
         override val rotation = 180f
@@ -254,7 +257,7 @@ class Road(override val ctx: MainActivity) : Component {
     }
 
     inner class Car5 : Item() {
-        override var img = bitmaps.car5
+        override var img = ctx.bitmaps.car5
         override var lane = randomLane()
         override val isObstacle = true
         override val rotation = 180f
@@ -272,7 +275,7 @@ class Road(override val ctx: MainActivity) : Component {
     }
 
     inner class Car6 : Item() {
-        override var img = bitmaps.car6
+        override var img = ctx.bitmaps.car6
         override var lane = randomLane()
         override val isObstacle = true
         override val rotation = 180f
@@ -290,7 +293,7 @@ class Road(override val ctx: MainActivity) : Component {
     }
 
     inner class Coin : Item() {
-        override var img = bitmaps.coin
+        override var img = ctx.bitmaps.coin
         override var lane = randomLane()
         override val isObstacle = false
         override val dim = rectFFromDim(w(45), w(45))
@@ -305,7 +308,7 @@ class Road(override val ctx: MainActivity) : Component {
 
         override fun onTouch() {
             ctx.player.coins += 1
-            sounds.playCoin()
+            ctx.sounds.playCoin()
             itemsToDel.add(this)
         }
 
@@ -320,20 +323,14 @@ class Road(override val ctx: MainActivity) : Component {
             if (SystemClock.elapsedRealtime() - timeSpriteLastChanged > 70) {
                 if (shineNum <= 6) {
                     shineNum += 1
-                    if (shineNum >= 0) img = bitmaps.coinShining[shineNum]
+                    if (shineNum >= 0) img = ctx.bitmaps.coinShining[shineNum]
                     timeSpriteLastChanged = SystemClock.elapsedRealtime()
-                } else img = bitmaps.coin
+                } else img = ctx.bitmaps.coin
             }
 
             animationStage += 2f / fps
         }
     }
-
-
-    val numLanes = 3
-
-    lateinit var items: MutableList<Item>
-    lateinit var itemsToDel: MutableList<Item>
 
 
     fun reset() {

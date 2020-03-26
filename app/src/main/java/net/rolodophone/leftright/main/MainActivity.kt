@@ -6,10 +6,10 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import net.rolodophone.leftright.components.*
-import net.rolodophone.leftright.state.State
-import net.rolodophone.leftright.state.StateGame
-import net.rolodophone.leftright.state.StateGameOver
-import net.rolodophone.leftright.state.StatePaused
+import net.rolodophone.leftright.resources.Bitmaps
+import net.rolodophone.leftright.resources.Music
+import net.rolodophone.leftright.resources.Sounds
+import net.rolodophone.leftright.state.*
 
 class MainActivity : Activity() {
 
@@ -23,11 +23,16 @@ class MainActivity : Activity() {
     lateinit var statusBar: StatusBar
     lateinit var weather: Weather
 
-    var stateGame: StateGame = StateGame(this)
+    lateinit var sounds: Sounds
+    lateinit var music: Music
+    lateinit var bitmaps: Bitmaps
+
+    val stateLoading = StateLoading(this)
     lateinit var stateGameOver: StateGameOver
     lateinit var statePaused: StatePaused
+    lateinit var stateGame: StateGame
 
-    var state: State = stateGame
+    var state: State = stateLoading
         set(value) {
 
             if (value == stateGameOver || value == stateGame && state != statePaused) {

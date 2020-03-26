@@ -6,7 +6,6 @@ import android.graphics.RectF
 import net.rolodophone.leftright.button.Button
 import net.rolodophone.leftright.button.ButtonText
 import net.rolodophone.leftright.main.*
-import net.rolodophone.leftright.resources.sounds
 
 class PausedOverlay(override val ctx: MainActivity) : Component {
     var resume = object : Button(
@@ -15,7 +14,7 @@ class PausedOverlay(override val ctx: MainActivity) : Component {
             w(90), halfHeight + w(5),
             w(270), halfHeight + w(49)
         ), {
-            sounds.playSelect()
+            ctx.sounds.playSelect()
             ctx.state = ctx.stateGame
         }
     ) {

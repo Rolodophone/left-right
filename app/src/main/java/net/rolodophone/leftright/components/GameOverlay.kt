@@ -3,7 +3,6 @@ package net.rolodophone.leftright.components
 import android.graphics.RectF
 import net.rolodophone.leftright.button.Button
 import net.rolodophone.leftright.main.*
-import net.rolodophone.leftright.resources.sounds
 
 class GameOverlay(override val ctx: MainActivity) : Component {
     val pause = object : Button(
@@ -13,7 +12,7 @@ class GameOverlay(override val ctx: MainActivity) : Component {
             w(50), height - w(5)
         ),
         {
-            sounds.playSelect()
+            ctx.sounds.playSelect()
             ctx.state = ctx.statePaused
         }
     ) {

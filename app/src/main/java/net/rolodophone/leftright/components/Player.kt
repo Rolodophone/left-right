@@ -3,8 +3,6 @@ package net.rolodophone.leftright.components
 import android.graphics.Bitmap
 import android.graphics.RectF
 import net.rolodophone.leftright.main.*
-import net.rolodophone.leftright.resources.bitmaps
-import net.rolodophone.leftright.resources.sounds
 
 class Player(override val ctx: MainActivity) : Component {
     private val xSpeed = w(1800)
@@ -51,7 +49,7 @@ class Player(override val ctx: MainActivity) : Component {
 
 
     fun reset() {
-        img = bitmaps.car1
+        img = ctx.bitmaps.car1
 
         dim = RectF(
             w(145),
@@ -141,17 +139,17 @@ class Player(override val ctx: MainActivity) : Component {
         causeOfDeath = deathType
 
         if (item != null) {
-            sounds.playHit()
+            ctx.sounds.playHit()
 
-            img = bitmaps.car1_hit
+            img = ctx.bitmaps.car1_hit
 
             when (item) {
-                is Road.Car1 -> item.img = bitmaps.car1_hit
-                is Road.Car2 -> item.img = bitmaps.car2_hit
-                is Road.Car3 -> item.img = bitmaps.car3_hit
-                is Road.Car4 -> item.img = bitmaps.car4_hit
-                is Road.Car5 -> item.img = bitmaps.car5_hit
-                is Road.Car6 -> item.img = bitmaps.car6_hit
+                is Road.Car1 -> item.img = ctx.bitmaps.car1_hit
+                is Road.Car2 -> item.img = ctx.bitmaps.car2_hit
+                is Road.Car3 -> item.img = ctx.bitmaps.car3_hit
+                is Road.Car4 -> item.img = ctx.bitmaps.car4_hit
+                is Road.Car5 -> item.img = ctx.bitmaps.car5_hit
+                is Road.Car6 -> item.img = ctx.bitmaps.car6_hit
             }
         }
 
@@ -177,7 +175,7 @@ class Player(override val ctx: MainActivity) : Component {
 
         if (lane != 0) {
             goingL = true
-            sounds.playTap()
+            ctx.sounds.playTap()
         }
 
         goingR = false
@@ -192,7 +190,7 @@ class Player(override val ctx: MainActivity) : Component {
 
         if (lane != ctx.road.numLanes - 1) {
             goingR = true
-            sounds.playTap()
+            ctx.sounds.playTap()
         }
 
         goingL = false
