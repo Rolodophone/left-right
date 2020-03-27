@@ -70,8 +70,6 @@ class MainActivity : Activity() {
 
         mainView = MainView(this)
 
-        mainView.init()
-
         setContentView(mainView)
     }
 

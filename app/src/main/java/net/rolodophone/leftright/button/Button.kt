@@ -1,7 +1,7 @@
 package net.rolodophone.leftright.button
 
 import android.graphics.RectF
-import android.support.annotation.CallSuper
+import androidx.annotation.CallSuper
 import net.rolodophone.leftright.main.MainActivity
 
 open class Button(open val ctx: MainActivity, open val dim: RectF, open val onClick: () -> Unit) {

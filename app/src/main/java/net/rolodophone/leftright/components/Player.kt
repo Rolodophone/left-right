@@ -141,15 +141,15 @@ class Player(override val ctx: MainActivity) : Component {
         if (item != null) {
             ctx.sounds.playHit()
 
-            img = ctx.bitmaps.car1_hit
+            img = ctx.bitmaps.car1Hit
 
             when (item) {
-                is Road.Car1 -> item.img = ctx.bitmaps.car1_hit
-                is Road.Car2 -> item.img = ctx.bitmaps.car2_hit
-                is Road.Car3 -> item.img = ctx.bitmaps.car3_hit
-                is Road.Car4 -> item.img = ctx.bitmaps.car4_hit
-                is Road.Car5 -> item.img = ctx.bitmaps.car5_hit
-                is Road.Car6 -> item.img = ctx.bitmaps.car6_hit
+                is Road.Car1 -> item.img = ctx.bitmaps.car1Hit
+                is Road.Car2 -> item.img = ctx.bitmaps.car2Hit
+                is Road.Car3 -> item.img = ctx.bitmaps.car3Hit
+                is Road.Car4 -> item.img = ctx.bitmaps.car4Hit
+                is Road.Car5 -> item.img = ctx.bitmaps.car5Hit
+                is Road.Car6 -> item.img = ctx.bitmaps.car6Hit
             }
         }
 

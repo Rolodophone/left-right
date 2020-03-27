@@ -3,7 +3,7 @@ package net.rolodophone.leftright.components
 import android.graphics.Bitmap
 import android.graphics.RectF
 import android.os.SystemClock
-import android.support.annotation.CallSuper
+import androidx.annotation.CallSuper
 import net.rolodophone.leftright.main.*
 
 class Road(override val ctx: MainActivity) : Component {

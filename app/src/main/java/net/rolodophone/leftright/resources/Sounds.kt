@@ -2,16 +2,18 @@ package net.rolodophone.leftright.resources
 
 import android.content.Context
 import android.media.SoundPool
+import net.rolodophone.leftright.R
 
 class Sounds(ctx: Context) {
-    val soundPool: SoundPool = SoundPool.Builder().setMaxStreams(10).build()
+    private val soundPool: SoundPool = SoundPool.Builder().setMaxStreams(10).build()
 
-    var hit = 0
-    var select = 0
-    var tap = 0
-    var fuel = 0
-    var oil = 0
-    var coin = 0
+    private val hit = soundPool.load(ctx, R.raw.hit, 1)
+    private var select = soundPool.load(ctx, R.raw.select, 1)
+    private var tap = soundPool.load(ctx, R.raw.tap, 1)
+    private var fuel = soundPool.load(ctx, R.raw.fuel, 1)
+    private var oil = soundPool.load(ctx, R.raw.oil, 1)
+    private var coin = soundPool.load(ctx, R.raw.coin, 1)
+
 
     private fun playSound(sound: Int) {
         soundPool.play(sound, 1f, 1f, 1, 0, 1f)

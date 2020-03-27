@@ -1,39 +1,38 @@
 package net.rolodophone.leftright.resources
 
 import android.content.Context
-import android.media.AudioAttributes
-import android.media.SoundPool
-import android.util.Log
+import com.google.android.exoplayer2.SimpleExoPlayer
+import com.google.android.exoplayer2.source.MediaSource
+import com.google.android.exoplayer2.source.ProgressiveMediaSource
+import com.google.android.exoplayer2.upstream.DataSpec
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
+import com.google.android.exoplayer2.upstream.RawResourceDataSource
+import com.google.android.exoplayer2.util.Util
 import net.rolodophone.leftright.R
-import java.util.concurrent.CountDownLatch
 
 class Music(ctx: Context) {
-    //this is used to pause the app until the music is loaded
-    val countDownLatch = CountDownLatch(ctx.resources.getInteger(R.integer.num_big_resources))
+    val player = SimpleExoPlayer.Builder(ctx).build()
 
-    val soundPool: SoundPool = SoundPool.Builder()
-        .setMaxStreams(10)
-        .setAudioAttributes(
-            AudioAttributes.Builder()
-            .setUsage(AudioAttributes.USAGE_GAME)
-            .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-            .build())
-        .build()
-
+    private val rawDataSource = RawResourceDataSource(ctx)
     init {
-        soundPool.setOnLoadCompleteListener { _, _, _ ->
-            countDownLatch.countDown()
-            Log.d("music", "${countDownLatch.count} big resources left to load")
-        }
+        rawDataSource.open(DataSpec(RawResourceDataSource.buildRawResourceUri(R.raw.just_nasty)))
     }
 
-    var game = 0
+    private val dataSourceFactory = DefaultDataSourceFactory(ctx, Util.getUserAgent(ctx, ctx.resources.getString(R.string.app_name)))
 
-    private fun playMusic(music: Int) {
-        soundPool.play(music, 1f, 1f, 1, -1, 1f)
+
+    private val game: MediaSource = ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(rawDataSource.uri)
+
+
+    private fun playMusic(music: MediaSource) {
+        player.prepare(music)
+        player.playWhenReady = true
+        player.repeatMode = SimpleExoPlayer.REPEAT_MODE_ALL
     }
 
     fun playGame() = playMusic(game)
 
-    fun stop() = soundPool.autoPause()
+    fun stop() {
+        player.playWhenReady = false
+    }
 }

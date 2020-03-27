@@ -19,7 +19,7 @@ class GameOverOverlay(override val ctx: MainActivity) : Component {
     private val deathMsgPaint = Paint(bitmapPaint)
 
     val playAgain = ButtonBitmap(
-        ctx.bitmaps.play_again, ctx, RectF(
+        ctx.bitmaps.playAgain, ctx, RectF(
             w(220),
             h(250),
             w(300), h(250) + w(80)
@@ -29,7 +29,7 @@ class GameOverOverlay(override val ctx: MainActivity) : Component {
         ctx.state = ctx.stateGame
     }
     val mainMenu = ButtonBitmap(
-        ctx.bitmaps.main_menu, ctx, RectF(
+        ctx.bitmaps.mainMenu, ctx, RectF(
             w(60),
             h(250),
             w(140), h(250) + w(80)
@@ -147,7 +147,7 @@ class GameOverOverlay(override val ctx: MainActivity) : Component {
             h(60)
         )
         canvas.drawBitmap(
-            ctx.bitmaps.death_msg, null, deathMsgDim.scaled(scale),
+            ctx.bitmaps.deathMsg, null, deathMsgDim.scaled(scale),
             deathMsgPaint
         )
         canvas.restore()
