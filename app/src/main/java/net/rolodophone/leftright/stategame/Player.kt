@@ -1,24 +1,28 @@
-package net.rolodophone.leftright.components
+package net.rolodophone.leftright.stategame
 
-import android.graphics.Bitmap
 import android.graphics.RectF
 import net.rolodophone.leftright.main.*
 
-class Player(override val ctx: MainActivity) : Component {
-    private val xSpeed = w(1800)
+class Player(override val ctx: MainActivity, override val state: StateGame) : Component {
 
     //The x coordinate of the left side of the car, if it was in the Nth lane
     private var laneXs = mutableListOf<Float>()
 
     init {
-        for (i in 0 until ctx.road.numLanes) {
-            laneXs.add(ctx.road.centerOfLane(i) - w(35))
+        for (i in 0 until state.road.numLanes) {
+            laneXs.add(state.road.centerOfLane(i) - w(35))
         }
     }
 
 
-    private lateinit var img: Bitmap
-    lateinit var dim: RectF
+    private var img = ctx.bitmaps.car1
+
+    var dim = RectF(
+        w(145),
+        height - w(70),
+        w(215),
+        height + w(70)
+    )
 
     //the image dim (the visible dimensions of the car) is always 1/4 larger than dim
     // (meaning the hitbox, dim, is always 20% smaller than imgDim
@@ -28,11 +32,12 @@ class Player(override val ctx: MainActivity) : Component {
             dim = value.scaled(8/10f)
         }
 
+    val xSpeed = w(1800)
     var ySpeed = 0f
-    var fuel = 0f
+    var fuel = 50f
     var distance = 0f
     var coins = 0
-    lateinit var causeOfDeath: DeathType
+    var causeOfDeath = DeathType.NONE
     var goingL = false
     var goingR = false
     var spinSpeed = 0f
@@ -48,36 +53,7 @@ class Player(override val ctx: MainActivity) : Component {
         }
 
 
-    fun reset() {
-        img = ctx.bitmaps.car1
-
-        dim = RectF(
-            w(145),
-            height - w(70),
-            w(215),
-            height + w(70)
-        )
-
-        ySpeedMps = 0f
-        fuel = 50f
-        distance = 0f
-        coins = 0
-        causeOfDeath = DeathType.NONE
-
-        goingL = false
-        goingR = false
-
-        //for the oil item
-        spinSpeed = 0f
-        rotation = 0f
-        deceleration = 0f
-
-        //what lane the car is in. 0 represents left most lane and so on
-        lane = 1
-    }
-
-
-    fun update() {
+    override fun update() {
         //handle fuel
         fuel -= 2f / fps
         if (fuel <= 0f) die(DeathType.FUEL, null)
@@ -123,7 +99,7 @@ class Player(override val ctx: MainActivity) : Component {
         }
     }
 
-    fun draw() {
+    override fun draw() {
         canvas.save()
         canvas.rotate(rotation, dim.centerX(), dim.centerY())
         canvas.drawBitmap(
@@ -153,7 +129,7 @@ class Player(override val ctx: MainActivity) : Component {
             }
         }
 
-        ctx.state = ctx.stateGameOver
+        state.state = StateGame.State.GAME_OVER
     }
 
 
@@ -188,7 +164,7 @@ class Player(override val ctx: MainActivity) : Component {
             lane--
         }
 
-        if (lane != ctx.road.numLanes - 1) {
+        if (lane != state.road.numLanes - 1) {
             goingR = true
             ctx.sounds.playTap()
         }

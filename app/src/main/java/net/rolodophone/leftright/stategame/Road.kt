@@ -1,4 +1,4 @@
-package net.rolodophone.leftright.components
+package net.rolodophone.leftright.stategame
 
 import android.graphics.Bitmap
 import android.graphics.RectF
@@ -6,7 +6,7 @@ import android.os.SystemClock
 import androidx.annotation.CallSuper
 import net.rolodophone.leftright.main.*
 
-class Road(override val ctx: MainActivity) : Component {
+class Road(override val ctx: MainActivity, override val state: StateGame) : Component {
 
     fun centerOfLane(lane: Int): Float {
         require(lane < numLanes) { "lane index must be less than road.numLanes" }
@@ -15,14 +15,14 @@ class Road(override val ctx: MainActivity) : Component {
     }
 
     private fun randomChance(averageMetres: Int): Boolean {
-        return (0 until ((averageMetres / ctx.player.ySpeedMps) * fps).toInt()).random() == 0
+        return (0 until ((averageMetres / state.player.ySpeedMps) * fps).toInt()).random() == 0
     }
 
 
     var isFrenzy = false
     val numLanes = 3
-    lateinit var items: MutableList<Item>
-    lateinit var itemsToDel: MutableList<Item>
+    val items = mutableListOf<Item>()
+    val itemsToDel = mutableListOf<Item>()
 
 
     val background = Background()
@@ -35,7 +35,7 @@ class Road(override val ctx: MainActivity) : Component {
         var topLineBottom = 0f
 
         fun update() {
-            topLineBottom += ctx.player.ySpeed / fps
+            topLineBottom += state.player.ySpeed / fps
             topLineBottom %= lineH + lineGap
         }
 
@@ -85,7 +85,7 @@ class Road(override val ctx: MainActivity) : Component {
 
         fun randomLane(): Int {
             val remainingLanes = mutableSetOf<Int>()
-            remainingLanes.addAll(0 until ctx.road.numLanes)
+            remainingLanes.addAll(0 until state.road.numLanes)
 
             var newLane: Int
             while (true) {
@@ -130,13 +130,13 @@ class Road(override val ctx: MainActivity) : Component {
         @CallSuper
         open fun update() {
             //move item down
-            dim.offset(0f, ctx.player.ySpeed / fps)
+            dim.offset(0f, state.player.ySpeed / fps)
 
             //mark offscreen item for deletion
             if (dim.top > height) itemsToDel.add(this)
 
             //perform onTouch()
-            if (dim.bottom > ctx.player.dim.top && dim.top < ctx.player.dim.bottom && dim.right > ctx.player.dim.left && dim.left < ctx.player.dim.right && !disabled) onTouch()
+            if (dim.bottom > state.player.dim.top && dim.top < state.player.dim.bottom && dim.right > state.player.dim.left && dim.left < state.player.dim.right && !disabled) onTouch()
         }
 
         open fun draw() {
@@ -154,7 +154,7 @@ class Road(override val ctx: MainActivity) : Component {
         override val dim = rectFFromDim(w(45), w(51.4285714286f))
 
         override fun onTouch() {
-            ctx.player.fuel += 50f
+            state.player.fuel += 50f
             itemsToDel.add(this)
             ctx.sounds.playFuel()
         }
@@ -167,7 +167,7 @@ class Road(override val ctx: MainActivity) : Component {
         override val dim = rectFFromDim(w(45), w(51.4285714286f))
 
         override fun onTouch() {
-            ctx.player.die(DeathType.CONE, this)
+            state.player.die(DeathType.CONE, this)
         }
     }
 
@@ -178,7 +178,7 @@ class Road(override val ctx: MainActivity) : Component {
         override val dim = rectFFromDim(w(135), w(135))
 
         override fun onTouch() {
-            ctx.player.oil()
+            state.player.oil()
             this.disabled = true
             ctx.sounds.playOil()
         }
@@ -192,7 +192,7 @@ class Road(override val ctx: MainActivity) : Component {
         override val dim = rectFFromDim(w(87.5f), w(175))
 
         override fun onTouch() {
-            ctx.player.die(DeathType.CAR, this)
+            state.player.die(DeathType.CAR, this)
         }
 
         override fun update() {
@@ -210,7 +210,7 @@ class Road(override val ctx: MainActivity) : Component {
         override val dim = rectFFromDim(w(87.5f), w(175))
 
         override fun onTouch() {
-            ctx.player.die(DeathType.CAR, this)
+            state.player.die(DeathType.CAR, this)
         }
 
         override fun update() {
@@ -228,7 +228,7 @@ class Road(override val ctx: MainActivity) : Component {
         override val dim = rectFFromDim(w(87.5f), w(175))
 
         override fun onTouch() {
-            ctx.player.die(DeathType.CAR, this)
+            state.player.die(DeathType.CAR, this)
         }
 
         override fun update() {
@@ -246,7 +246,7 @@ class Road(override val ctx: MainActivity) : Component {
         override val dim = rectFFromDim(w(87.5f), w(175))
 
         override fun onTouch() {
-            ctx.player.die(DeathType.CAR, this)
+            state.player.die(DeathType.CAR, this)
         }
 
         override fun update() {
@@ -264,7 +264,7 @@ class Road(override val ctx: MainActivity) : Component {
         override val dim = rectFFromDim(w(87.5f), w(175))
 
         override fun onTouch() {
-            ctx.player.die(DeathType.CAR, this)
+            state.player.die(DeathType.CAR, this)
         }
 
         override fun update() {
@@ -282,7 +282,7 @@ class Road(override val ctx: MainActivity) : Component {
         override val dim = rectFFromDim(w(87.5f), w(175))
 
         override fun onTouch() {
-            ctx.player.die(DeathType.CAR, this)
+            state.player.die(DeathType.CAR, this)
         }
 
         override fun update() {
@@ -307,7 +307,7 @@ class Road(override val ctx: MainActivity) : Component {
         var shineNum = -2
 
         override fun onTouch() {
-            ctx.player.coins += 1
+            state.player.coins += 1
             ctx.sounds.playCoin()
             itemsToDel.add(this)
         }
@@ -333,13 +333,7 @@ class Road(override val ctx: MainActivity) : Component {
     }
 
 
-    fun reset() {
-        items = mutableListOf()
-        itemsToDel = mutableListOf()
-    }
-
-
-    fun update() {
+    override fun update() {
         background.update()
 
         //spawn new items
@@ -374,7 +368,7 @@ class Road(override val ctx: MainActivity) : Component {
     }
 
 
-    fun draw() {
+    override fun draw() {
         background.draw()
         for (item in items) item.draw()
     }

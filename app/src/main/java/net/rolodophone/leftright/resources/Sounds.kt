@@ -1,10 +1,10 @@
 package net.rolodophone.leftright.resources
 
-import android.content.Context
 import android.media.SoundPool
 import net.rolodophone.leftright.R
+import net.rolodophone.leftright.main.MainActivity
 
-class Sounds(ctx: Context) {
+class Sounds(ctx: MainActivity) {
     private val soundPool: SoundPool = SoundPool.Builder().setMaxStreams(10).build()
 
     private val hit = soundPool.load(ctx, R.raw.hit, 1)
@@ -27,4 +27,5 @@ class Sounds(ctx: Context) {
     fun playCoin() = playSound(coin)
 
     fun stop() = soundPool.autoPause()
+    fun resume() = soundPool.autoResume()
 }

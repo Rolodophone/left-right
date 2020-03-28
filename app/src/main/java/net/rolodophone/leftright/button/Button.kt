@@ -3,23 +3,28 @@ package net.rolodophone.leftright.button
 import android.graphics.RectF
 import androidx.annotation.CallSuper
 import net.rolodophone.leftright.main.MainActivity
+import net.rolodophone.leftright.main.State
 
-open class Button(open val ctx: MainActivity, open val dim: RectF, open val onClick: () -> Unit) {
-    private var drawnThisFrame = false
+open class Button(val ctx: MainActivity, state: State, val dim: RectF, onClick: () -> Unit) {
+
+    class ButtonHandler(val checkClick: (Float, Float) -> Boolean, val onClick: () -> Unit)
+
+    init {
+        val checkClick = { x: Float, y: Float -> visible && x in dim.left..dim.right && y in dim.top..dim.bottom }
+        state.buttons.add(ButtonHandler(checkClick, onClick))
+    }
+
+    private var drawnLastFrame = false
     var visible = false
 
 
     fun update() {
-        visible = drawnThisFrame
-        drawnThisFrame = false
+        visible = drawnLastFrame
+        drawnLastFrame = false
     }
 
     @CallSuper
     open fun draw() {
-        drawnThisFrame = true
-    }
-
-    fun checkClick(x: Float, y: Float): Boolean {
-        return visible && x in dim.left..dim.right && y in dim.top..dim.bottom
+        drawnLastFrame = true
     }
 }

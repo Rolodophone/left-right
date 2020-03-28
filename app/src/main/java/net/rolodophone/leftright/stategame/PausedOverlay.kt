@@ -1,4 +1,4 @@
-package net.rolodophone.leftright.components
+package net.rolodophone.leftright.stategame
 
 import android.graphics.Paint
 import android.graphics.Path
@@ -7,15 +7,16 @@ import net.rolodophone.leftright.button.Button
 import net.rolodophone.leftright.button.ButtonText
 import net.rolodophone.leftright.main.*
 
-class PausedOverlay(override val ctx: MainActivity) : Component {
+class PausedOverlay(override val ctx: MainActivity, override val state: StateGame) : Component {
     var resume = object : Button(
         ctx,
+        state,
         RectF(
             w(90), halfHeight + w(5),
             w(270), halfHeight + w(49)
         ), {
             ctx.sounds.playSelect()
-            ctx.state = ctx.stateGame
+            state.state = StateGame.State.NONE
         }
     ) {
         override fun draw() {
@@ -40,27 +41,36 @@ class PausedOverlay(override val ctx: MainActivity) : Component {
         "debug",
         Paint.Align.RIGHT,
         ctx,
+        state,
         RectF(
             w(200), height - w(35),
             w(348), height - w(10)
         )
     ) {
-        ctx.statusBar.showDebug = true
+        state.statusBar.showDebug = true
     }
     val btnHideDebug = ButtonText(
         "debug",
         Paint.Align.RIGHT,
         ctx,
+        state,
         RectF(
             w(200), height - w(35),
             w(348), height - w(10)
         )
     ) {
-        ctx.statusBar.showDebug = false
+        state.statusBar.showDebug = false
     }
 
 
-    fun draw() {
+    override fun update() {
+        resume.update()
+        btnShowDebug.update()
+        btnHideDebug.update()
+    }
+
+
+    override fun draw() {
         //dim rest of screen
         canvas.drawRect(0f, 0f,
             width,
@@ -85,6 +95,6 @@ class PausedOverlay(override val ctx: MainActivity) : Component {
         )
 
         resume.draw()
-        if (ctx.statusBar.showDebug) btnHideDebug.draw() else btnShowDebug.draw()
+        if (state.statusBar.showDebug) btnHideDebug.draw() else btnShowDebug.draw()
     }
 }

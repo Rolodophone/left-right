@@ -2,12 +2,9 @@ package net.rolodophone.leftright.button
 
 import android.graphics.Paint
 import android.graphics.RectF
-import net.rolodophone.leftright.main.MainActivity
-import net.rolodophone.leftright.main.canvas
-import net.rolodophone.leftright.main.w
-import net.rolodophone.leftright.main.whitePaint
+import net.rolodophone.leftright.main.*
 
-class ButtonText(val text: String, val align: Paint.Align, override val ctx: MainActivity, override val dim: RectF, override val onClick: () -> Unit) : Button(ctx, dim, onClick) {
+class ButtonText(val text: String, val align: Paint.Align, ctx: MainActivity, state: State, dim: RectF, onClick: () -> Unit) : Button(ctx, state, dim, onClick) {
 
     private val x = when (align) {
         Paint.Align.LEFT -> dim.left

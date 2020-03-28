@@ -1,4 +1,4 @@
-package net.rolodophone.leftright.components
+package net.rolodophone.leftright.stategame
 
 import android.graphics.Paint
 import android.graphics.RectF
@@ -6,7 +6,7 @@ import android.os.SystemClock
 import net.rolodophone.leftright.button.ButtonText
 import net.rolodophone.leftright.main.*
 
-class StatusBar(override val ctx: MainActivity) : Component {
+class StatusBar(override val ctx: MainActivity, override val state: StateGame) : Component {
     var showDebug = false
 
     val debug = Debug()
@@ -16,19 +16,20 @@ class StatusBar(override val ctx: MainActivity) : Component {
         var viewFps = fps.toInt()
 
         val moreFuel = ButtonText(
-            "more fuel", Paint.Align.RIGHT, ctx, RectF(
+            "more fuel", Paint.Align.RIGHT, ctx, state, RectF(
                 w(200),
                 statusBarHeight + w(30),
                 w(353),
                 statusBarHeight + w(55)
             )
         ) {
-            ctx.player.fuel += 1000
+            state.player.fuel += 1000
         }
         val frenzyOn = ButtonText(
             "frenzy on",
             Paint.Align.RIGHT,
             ctx,
+            state,
             RectF(
                 w(200),
                 statusBarHeight + w(60),
@@ -36,12 +37,13 @@ class StatusBar(override val ctx: MainActivity) : Component {
                 statusBarHeight + w(85)
             )
         ) {
-            ctx.road.isFrenzy = true
+            state.road.isFrenzy = true
         }
         val frenzyOff = ButtonText(
             "frenzy off",
             Paint.Align.RIGHT,
             ctx,
+            state,
             RectF(
                 w(200),
                 statusBarHeight + w(60),
@@ -49,8 +51,15 @@ class StatusBar(override val ctx: MainActivity) : Component {
                 statusBarHeight + w(85)
             )
         ) {
-            ctx.road.isFrenzy = false
+            state.road.isFrenzy = false
         }
+
+        fun update() {
+            moreFuel.update()
+            frenzyOff.update()
+            frenzyOn.update()
+        }
+
 
         fun draw() {
             //draw fps
@@ -67,7 +76,7 @@ class StatusBar(override val ctx: MainActivity) : Component {
 
             //draw buttons
             moreFuel.draw()
-            if (ctx.road.isFrenzy) frenzyOff.draw() else frenzyOn.draw()
+            if (state.road.isFrenzy) frenzyOff.draw() else frenzyOn.draw()
         }
     }
 
@@ -78,8 +87,12 @@ class StatusBar(override val ctx: MainActivity) : Component {
         w(29.1428571429f) + statusBarHeight
     )
 
+    override fun update() {
+        debug.update()
+    }
 
-    fun draw() {
+
+    override fun draw() {
         whitePaint.textSize = w(22)
 
 
@@ -88,7 +101,7 @@ class StatusBar(override val ctx: MainActivity) : Component {
 
         whitePaint.textAlign = Paint.Align.RIGHT
         canvas.drawText(
-            ctx.player.fuel.toInt().toString(),
+            state.player.fuel.toInt().toString(),
             w(329),
             w(25) + statusBarHeight,
             whitePaint
@@ -97,7 +110,7 @@ class StatusBar(override val ctx: MainActivity) : Component {
         //draw distance
         whitePaint.textAlign = Paint.Align.LEFT
         canvas.drawText(
-            ctx.player.distance.toInt().toString() + "m",
+            state.player.distance.toInt().toString() + "m",
             w(7),
             w(25) + statusBarHeight,
             whitePaint

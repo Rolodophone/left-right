@@ -1,11 +1,11 @@
 package net.rolodophone.leftright.resources
 
-import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import net.rolodophone.leftright.R
+import net.rolodophone.leftright.main.MainActivity
 
-class Bitmaps(ctx: Context) {
+class Bitmaps(ctx: MainActivity) {
     private val bitmapOptions = BitmapFactory.Options()
     init {
         bitmapOptions.inScaled = false

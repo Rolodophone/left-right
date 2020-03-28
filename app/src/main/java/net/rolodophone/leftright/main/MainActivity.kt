@@ -1,46 +1,31 @@
 package net.rolodophone.leftright.main
 
 import android.app.Activity
+import android.graphics.Color
+import android.graphics.PixelFormat
 import android.graphics.Point
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import net.rolodophone.leftright.components.*
+import android.view.WindowManager
 import net.rolodophone.leftright.resources.Bitmaps
 import net.rolodophone.leftright.resources.Music
 import net.rolodophone.leftright.resources.Sounds
-import net.rolodophone.leftright.state.*
+import net.rolodophone.leftright.stategame.StateGame
+import net.rolodophone.leftright.stateloading.StateLoading
+import java.util.concurrent.CountDownLatch
 
 class MainActivity : Activity() {
 
-    lateinit var buttons: Buttons
-    lateinit var gameOverlay: GameOverlay
-    lateinit var gameOverOverlay: GameOverOverlay
     lateinit var grid: Grid
-    lateinit var pausedOverlay: PausedOverlay
-    lateinit var player: Player
-    lateinit var road: Road
-    lateinit var statusBar: StatusBar
-    lateinit var weather: Weather
 
     lateinit var sounds: Sounds
     lateinit var music: Music
     lateinit var bitmaps: Bitmaps
 
-    val stateLoading = StateLoading(this)
-    lateinit var stateGameOver: StateGameOver
-    lateinit var statePaused: StatePaused
-    lateinit var stateGame: StateGame
+    val musicLoadingLatch = CountDownLatch(Music.NUM_SONGS)
 
-    var state: State = stateLoading
-        set(value) {
-
-            if (value == stateGameOver || value == stateGame && state != statePaused) {
-                value.reset()
-            }
-
-            field = value
-        }
+    var state: State = StateLoading(this)
 
     private lateinit var mainView: MainView
     private lateinit var thread: Thread
@@ -71,37 +56,79 @@ class MainActivity : Activity() {
         mainView = MainView(this)
 
         setContentView(mainView)
+
+        init()
+    }
+
+
+    fun init() {
+        Log.i("Initialization", "<---------INIT--------->")
+
+        mainView.holder.setFormat(PixelFormat.RGB_565)
+
+        //initialize paints
+        whitePaint.color = Color.rgb(255, 255, 255)
+        whitePaint.isAntiAlias = true
+        whitePaint.isFilterBitmap = true
+        bitmapPaint.isAntiAlias = true
+        bitmapPaint.isFilterBitmap = false
+        dimmerPaint.color = Color.argb(150, 0, 0, 0)
+
+        //load resources
+        sounds = Sounds(this)
+        music = Music(this)
+        bitmaps = Bitmaps(this)
+
+        //initialize grid
+        grid = Grid(this)
+
+        Thread.sleep(4000)
+
+        //start game
+        state = StateGame(this)
+
+        Log.i("Initialization", "</--------INIT--------->")
     }
 
 
     override fun onStart() {
-        Log.i("Activity", "onStart()")
         super.onStart()
 
+        //configure window
+        window.statusBarColor = Color.argb(0, 0, 0, 0)
+        window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_IN_OVERSCAN)
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
 
         appOpen = true
         thread = Thread(mainView)
         thread.name = "LeftRightDraw"
         thread.start()
+
+        music.resume()
+        sounds.resume()
     }
     
     
     override fun onPause() {
-        Log.i("Activity", "onPause()")
         super.onPause()
-
         mainView.pause()
     }
 
 
+    override fun onResume() {
+        super.onResume()
+        mainView.resume()
+    }
+
 
     override fun onStop() {
-        Log.i("Activity", "onStop()")
         super.onStop()
 
         appOpen = false
-        Log.i("Activity", "Joining status thread")
+        Log.i("Activity", "Joining game thread")
         thread.join()
+
+        music.stop()
+        sounds.stop()
     }
 }
