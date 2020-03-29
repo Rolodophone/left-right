@@ -10,32 +10,31 @@ import com.google.android.exoplayer2.upstream.RawResourceDataSource
 import com.google.android.exoplayer2.util.Util
 import net.rolodophone.leftright.R
 import net.rolodophone.leftright.main.MainActivity
+import net.rolodophone.leftright.stateloading.StateLoading
 
 class Music(ctx: MainActivity) {
-    companion object {
-        const val NUM_SONGS = 1
-    }
-
 
     private val player = SimpleExoPlayer.Builder(ctx).build()
 
-
-    private val rawDataSource = RawResourceDataSource(ctx)
-    init {
-        rawDataSource.open(DataSpec(RawResourceDataSource.buildRawResourceUri(R.raw.just_nasty)))
-    }
-    private val dataSourceFactory = DefaultDataSourceFactory(ctx, Util.getUserAgent(ctx, ctx.resources.getString(R.string.app_name)))
-
-    private val game: MediaSource = ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(rawDataSource.uri)
-
-
     init {
         player.addListener(object : Player.EventListener {
-            override fun onLoadingChanged(isLoading: Boolean) {
-                if (!isLoading) ctx.musicLoadingLatch.countDown()
+            override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
+                if (playbackState == Player.STATE_READY) ctx.state.let { if (it is StateLoading) it.loadingCountDown-- }
             }
         })
     }
+
+
+    private val game: MediaSource
+
+    init {
+        val dataSourceFactory = DefaultDataSourceFactory(ctx, Util.getUserAgent(ctx, ctx.resources.getString(R.string.app_name)))
+        val rawDataSource = RawResourceDataSource(ctx)
+
+        rawDataSource.open(DataSpec(RawResourceDataSource.buildRawResourceUri(R.raw.just_nasty)))
+        game = ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(rawDataSource.uri)
+    }
+
 
 
     private fun playMusic(music: MediaSource) {
@@ -45,7 +44,7 @@ class Music(ctx: MainActivity) {
 
     fun playGame() = playMusic(game)
 
-    fun stop() {
+    fun pause() {
         player.playWhenReady = false
     }
 

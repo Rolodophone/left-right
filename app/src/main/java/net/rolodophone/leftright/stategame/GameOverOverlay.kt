@@ -6,6 +6,7 @@ import android.graphics.RectF
 import android.graphics.Typeface
 import net.rolodophone.leftright.button.ButtonBitmap
 import net.rolodophone.leftright.main.*
+import net.rolodophone.leftright.stateloading.StateLoading
 import java.io.FileNotFoundException
 import kotlin.random.Random
 
@@ -26,7 +27,7 @@ class GameOverOverlay(override val ctx: MainActivity, override val state: StateG
         )
     ) {
         ctx.sounds.playSelect()
-        ctx.state = StateGame(ctx)
+        ctx.state = StateLoading(ctx, StateGame(ctx))
     }
     val mainMenu = ButtonBitmap(
         ctx.bitmaps.mainMenu, ctx, state, RectF(

@@ -13,7 +13,6 @@ import net.rolodophone.leftright.resources.Music
 import net.rolodophone.leftright.resources.Sounds
 import net.rolodophone.leftright.stategame.StateGame
 import net.rolodophone.leftright.stateloading.StateLoading
-import java.util.concurrent.CountDownLatch
 
 class MainActivity : Activity() {
 
@@ -23,9 +22,7 @@ class MainActivity : Activity() {
     lateinit var music: Music
     lateinit var bitmaps: Bitmaps
 
-    val musicLoadingLatch = CountDownLatch(Music.NUM_SONGS)
-
-    var state: State = StateLoading(this)
+    lateinit var state: State
 
     private lateinit var mainView: MainView
     private lateinit var thread: Thread
@@ -82,10 +79,8 @@ class MainActivity : Activity() {
         //initialize grid
         grid = Grid(this)
 
-        Thread.sleep(4000)
-
-        //start game
-        state = StateGame(this)
+        //load state, waiting for music to finish
+        state = StateLoading(this, StateGame(this))
 
         Log.i("Initialization", "</--------INIT--------->")
     }
@@ -103,9 +98,6 @@ class MainActivity : Activity() {
         thread = Thread(mainView)
         thread.name = "LeftRightDraw"
         thread.start()
-
-        music.resume()
-        sounds.resume()
     }
     
     
@@ -125,10 +117,6 @@ class MainActivity : Activity() {
         super.onStop()
 
         appOpen = false
-        Log.i("Activity", "Joining game thread")
         thread.join()
-
-        music.stop()
-        sounds.stop()
     }
 }

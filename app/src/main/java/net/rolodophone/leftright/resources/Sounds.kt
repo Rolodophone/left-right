@@ -26,6 +26,6 @@ class Sounds(ctx: MainActivity) {
     fun playOil() = playSound(oil)
     fun playCoin() = playSound(coin)
 
-    fun stop() = soundPool.autoPause()
+    fun pause() = soundPool.autoPause()
     fun resume() = soundPool.autoResume()
 }

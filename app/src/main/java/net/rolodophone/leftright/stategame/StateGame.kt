@@ -5,9 +5,25 @@ import net.rolodophone.leftright.main.MainActivity
 import net.rolodophone.leftright.main.State
 
 class StateGame(override val ctx: MainActivity) : State {
+    override val numThingsToLoad = 1
+
     enum class State {NONE, PAUSED, GAME_OVER}
 
     var state = State.NONE
+        set(value) {
+            when (value) {
+                State.NONE -> {
+                    ctx.music.resume()
+                }
+                State.PAUSED -> {
+                    ctx.music.pause()
+                }
+                State.GAME_OVER -> {
+                    ctx.music.pause()
+                }
+            }
+            field = value
+        }
 
     override val buttons = mutableListOf<Button.ButtonHandler>()
 
