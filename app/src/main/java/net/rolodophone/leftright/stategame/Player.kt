@@ -2,6 +2,8 @@ package net.rolodophone.leftright.stategame
 
 import android.graphics.RectF
 import net.rolodophone.leftright.main.*
+import net.rolodophone.leftright.stategame.road.Car
+import net.rolodophone.leftright.stategame.road.Item
 
 class Player(override val ctx: MainActivity, override val state: StateGame) : Component {
 
@@ -15,7 +17,7 @@ class Player(override val ctx: MainActivity, override val state: StateGame) : Co
     }
 
 
-    private var img = ctx.bitmaps.car1
+    private var img = ctx.bitmaps.car1.clean
 
     var dim = RectF(
         w(145),
@@ -111,22 +113,13 @@ class Player(override val ctx: MainActivity, override val state: StateGame) : Co
     }
 
 
-    fun die(deathType: DeathType, item: Road.Item?) {
+    fun die(deathType: DeathType, item: Item?) {
         causeOfDeath = deathType
 
         if (item != null) {
             ctx.sounds.playHit()
-
-            img = ctx.bitmaps.car1Hit
-
-            when (item) {
-                is Road.Car1 -> item.img = ctx.bitmaps.car1Hit
-                is Road.Car2 -> item.img = ctx.bitmaps.car2Hit
-                is Road.Car3 -> item.img = ctx.bitmaps.car3Hit
-                is Road.Car4 -> item.img = ctx.bitmaps.car4Hit
-                is Road.Car5 -> item.img = ctx.bitmaps.car5Hit
-                is Road.Car6 -> item.img = ctx.bitmaps.car6Hit
-            }
+            img = ctx.bitmaps.car1.hit
+            if (item is Car) item.isCrashed = true
         }
 
         state.state = StateGame.State.GAME_OVER

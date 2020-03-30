@@ -9,75 +9,46 @@ import net.rolodophone.leftright.main.*
 class StatusBar(override val ctx: MainActivity, override val state: StateGame) : Component {
     var showDebug = false
 
-    val debug = Debug()
+    var prevTime = SystemClock.elapsedRealtime()
+    var viewFps = fps.toInt()
 
-    inner class Debug {
-        var prevTime = SystemClock.elapsedRealtime()
-        var viewFps = fps.toInt()
-
-        val moreFuel = ButtonText(
-            "more fuel", Paint.Align.RIGHT, ctx, state, RectF(
-                w(200),
-                statusBarHeight + w(30),
-                w(353),
-                statusBarHeight + w(55)
-            )
-        ) {
-            state.player.fuel += 1000
-        }
-        val frenzyOn = ButtonText(
-            "frenzy on",
-            Paint.Align.RIGHT,
-            ctx,
-            state,
-            RectF(
-                w(200),
-                statusBarHeight + w(60),
-                w(353),
-                statusBarHeight + w(85)
-            )
-        ) {
-            state.road.isFrenzy = true
-        }
-        val frenzyOff = ButtonText(
-            "frenzy off",
-            Paint.Align.RIGHT,
-            ctx,
-            state,
-            RectF(
-                w(200),
-                statusBarHeight + w(60),
-                w(353),
-                statusBarHeight + w(85)
-            )
-        ) {
-            state.road.isFrenzy = false
-        }
-
-        fun update() {
-            moreFuel.update()
-            frenzyOff.update()
-            frenzyOn.update()
-        }
-
-
-        fun draw() {
-            //draw fps
-            if (SystemClock.elapsedRealtime() > prevTime + 500) {
-                viewFps = fps.toInt()
-                prevTime = SystemClock.elapsedRealtime()
-            }
-            whitePaint.textAlign = Paint.Align.LEFT
-            whitePaint.textSize = w(22)
-            canvas.drawText("FPS: $viewFps",
-                w(5), w(55) + statusBarHeight,
-                whitePaint
-            )
-
-            //draw buttons
-            moreFuel.draw()
-            if (state.road.isFrenzy) frenzyOff.draw() else frenzyOn.draw()
-        }
+    val moreFuel = ButtonText(
+        "more fuel", Paint.Align.RIGHT, ctx, state, RectF(
+            w(200),
+            statusBarHeight + w(30),
+            w(353),
+            statusBarHeight + w(55)
+        )
+    ) {
+        state.player.fuel += 1000
+    }
+    val frenzyOn = ButtonText(
+        "frenzy on",
+        Paint.Align.RIGHT,
+        ctx,
+        state,
+        RectF(
+            w(200),
+            statusBarHeight + w(60),
+            w(353),
+            statusBarHeight + w(85)
+        )
+    ) {
+        state.road.isFrenzy = true
+    }
+    val frenzyOff = ButtonText(
+        "frenzy off",
+        Paint.Align.RIGHT,
+        ctx,
+        state,
+        RectF(
+            w(200),
+            statusBarHeight + w(60),
+            w(353),
+            statusBarHeight + w(85)
+        )
+    ) {
+        state.road.isFrenzy = false
     }
 
     val fuelDim = RectF(
@@ -88,7 +59,9 @@ class StatusBar(override val ctx: MainActivity, override val state: StateGame) :
     )
 
     override fun update() {
-        debug.update()
+        moreFuel.update()
+        frenzyOff.update()
+        frenzyOn.update()
     }
 
 
@@ -116,6 +89,22 @@ class StatusBar(override val ctx: MainActivity, override val state: StateGame) :
             whitePaint
         )
 
-        if (showDebug) debug.draw()
+        if (showDebug) {
+            //draw fps
+            if (SystemClock.elapsedRealtime() > prevTime + 500) {
+                viewFps = fps.toInt()
+                prevTime = SystemClock.elapsedRealtime()
+            }
+            whitePaint.textAlign = Paint.Align.LEFT
+            whitePaint.textSize = w(22)
+            canvas.drawText("FPS: $viewFps",
+                w(5), w(55) + statusBarHeight,
+                whitePaint
+            )
+
+            //draw buttons
+            moreFuel.draw()
+            if (state.road.isFrenzy) frenzyOff.draw() else frenzyOn.draw()
+        }
     }
 }

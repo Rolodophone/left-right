@@ -2,16 +2,8 @@ package net.rolodophone.leftright.main
 
 import android.graphics.Color
 import android.graphics.Paint
-import net.rolodophone.leftright.button.Button
 
-class Grid(override val ctx: MainActivity) : Component {
-    //grid has no state so I'm making a trivial state here as a placeholder
-    override val state = object : State {
-        override val ctx = this@Grid.ctx
-        override val buttons = mutableListOf<Button.ButtonHandler>()
-        override fun update() {}
-        override fun draw() {}
-    }
+class Grid(val ctx: MainActivity) {
 
     private val gridPaint = Paint()
 
@@ -19,9 +11,9 @@ class Grid(override val ctx: MainActivity) : Component {
         gridPaint.color = Color.argb(100, 255, 255, 255)
     }
 
-    override fun update() {}
+    fun update() {}
 
-    override fun draw() {
+    fun draw() {
         var x = w(20)
         while (x < width) {
             canvas.drawLine(x, 0f, x, height, gridPaint)

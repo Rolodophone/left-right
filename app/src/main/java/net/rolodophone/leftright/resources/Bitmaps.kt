@@ -5,24 +5,46 @@ import android.graphics.BitmapFactory
 import net.rolodophone.leftright.R
 import net.rolodophone.leftright.main.MainActivity
 
-class Bitmaps(ctx: MainActivity) {
+class Bitmaps(private val ctx: MainActivity) {
     private val bitmapOptions = BitmapFactory.Options()
     init {
         bitmapOptions.inScaled = false
     }
 
-    val car1: Bitmap = BitmapFactory.decodeResource(ctx.resources, R.drawable.car1, bitmapOptions)
-    val car1Hit: Bitmap = BitmapFactory.decodeResource(ctx.resources, R.drawable.car1_hit, bitmapOptions)
-    val car2: Bitmap = BitmapFactory.decodeResource(ctx.resources, R.drawable.car2, bitmapOptions)
-    val car2Hit: Bitmap = BitmapFactory.decodeResource(ctx.resources, R.drawable.car2_hit, bitmapOptions)
-    val car3: Bitmap = BitmapFactory.decodeResource(ctx.resources, R.drawable.car3, bitmapOptions)
-    val car3Hit: Bitmap = BitmapFactory.decodeResource(ctx.resources, R.drawable.car3_hit, bitmapOptions)
-    val car4: Bitmap = BitmapFactory.decodeResource(ctx.resources, R.drawable.car4, bitmapOptions)
-    val car4Hit: Bitmap = BitmapFactory.decodeResource(ctx.resources, R.drawable.car4_hit, bitmapOptions)
-    val car5: Bitmap = BitmapFactory.decodeResource(ctx.resources, R.drawable.car5, bitmapOptions)
-    val car5Hit: Bitmap = BitmapFactory.decodeResource(ctx.resources, R.drawable.car5_hit, bitmapOptions)
-    val car6: Bitmap = BitmapFactory.decodeResource(ctx.resources, R.drawable.car6, bitmapOptions)
-    val car6Hit: Bitmap = BitmapFactory.decodeResource(ctx.resources, R.drawable.car6_hit, bitmapOptions)
+    val car1 = Car1()
+    val car2 = Car2()
+    val car3 = Car3()
+    val car4 = Car4()
+    val car5 = Car5()
+    val car6 = Car6()
+
+    interface Car { val clean: Bitmap; val hit: Bitmap }
+
+    inner class Car1 : Car {
+        override val clean: Bitmap = BitmapFactory.decodeResource(ctx.resources, R.drawable.car1, bitmapOptions)
+        override val hit: Bitmap = BitmapFactory.decodeResource(ctx.resources, R.drawable.car1_hit, bitmapOptions)
+    }
+    inner class Car2 : Car {
+        override val clean: Bitmap = BitmapFactory.decodeResource(ctx.resources, R.drawable.car2, bitmapOptions)
+        override val hit: Bitmap = BitmapFactory.decodeResource(ctx.resources, R.drawable.car2_hit, bitmapOptions)
+    }
+    inner class Car3 : Car {
+        override val clean: Bitmap = BitmapFactory.decodeResource(ctx.resources, R.drawable.car3, bitmapOptions)
+        override val hit: Bitmap = BitmapFactory.decodeResource(ctx.resources, R.drawable.car3_hit, bitmapOptions)
+    }
+    inner class Car4 : Car {
+        override val clean: Bitmap = BitmapFactory.decodeResource(ctx.resources, R.drawable.car4, bitmapOptions)
+        override val hit: Bitmap = BitmapFactory.decodeResource(ctx.resources, R.drawable.car4_hit, bitmapOptions)
+    }
+    inner class Car5 : Car {
+        override val clean: Bitmap = BitmapFactory.decodeResource(ctx.resources, R.drawable.car5, bitmapOptions)
+        override val hit: Bitmap = BitmapFactory.decodeResource(ctx.resources, R.drawable.car5_hit, bitmapOptions)
+    }
+    inner class Car6 : Car {
+        override val clean: Bitmap = BitmapFactory.decodeResource(ctx.resources, R.drawable.car6, bitmapOptions)
+        override val hit: Bitmap = BitmapFactory.decodeResource(ctx.resources, R.drawable.car6_hit, bitmapOptions)
+    }
+
     val deathMsg: Bitmap = BitmapFactory.decodeResource(ctx.resources, R.drawable.death_msg, bitmapOptions)
     val fuel: Bitmap = BitmapFactory.decodeResource(ctx.resources, R.drawable.fuel, bitmapOptions)
     val mainMenu: Bitmap = BitmapFactory.decodeResource(ctx.resources, R.drawable.main_menu, bitmapOptions)
