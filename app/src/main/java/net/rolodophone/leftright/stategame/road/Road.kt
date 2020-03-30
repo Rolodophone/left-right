@@ -17,10 +17,10 @@ class Road(override val ctx: MainActivity, override val state: StateGame) : Comp
         //spawn new items
         if (fps != Float.POSITIVE_INFINITY) {
             if (!isFrenzy) {
-                for (itemType in listOf(Fuel, Cone, Oil, Coin, Car1, Car2, Car3, Car4, Car5, Car6)) if (randomChance(itemType.averageSpawnMetres)) itemType.new(this)
+                for (itemType in listOf(Fuel, Cone, Oil, Coin, Car1, Car2, Car3, Car4, Car5, Car6)) if (randomChance(itemType.averageSpawnMetres.toFloat())) itemType.new(this)
             }
             else {
-                for (itemType in listOf(Fuel, Cone, Oil, Coin, Car1, Car2, Car3, Car4, Car5, Car6)) if (randomChance(itemType.averageSpawnMetres / 10)) itemType.new(this)
+                for (itemType in listOf(Fuel, Cone, Oil, Coin, Car1, Car2, Car3, Car4, Car5, Car6)) if (randomChance(itemType.averageSpawnMetres.toFloat() / 10)) itemType.new(this)
             }
         }
 
@@ -42,7 +42,7 @@ class Road(override val ctx: MainActivity, override val state: StateGame) : Comp
         return (width * (lane + 1) - halfWidth) / numLanes
     }
 
-    private fun randomChance(averageMetres: Int): Boolean {
+    private fun randomChance(averageMetres: Float): Boolean {
         return (0 until ((averageMetres / state.player.ySpeedMps) * fps).toInt()).random() == 0
     }
 }
