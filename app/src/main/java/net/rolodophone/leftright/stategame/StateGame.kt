@@ -21,6 +21,7 @@ class StateGame(override val ctx: MainActivity) : State {
                 }
                 State.GAME_OVER -> {
                     ctx.music.pause()
+                    gameOverOverlay.prepare()
                 }
             }
             field = value

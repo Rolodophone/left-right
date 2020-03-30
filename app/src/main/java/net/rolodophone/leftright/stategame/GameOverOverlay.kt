@@ -81,7 +81,7 @@ class GameOverOverlay(override val ctx: MainActivity, override val state: StateG
     private var scale = 0f
 
     val comment = comments.getValue(state.player.causeOfDeath).random()
-    val score = state.player.distance.toInt() + state.player.fuel.toInt() + state.player.coins
+    var score = 0
     val highscore = try {
         ctx.openFileInput("highscore").bufferedReader().readText().toInt()
     } catch (e: FileNotFoundException) {
@@ -90,9 +90,13 @@ class GameOverOverlay(override val ctx: MainActivity, override val state: StateG
         }
         0
     }
-    val isNewHighscore = score > highscore
+    var isNewHighscore = false
 
-    init {
+
+    fun prepare() {
+        score = state.player.distance.toInt() + state.player.fuel.toInt() + state.player.coins
+        isNewHighscore = score > highscore
+
         if (isNewHighscore) {
             ctx.openFileOutput("highscore", Context.MODE_PRIVATE).use {
                 it.write(score.toString().toByteArray())
@@ -195,7 +199,7 @@ class GameOverOverlay(override val ctx: MainActivity, override val state: StateG
             whitePaint
         )
         canvas.drawText(
-            (score).toString(),
+            score.toString(),
             w(330), h(160) + w(100),
             whitePaint
         )
