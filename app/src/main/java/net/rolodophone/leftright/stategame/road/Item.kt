@@ -12,9 +12,9 @@ abstract class Item(private val road: Road) {
         abstract fun new(road: Road)
     }
 
-    var disabled = false
+    var isDisabled = false
 
-    open val rotation = 0f
+    open var rotation = 0f
     open val lane = randomLane()
 
     abstract val isObstacle: Boolean
@@ -86,7 +86,7 @@ abstract class Item(private val road: Road) {
         if (dim.top > height) road.itemsToDel.add(this)
 
         //perform onTouch()
-        if (isTouching(road.state.player.dim) && !disabled) onTouch()
+        if (isTouching(road.state.player.dim) && !isDisabled) onTouch()
     }
 
     fun draw() {

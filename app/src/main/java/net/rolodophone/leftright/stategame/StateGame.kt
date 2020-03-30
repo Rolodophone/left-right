@@ -32,7 +32,7 @@ class StateGame(override val ctx: MainActivity) : State {
     val road = Road(ctx, this)
     val player = Player(ctx, this)
     val weather = Weather(ctx, this)
-    val statusBar = StatusBar(ctx, this)
+    val status = Status(ctx, this)
     val gameOverlay = GameOverlay(ctx, this)
     val pausedOverlay = PausedOverlay(ctx, this)
     val gameOverOverlay = GameOverOverlay(ctx, this)
@@ -42,7 +42,7 @@ class StateGame(override val ctx: MainActivity) : State {
     }
 
     override fun update() {
-        statusBar.update()
+        status.update()
         gameOverlay.update()
         pausedOverlay.update()
         gameOverOverlay.update()
@@ -66,11 +66,11 @@ class StateGame(override val ctx: MainActivity) : State {
 
         when (state) {
             State.NONE -> {
-                statusBar.draw()
+                status.draw()
                 gameOverlay.draw()
             }
             State.PAUSED -> {
-                statusBar.draw()
+                status.draw()
                 pausedOverlay.draw()
             }
             State.GAME_OVER -> {

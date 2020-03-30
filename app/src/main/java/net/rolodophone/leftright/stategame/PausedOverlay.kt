@@ -47,26 +47,13 @@ class PausedOverlay(override val ctx: MainActivity, override val state: StateGam
             w(348), height - w(10)
         )
     ) {
-        state.statusBar.showDebug = true
-    }
-    val btnHideDebug = ButtonText(
-        "debug",
-        Paint.Align.RIGHT,
-        ctx,
-        state,
-        RectF(
-            w(200), height - w(35),
-            w(348), height - w(10)
-        )
-    ) {
-        state.statusBar.showDebug = false
+        state.status.showDebug = true
     }
 
 
     override fun update() {
         resume.update()
         btnShowDebug.update()
-        btnHideDebug.update()
     }
 
 
@@ -95,6 +82,6 @@ class PausedOverlay(override val ctx: MainActivity, override val state: StateGam
         )
 
         resume.draw()
-        if (state.statusBar.showDebug) btnHideDebug.draw() else btnShowDebug.draw()
+        if (!state.status.showDebug) btnShowDebug.draw()
     }
 }

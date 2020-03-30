@@ -94,7 +94,7 @@ class GameOverOverlay(override val ctx: MainActivity, override val state: StateG
 
 
     fun prepare() {
-        score = state.player.distance.toInt() + state.player.fuel.toInt() + state.player.coins
+        score = if (state.status.showDebug) -1 else state.player.distance.toInt() + state.player.fuel.toInt() + state.player.coins
         isNewHighscore = score > highscore
 
         if (isNewHighscore) {
@@ -189,7 +189,7 @@ class GameOverOverlay(override val ctx: MainActivity, override val state: StateG
             whitePaint
         )
         canvas.drawText(
-            state.player.fuel.toInt().toString(),
+            if (state.player.fuel == Float.POSITIVE_INFINITY) "∞" else state.player.fuel.toInt().toString(),
             w(330), h(160) + w(30),
             whitePaint
         )
@@ -199,7 +199,7 @@ class GameOverOverlay(override val ctx: MainActivity, override val state: StateG
             whitePaint
         )
         canvas.drawText(
-            score.toString(),
+            if (score == -1) "N/A" else score.toString(),
             w(330), h(160) + w(100),
             whitePaint
         )

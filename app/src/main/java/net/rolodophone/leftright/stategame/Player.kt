@@ -127,6 +127,8 @@ class Player(override val ctx: MainActivity, override val state: StateGame) : Co
 
 
     fun oil() {
+        ctx.sounds.playOil()
+
         //one full turn every second
         spinSpeed = 720f
         //lose half your speed over 5 seconds

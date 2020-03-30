@@ -16,7 +16,18 @@ class Oil(val road: Road) : Item(road) {
 
     override fun onTouch() {
         road.state.player.oil()
-        disabled = true
-        road.ctx.sounds.playOil()
+        isDisabled = true
+    }
+
+    override fun update() {
+        super.update()
+        if (!isDisabled) {
+            for (item in road.items.minus(this)) {
+                if (isTouching(item.dim) && item is Car) {
+                    item.oil()
+                    isDisabled = true
+                }
+            }
+        }
     }
 }

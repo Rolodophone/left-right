@@ -5,11 +5,14 @@ import net.rolodophone.leftright.main.w
 import net.rolodophone.leftright.resources.Bitmaps
 import net.rolodophone.leftright.stategame.DeathType
 
-abstract class Car(private val imgGroup: Bitmaps.Car, private val speed: Float, val road: Road) : Item(road) {
+abstract class Car(private val imgGroup: Bitmaps.Car, private var speed: Float, val road: Road) : Item(road) {
     override var img = imgGroup.clean
     override val isObstacle = true
     override val dim = rectFFromDim(w(87.5f), w(175))
     override val z = 4
+
+    private var spinSpeed = 0f
+    private var deceleration = 0f
 
     var isCrashed = false
         set(value) {
@@ -30,11 +33,34 @@ abstract class Car(private val imgGroup: Bitmaps.Car, private val speed: Float, 
             dim.offset(0f, -speed / fps)
 
             //crash if touching another obstacle
-            for (item in road.items.minus(this)) if (isTouching(item.dim) && item.isObstacle) {
+            for (item in road.items.filter { it.isObstacle && it != this}) if (isTouching(item.dim)) {
                 isCrashed = true
                 if (item is Car) item.isCrashed = true
             }
         }
+
+        //handle oil
+        if (spinSpeed != 0f) {
+            rotation += spinSpeed / fps
+            spinSpeed -= 144 / fps
+            speed -= deceleration / fps
+
+            if (spinSpeed < 0f) {
+                spinSpeed = 0f
+                rotation = 0f
+            }
+        }
+    }
+
+    fun oil() {
+        road.ctx.sounds.playOil()
+
+        //one full turn every second
+        spinSpeed = 720f
+        //lose half your speed over 5 seconds
+        deceleration = (speed / 2f) / 5f
+        //reset rotation
+        rotation = 0f
     }
 }
 

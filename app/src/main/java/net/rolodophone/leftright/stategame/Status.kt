@@ -6,21 +6,31 @@ import android.os.SystemClock
 import net.rolodophone.leftright.button.ButtonText
 import net.rolodophone.leftright.main.*
 
-class StatusBar(override val ctx: MainActivity, override val state: StateGame) : Component {
+class Status(override val ctx: MainActivity, override val state: StateGame) : Component {
     var showDebug = false
 
     var prevTime = SystemClock.elapsedRealtime()
     var viewFps = fps.toInt()
 
-    val moreFuel = ButtonText(
-        "more fuel", Paint.Align.RIGHT, ctx, state, RectF(
+    val unlimitedFuelOn = ButtonText(
+        "unlimited fuel on", Paint.Align.RIGHT, ctx, state, RectF(
             w(200),
             statusBarHeight + w(30),
             w(353),
             statusBarHeight + w(55)
         )
     ) {
-        state.player.fuel += 1000
+        state.player.fuel = Float.POSITIVE_INFINITY
+    }
+    val unlimitedFuelOff = ButtonText(
+        "unlimited fuel off", Paint.Align.RIGHT, ctx, state, RectF(
+            w(200),
+            statusBarHeight + w(30),
+            w(353),
+            statusBarHeight + w(55)
+        )
+    ) {
+        state.player.fuel = 50f
     }
     val frenzyOn = ButtonText(
         "frenzy on",
@@ -59,7 +69,8 @@ class StatusBar(override val ctx: MainActivity, override val state: StateGame) :
     )
 
     override fun update() {
-        moreFuel.update()
+        unlimitedFuelOn.update()
+        unlimitedFuelOff.update()
         frenzyOff.update()
         frenzyOn.update()
     }
@@ -74,7 +85,8 @@ class StatusBar(override val ctx: MainActivity, override val state: StateGame) :
 
         whitePaint.textAlign = Paint.Align.RIGHT
         canvas.drawText(
-            state.player.fuel.toInt().toString(),
+            if (state.player.fuel == Float.POSITIVE_INFINITY) "∞"
+            else state.player.fuel.toInt().toString(),
             w(329),
             w(25) + statusBarHeight,
             whitePaint
@@ -103,7 +115,7 @@ class StatusBar(override val ctx: MainActivity, override val state: StateGame) :
             )
 
             //draw buttons
-            moreFuel.draw()
+            if (state.player.fuel == Float.POSITIVE_INFINITY) unlimitedFuelOff.draw() else unlimitedFuelOn.draw()
             if (state.road.isFrenzy) frenzyOff.draw() else frenzyOn.draw()
         }
     }
