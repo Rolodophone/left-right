@@ -4,10 +4,10 @@ import net.rolodophone.leftright.main.w
 import net.rolodophone.leftright.stategame.DeathType
 
 class Cone(val road: Road) : Item(road) {
-    override val companion = Companion
-    companion object : Item.Companion() {
+    override val Factory = Companion
+    companion object : Item.ItemFactory() {
         override val averageSpawnMetres = 60
-        override fun new(road: Road) { road.items.add(Cone(road)) }
+        override fun constructor(road: Road) = Cone(road)
     }
 
     override var img = road.ctx.bitmaps.cone

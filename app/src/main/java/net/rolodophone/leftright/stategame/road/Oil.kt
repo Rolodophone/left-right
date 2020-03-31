@@ -3,10 +3,10 @@ package net.rolodophone.leftright.stategame.road
 import net.rolodophone.leftright.main.w
 
 class Oil(val road: Road) : Item(road) {
-    override val companion = Companion
-    companion object : Item.Companion() {
+    override val Factory = Companion
+    companion object : Item.ItemFactory() {
         override val averageSpawnMetres = 80
-        override fun new(road: Road) { road.items.add(Oil(road)) }
+        override fun constructor(road: Road) = Oil(road)
     }
 
     override var img = road.ctx.bitmaps.oil

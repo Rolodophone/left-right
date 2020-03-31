@@ -65,49 +65,49 @@ abstract class Car(private val imgGroup: Bitmaps.Car, private var speed: Float, 
 }
 
 class Car1(road: Road) : Car(road.ctx.bitmaps.car1, w(50), road) {
-    override val companion = Companion
-    companion object : Item.Companion() {
+    override val Factory = Companion
+    companion object : Item.ItemFactory() {
         override val averageSpawnMetres = 15
-        override fun new(road: Road) { road.items.add(Car1(road)) }
+        override fun constructor(road: Road) = Car1(road)
     }
 }
 
 class Car2(road: Road) : Car(road.ctx.bitmaps.car2, w(100), road) {
-    override val companion = Companion
-    companion object : Item.Companion() {
+    override val Factory = Companion
+    companion object : Item.ItemFactory() {
         override val averageSpawnMetres = 20
-        override fun new(road: Road) { road.items.add(Car2(road)) }
+        override fun constructor(road: Road) = Car2(road)
     }
 }
 
 class Car3(road: Road) : Car(road.ctx.bitmaps.car3, w(150), road) {
-    override val companion = Companion
-    companion object : Item.Companion() {
+    override val Factory = Companion
+    companion object : Item.ItemFactory() {
         override val averageSpawnMetres = 25
-        override fun new(road: Road) { road.items.add(Car3(road)) }
+        override fun constructor(road: Road) = Car3(road)
     }
 }
 
 class Car4(road: Road) : Car(road.ctx.bitmaps.car4, w(200), road) {
-    override val companion = Companion
-    companion object : Item.Companion() {
+    override val Factory = Companion
+    companion object : Item.ItemFactory() {
         override val averageSpawnMetres = 30
-        override fun new(road: Road) { road.items.add(Car4(road)) }
+        override fun constructor(road: Road) = Car4(road)
     }
 }
 
 class Car5(road: Road) : Car(road.ctx.bitmaps.car5, w(250), road) {
-    override val companion = Companion
-    companion object : Item.Companion() {
+    override val Factory = Companion
+    companion object : Item.ItemFactory() {
         override val averageSpawnMetres = 35
-        override fun new(road: Road) { road.items.add(Car5(road)) }
+        override fun constructor(road: Road) = Car5(road)
     }
 }
 
 class Car6(road: Road) : Car(road.ctx.bitmaps.car6, w(300), road) {
-    override val companion = Companion
-    companion object : Item.Companion() {
+    override val Factory = Companion
+    companion object : Item.ItemFactory() {
         override val averageSpawnMetres = 40
-        override fun new(road: Road) { road.items.add(Car6(road)) }
+        override fun constructor(road: Road) = Car6(road)
     }
 }

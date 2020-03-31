@@ -5,10 +5,10 @@ import net.rolodophone.leftright.main.fps
 import net.rolodophone.leftright.main.w
 
 class Coin(val road: Road) : Item(road) {
-    override val companion = Companion
-    companion object : Item.Companion() {
+    override val Factory = Companion
+    companion object : Item.ItemFactory() {
         override val averageSpawnMetres = 3
-        override fun new(road: Road) { road.items.add(Coin(road)) }
+        override fun constructor(road: Road) = Coin(road)
     }
 
     override var img = road.ctx.bitmaps.coin

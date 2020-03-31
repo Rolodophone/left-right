@@ -6,10 +6,14 @@ import androidx.annotation.CallSuper
 import net.rolodophone.leftright.main.*
 
 abstract class Item(private val road: Road) {
-    abstract val companion: Companion
-    abstract class Companion {
+    abstract val Factory: ItemFactory
+    abstract class ItemFactory {
         abstract val averageSpawnMetres: Int
-        abstract fun new(road: Road)
+        abstract fun constructor(road: Road): Item
+        fun new(road: Road) {
+            val new = constructor(road)
+            if (new.lane != -1) road.items.add(new)
+        }
     }
 
     var isDisabled = false
@@ -31,29 +35,17 @@ abstract class Item(private val road: Road) {
         )
     }
 
-    fun randomLane(): Int {
+    private fun randomLane(): Int {
         val remainingLanes = mutableSetOf<Int>()
-        remainingLanes.addAll(0 until road.numLanes)
+        remainingLanes.addAll((0 until road.numLanes).filter { checkValidLane(it) })
 
-        var newLane: Int
-        while (true) {
-            if (remainingLanes.isEmpty()) {
-                road.itemsToDel.add(this)
-                return 0
-            }
-
-            newLane = remainingLanes.random()
-            remainingLanes.remove(newLane)
-
-            if (checkValidLane(newLane)) {
-                return newLane
-            }
-        }
+        return if (remainingLanes.isEmpty()) -1
+        else remainingLanes.random()
     }
 
     private fun checkValidLane(laneToCheck: Int): Boolean {
 
-        //touching another item
+        //too close to another item
         for (item in road.items) if (item.lane == laneToCheck && item.dim.top < w(5)) {
             return false
         }
