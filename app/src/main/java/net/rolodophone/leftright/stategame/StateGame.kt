@@ -3,7 +3,6 @@ package net.rolodophone.leftright.stategame
 import net.rolodophone.leftright.button.Button
 import net.rolodophone.leftright.main.MainActivity
 import net.rolodophone.leftright.main.State
-import net.rolodophone.leftright.stategame.road.Road
 
 class StateGame(override val ctx: MainActivity) : State {
     override val numThingsToLoad = 1

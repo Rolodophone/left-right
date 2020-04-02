@@ -1,4 +1,4 @@
-package net.rolodophone.leftright.stategame.road
+package net.rolodophone.leftright.stategame
 
 import net.rolodophone.leftright.main.*
 

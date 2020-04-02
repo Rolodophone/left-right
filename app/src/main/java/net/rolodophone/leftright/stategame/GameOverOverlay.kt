@@ -40,17 +40,8 @@ class GameOverOverlay(override val ctx: MainActivity, override val state: StateG
     }
 
     private val comments = mapOf(
-        DeathType.NONE to listOf(
-            listOf("Better luck next time!"),
-            listOf("Oops, I forgot my seat belt..."),
-            listOf("Death can be fatal..."),
-
-            listOf("Magic!")
-        ),
-
         DeathType.CONE to listOf(
             listOf("Better luck next time!"),
-            listOf("Oops, I forgot my seat belt..."),
             listOf("Death can be fatal..."),
 
             listOf("Who filled this cone", "with concrete?"),
@@ -59,7 +50,6 @@ class GameOverOverlay(override val ctx: MainActivity, override val state: StateG
 
         DeathType.FUEL to listOf(
             listOf("Better luck next time!"),
-            listOf("Oops, I forgot my seat belt..."),
             listOf("Death can be fatal..."),
 
             listOf("No one ever told me this", "car explodes when it runs", "out of fuel!"),
@@ -69,7 +59,6 @@ class GameOverOverlay(override val ctx: MainActivity, override val state: StateG
 
         DeathType.CAR to listOf(
             listOf("Better luck next time!"),
-            listOf("Oops, I forgot my seat belt..."),
             listOf("Death can be fatal...")
         )
     )
@@ -80,7 +69,7 @@ class GameOverOverlay(override val ctx: MainActivity, override val state: StateG
     private var maxRotation = -20f + Random.nextFloat() * 40f
     private var scale = 0f
 
-    val comment = comments.getValue(state.player.causeOfDeath).random()
+    lateinit var comment: List<String>
     var score = 0
     val highscore = try {
         ctx.openFileInput("highscore").bufferedReader().readText().toInt()
@@ -94,6 +83,8 @@ class GameOverOverlay(override val ctx: MainActivity, override val state: StateG
 
 
     fun prepare() {
+        comment = comments.getValue(state.player.causeOfDeath).random()
+
         score = if (state.status.showDebug) -1 else state.player.distance.toInt() + state.player.fuel.toInt() + state.player.coins
         isNewHighscore = score > highscore
 

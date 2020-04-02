@@ -2,10 +2,17 @@ package net.rolodophone.leftright.stategame
 
 import android.graphics.RectF
 import net.rolodophone.leftright.main.*
-import net.rolodophone.leftright.stategame.road.Car
-import net.rolodophone.leftright.stategame.road.Item
 
-class Player(override val ctx: MainActivity, override val state: StateGame) : Component {
+class Player(override val ctx: MainActivity, override val state: StateGame) : Object(state.road, RectF(
+    w(135),
+    height - w(90),
+    w(225),
+    height + w(90)
+)) {
+    override var img = ctx.bitmaps.car1.clean
+    override val w = w(90)
+    override val h = w(180)
+    override var lane = 1
 
     //The x coordinate of the left side of the car, if it was in the Nth lane
     private var laneXs = mutableListOf<Float>()
@@ -16,36 +23,21 @@ class Player(override val ctx: MainActivity, override val state: StateGame) : Co
         }
     }
 
-
-    private var img = ctx.bitmaps.car1.clean
-
-    var dim = RectF(
-        w(145),
-        height - w(70),
-        w(215),
-        height + w(70)
-    )
-
-    //the image dim (the visible dimensions of the car) is always 1/4 larger than dim
-    // (meaning the hitbox, dim, is always 20% smaller than imgDim
-    var imgDim: RectF
-        get() = dim.scaled(10/8f)
-        set(value) {
-            dim = value.scaled(8/10f)
-        }
-
     val xSpeed = w(1800)
     var ySpeed = 0f
+
     var fuel = 50f
     var distance = 0f
     var coins = 0
-    var causeOfDeath = DeathType.NONE
+
+    lateinit var causeOfDeath: DeathType
+
     var goingL = false
     var goingR = false
+
     var spinSpeed = 0f
     var rotation = 0f
     var deceleration = 0f
-    var lane = 1
 
     //helper variable to use ySpeed in m/s
     var ySpeedMps
@@ -55,10 +47,44 @@ class Player(override val ctx: MainActivity, override val state: StateGame) : Co
         }
 
 
+    override fun onTouch(otherObject: Object) {
+        when (otherObject) {
+            is Fuel -> {
+                state.player.fuel += 50f
+                road.itemsToDel.add(otherObject)
+                ctx.sounds.playFuel()
+            }
+            is Oil -> {
+                road.ctx.sounds.playOil()
+
+                //one full turn every second
+                spinSpeed = 720f
+                //lose half your speed over 5 seconds
+                deceleration = (ySpeed / 2f) / 5f
+                //reset rotation
+                rotation = 0f
+            }
+            is Coin -> {
+                road.state.player.coins += 1
+                road.itemsToDel.add(otherObject)
+                road.ctx.sounds.playCoin()
+            }
+        }
+
+        if (otherObject is Obstacle) {
+            ctx.sounds.playHit()
+            img = ctx.bitmaps.car1.hit
+            die(otherObject.deathType)
+        }
+    }
+
+
     override fun update() {
+        super.update()
+
         //handle fuel
         fuel -= 2f / fps
-        if (fuel <= 0f) die(DeathType.FUEL, null)
+        if (fuel <= 0f) die(DeathType.FUEL)
 
         //increase distance travelled
         distance += ySpeedMps / fps
@@ -104,37 +130,14 @@ class Player(override val ctx: MainActivity, override val state: StateGame) : Co
     override fun draw() {
         canvas.save()
         canvas.rotate(rotation, dim.centerX(), dim.centerY())
-        canvas.drawBitmap(
-            img, null,
-            imgDim,
-            bitmapPaint
-        )
+        canvas.drawBitmap(img, null, imgDim, bitmapPaint)
         canvas.restore()
     }
 
 
-    fun die(deathType: DeathType, item: Item?) {
+    private fun die(deathType: DeathType) {
         causeOfDeath = deathType
-
-        if (item != null) {
-            ctx.sounds.playHit()
-            img = ctx.bitmaps.car1.hit
-            if (item is Car) item.isCrashed = true
-        }
-
         state.state = StateGame.State.GAME_OVER
-    }
-
-
-    fun oil() {
-        ctx.sounds.playOil()
-
-        //one full turn every second
-        spinSpeed = 720f
-        //lose half your speed over 5 seconds
-        deceleration = (ySpeed / 2f) / 5f
-        //reset rotation
-        rotation = 0f
     }
 
 

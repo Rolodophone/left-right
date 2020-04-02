@@ -2,7 +2,9 @@
   <dictionary name="sergi">
     <words>
       <w>highscore</w>
+      <w>hitbox</w>
       <w>leftright</w>
+      <w>spawnable</w>
     </words>
   </dictionary>
 </component>
