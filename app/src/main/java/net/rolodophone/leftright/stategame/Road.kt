@@ -5,8 +5,8 @@ import net.rolodophone.leftright.main.*
 class Road(override val state: StateGame) : Component {
     var isFrenzy = false
     val numLanes = 3
-    val objects = mutableListOf<Spawnable>()
-    val itemsToDel = mutableListOf<Spawnable>()
+    val objects = mutableListOf<Object>()
+    val itemsToDel = mutableListOf<Object>()
 
     private val background = Background(state)
 

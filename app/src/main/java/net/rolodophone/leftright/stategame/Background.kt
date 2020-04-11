@@ -10,7 +10,7 @@ class Background(override val state: StateGame) : Component {
     var topLineBottom = 0f
 
     override fun update() {
-        topLineBottom += state.player.ySpeed / fps
+        topLineBottom += state.player.speed / fps
         topLineBottom %= lineH + lineGap
     }
 

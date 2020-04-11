@@ -4,9 +4,9 @@ import android.os.SystemClock
 import net.rolodophone.leftright.main.fps
 import net.rolodophone.leftright.main.w
 
-class Coin(state: StateGame) : Spawnable(state, w(45), w(45)) {
+class Coin(state: StateGame) : Object(state, w(45), w(45)) {
     override val companion = Companion
-    companion object : Spawnable.SpawnableCompanion(3, { Coin(it) })
+    companion object : Object.ObjectCompanion(3, { Coin(it) })
 
     override var img = state.bitmaps.coin
     override val z = 3

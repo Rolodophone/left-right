@@ -4,7 +4,7 @@ import net.rolodophone.leftright.main.w
 
 class Cone(state: StateGame) : Obstacle(state, w(45), w(51.4285714286f)) {
     override val companion = Companion
-    companion object : SpawnableCompanion(60, { Cone(it) })
+    companion object : ObjectCompanion(60, { Cone(it) })
 
     override var img = state.bitmaps.cone
     override val z = 2

@@ -3,28 +3,24 @@ package net.rolodophone.leftright.stategame
 import android.graphics.RectF
 import net.rolodophone.leftright.main.*
 
-class Player(state: StateGame) : Object(state, RectF(
-    w(135),
-    height - w(90),
-    w(225),
-    height + w(90)
-)) {
-    override var img = state.bitmaps.car1.clean
-    override val w = w(90)
-    override val h = w(180)
-    override var lane = 1
+class Player(state: StateGame) : Car(state.bitmaps.car1, 0f, state) {
+    override val companion = Companion
+    companion object : Object.ObjectCompanion(-1, { Player(it) })
 
-    //The x coordinate of the left side of the car, if it was in the Nth lane
-    private var laneXs = mutableListOf<Float>()
+    init { lane = 1 }
 
-    init {
-        for (i in 0 until state.road.numLanes) {
-            laneXs.add(state.road.centerOfLane(i) - w(35))
-        }
-    }
+    //move player so it's at the bottom not at the top when it spawns
+    override val dim = RectF(
+        state.road.centerOfLane(lane) - w / 2,
+        height - h/2,
+        state.road.centerOfLane(lane) + w / 2,
+        height + h/2
+    ).scaled(9/10f)
+
+    //The x coordinate of the left side of the hitbox of the car, if it was in the Nth lane
+    private var laneXs = List(state.road.numLanes) { state.road.centerOfLane(it) - dim.width()/2f }
 
     val xSpeed = w(1800)
-    var ySpeed = 0f
 
     var fuel = 50f
     var distance = 0f
@@ -35,46 +31,32 @@ class Player(state: StateGame) : Object(state, RectF(
     var goingL = false
     var goingR = false
 
-    var spinSpeed = 0f
-    var rotation = 0f
-    var deceleration = 0f
-
-    //helper variable to use ySpeed in m/s
+    //helper variable to use speed in m/s
     var ySpeedMps
-        get() = (ySpeed / width)
+        get() = (speed / width)
         set(value) {
-            ySpeed = (value) * width
+            speed = (value) * width
         }
 
 
     override fun onTouch(otherObject: Object) {
+        super.onTouch(otherObject)
+
+        if (otherObject is Obstacle) {
+            die(otherObject.deathType)
+        }
+
         when (otherObject) {
             is Fuel -> {
                 state.player.fuel += 50f
                 state.road.itemsToDel.add(otherObject)
                 state.sounds.playFuel()
             }
-            is Oil -> {
-                state.sounds.playOil()
-
-                //one full turn every second
-                spinSpeed = 720f
-                //lose half your speed over 5 seconds
-                deceleration = (ySpeed / 2f) / 5f
-                //reset rotation
-                rotation = 0f
-            }
             is Coin -> {
                 state.player.coins += 1
                 state.road.itemsToDel.add(otherObject)
                 state.sounds.playCoin()
             }
-        }
-
-        if (otherObject is Obstacle) {
-            state.sounds.playHit()
-            img = state.bitmaps.car1.hit
-            die(otherObject.deathType)
         }
     }
 
@@ -113,25 +95,6 @@ class Player(state: StateGame) : Object(state, RectF(
                 lane += 1
             }
         }
-
-        //handle oil
-        if (spinSpeed != 0f) {
-            rotation += spinSpeed / fps
-            spinSpeed -= 144 / fps
-            ySpeed -= deceleration / fps
-
-            if (spinSpeed < 0f) {
-                spinSpeed = 0f
-                rotation = 0f
-            }
-        }
-    }
-
-    override fun draw() {
-        canvas.save()
-        canvas.rotate(rotation, dim.centerX(), dim.centerY())
-        canvas.drawBitmap(img, null, imgDim, bitmapPaint)
-        canvas.restore()
     }
 
 
