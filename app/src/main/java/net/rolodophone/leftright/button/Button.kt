@@ -2,10 +2,9 @@ package net.rolodophone.leftright.button
 
 import android.graphics.RectF
 import androidx.annotation.CallSuper
-import net.rolodophone.leftright.main.MainActivity
 import net.rolodophone.leftright.main.State
 
-open class Button(val ctx: MainActivity, state: State, val dim: RectF, onClick: () -> Unit) {
+open class Button(state: State, val dim: RectF, onClick: () -> Unit) {
 
     class ButtonHandler(val checkClick: (Float, Float) -> Boolean, val onClick: () -> Unit)
 

@@ -4,16 +4,15 @@ import android.graphics.RectF
 import net.rolodophone.leftright.button.Button
 import net.rolodophone.leftright.main.*
 
-class GameOverlay(override val ctx: MainActivity, override val state: StateGame) : Component {
+class GameOverlay(override val state: StateGame) : Component {
     val pause = object : Button(
-        ctx,
         state,
         RectF(
             w(5), height - w(50),
             w(50), height - w(5)
         ),
         {
-            ctx.sounds.playSelect()
+            state.sounds.playSelect()
             state.state = StateGame.State.PAUSED
         }
     ) {
@@ -37,13 +36,13 @@ class GameOverlay(override val ctx: MainActivity, override val state: StateGame)
         }
     }
 
-    val leftButton = Button(ctx, state, RectF(0f, 0f, halfWidth - 1f, height)) {
+    val leftButton = Button(state, RectF(0f, 0f, halfWidth - 1f, height)) {
         val degree = state.player.rotation % 360f
         if (degree < 90f || degree > 270f) state.player.turnLeft()
         else state.player.turnRight()
     }
 
-    val rightButton = Button(ctx, state, RectF(halfWidth, 0f, width, height)) {
+    val rightButton = Button(state, RectF(halfWidth, 0f, width, height)) {
         val degree = state.player.rotation % 360f
         if (degree < 90f || degree > 270f) state.player.turnRight()
         else state.player.turnLeft()

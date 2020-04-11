@@ -4,11 +4,11 @@ import android.os.SystemClock
 import net.rolodophone.leftright.main.fps
 import net.rolodophone.leftright.main.w
 
-class Coin(road: Road) : Spawnable(road, w(45), w(45)) {
+class Coin(state: StateGame) : Spawnable(state, w(45), w(45)) {
     override val companion = Companion
-    companion object : Spawnable.SpawnableCompanion(3, {road -> Coin(road) })
+    companion object : Spawnable.SpawnableCompanion(3, { Coin(it) })
 
-    override var img = road.ctx.bitmaps.coin
+    override var img = state.bitmaps.coin
     override val z = 3
 
     init {
@@ -30,9 +30,9 @@ class Coin(road: Road) : Spawnable(road, w(45), w(45)) {
         if (SystemClock.elapsedRealtime() - timeSpriteLastChanged > 70) {
             if (shineNum <= 6) {
                 shineNum += 1
-                if (shineNum >= 0) img = road.ctx.bitmaps.coinShining[shineNum]
+                if (shineNum >= 0) img = state.bitmaps.coinShining[shineNum]
                 timeSpriteLastChanged = SystemClock.elapsedRealtime()
-            } else img = road.ctx.bitmaps.coin
+            } else img = state.bitmaps.coin
         }
 
         animationStage += 2f / fps

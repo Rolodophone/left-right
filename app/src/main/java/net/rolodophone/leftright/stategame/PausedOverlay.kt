@@ -7,15 +7,14 @@ import net.rolodophone.leftright.button.Button
 import net.rolodophone.leftright.button.ButtonText
 import net.rolodophone.leftright.main.*
 
-class PausedOverlay(override val ctx: MainActivity, override val state: StateGame) : Component {
+class PausedOverlay(override val state: StateGame) : Component {
     var resume = object : Button(
-        ctx,
         state,
         RectF(
             w(90), halfHeight + w(5),
             w(270), halfHeight + w(49)
         ), {
-            ctx.sounds.playSelect()
+            state.sounds.playSelect()
             state.state = StateGame.State.NONE
         }
     ) {
@@ -40,7 +39,6 @@ class PausedOverlay(override val ctx: MainActivity, override val state: StateGam
     val btnShowDebug = ButtonText(
         "debug",
         Paint.Align.RIGHT,
-        ctx,
         state,
         RectF(
             w(200), height - w(35),

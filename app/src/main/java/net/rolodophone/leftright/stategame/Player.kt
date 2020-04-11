@@ -3,13 +3,13 @@ package net.rolodophone.leftright.stategame
 import android.graphics.RectF
 import net.rolodophone.leftright.main.*
 
-class Player(override val ctx: MainActivity, override val state: StateGame) : Object(state.road, RectF(
+class Player(state: StateGame) : Object(state, RectF(
     w(135),
     height - w(90),
     w(225),
     height + w(90)
 )) {
-    override var img = ctx.bitmaps.car1.clean
+    override var img = state.bitmaps.car1.clean
     override val w = w(90)
     override val h = w(180)
     override var lane = 1
@@ -51,11 +51,11 @@ class Player(override val ctx: MainActivity, override val state: StateGame) : Ob
         when (otherObject) {
             is Fuel -> {
                 state.player.fuel += 50f
-                road.itemsToDel.add(otherObject)
-                ctx.sounds.playFuel()
+                state.road.itemsToDel.add(otherObject)
+                state.sounds.playFuel()
             }
             is Oil -> {
-                road.ctx.sounds.playOil()
+                state.sounds.playOil()
 
                 //one full turn every second
                 spinSpeed = 720f
@@ -65,15 +65,15 @@ class Player(override val ctx: MainActivity, override val state: StateGame) : Ob
                 rotation = 0f
             }
             is Coin -> {
-                road.state.player.coins += 1
-                road.itemsToDel.add(otherObject)
-                road.ctx.sounds.playCoin()
+                state.player.coins += 1
+                state.road.itemsToDel.add(otherObject)
+                state.sounds.playCoin()
             }
         }
 
         if (otherObject is Obstacle) {
-            ctx.sounds.playHit()
-            img = ctx.bitmaps.car1.hit
+            state.sounds.playHit()
+            img = state.bitmaps.car1.hit
             die(otherObject.deathType)
         }
     }
@@ -149,7 +149,7 @@ class Player(override val ctx: MainActivity, override val state: StateGame) : Ob
 
         if (lane != 0) {
             goingL = true
-            ctx.sounds.playTap()
+            state.sounds.playTap()
         }
 
         goingR = false
@@ -164,7 +164,7 @@ class Player(override val ctx: MainActivity, override val state: StateGame) : Ob
 
         if (lane != state.road.numLanes - 1) {
             goingR = true
-            ctx.sounds.playTap()
+            state.sounds.playTap()
         }
 
         goingL = false

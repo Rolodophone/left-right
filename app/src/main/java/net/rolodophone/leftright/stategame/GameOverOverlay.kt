@@ -10,7 +10,7 @@ import net.rolodophone.leftright.stateloading.StateLoading
 import java.io.FileNotFoundException
 import kotlin.random.Random
 
-class GameOverOverlay(override val ctx: MainActivity, override val state: StateGame) : Component {
+class GameOverOverlay(override val state: StateGame) : Component {
     private val deathMsgDim = RectF(
         w(30),
         h(40),
@@ -20,23 +20,23 @@ class GameOverOverlay(override val ctx: MainActivity, override val state: StateG
     private val deathMsgPaint = Paint(bitmapPaint)
 
     val playAgain = ButtonBitmap(
-        ctx.bitmaps.playAgain, ctx, state, RectF(
+        state.bitmaps.playAgain, state, RectF(
             w(220),
             h(250),
             w(300), h(250) + w(80)
         )
     ) {
-        ctx.sounds.playSelect()
-        ctx.state = StateLoading(ctx, StateGame(ctx))
+        state.sounds.playSelect()
+        state.ctx.state = StateLoading(state.ctx, StateGame(state.ctx))
     }
     val mainMenu = ButtonBitmap(
-        ctx.bitmaps.mainMenu, ctx, state, RectF(
+        state.bitmaps.mainMenu, state, RectF(
             w(60),
             h(250),
             w(140), h(250) + w(80)
         )
     ) {
-        ctx.sounds.playSelect()
+        state.sounds.playSelect()
     }
 
     private val comments = mapOf(
@@ -72,9 +72,9 @@ class GameOverOverlay(override val ctx: MainActivity, override val state: StateG
     lateinit var comment: List<String>
     var score = 0
     val highscore = try {
-        ctx.openFileInput("highscore").bufferedReader().readText().toInt()
+        state.ctx.openFileInput("highscore").bufferedReader().readText().toInt()
     } catch (e: FileNotFoundException) {
-        ctx.openFileOutput("highscore", Context.MODE_PRIVATE).use {
+        state.ctx.openFileOutput("highscore", Context.MODE_PRIVATE).use {
             it.write("0".toByteArray())
         }
         0
@@ -89,7 +89,7 @@ class GameOverOverlay(override val ctx: MainActivity, override val state: StateG
         isNewHighscore = score > highscore
 
         if (isNewHighscore) {
-            ctx.openFileOutput("highscore", Context.MODE_PRIVATE).use {
+            state.ctx.openFileOutput("highscore", Context.MODE_PRIVATE).use {
                 it.write(score.toString().toByteArray())
             }
         }
@@ -134,7 +134,7 @@ class GameOverOverlay(override val ctx: MainActivity, override val state: StateG
             h(60)
         )
         canvas.drawBitmap(
-            ctx.bitmaps.deathMsg, null, deathMsgDim.scaled(scale),
+            state.bitmaps.deathMsg, null, deathMsgDim.scaled(scale),
             deathMsgPaint
         )
         canvas.restore()

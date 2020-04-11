@@ -7,19 +7,23 @@ import net.rolodophone.leftright.main.State
 class StateGame(override val ctx: MainActivity) : State {
     override val numThingsToLoad = 1
 
+    val bitmaps = ctx.bitmaps
+    val sounds = ctx.sounds
+    val music = ctx.music
+
     enum class State {NONE, PAUSED, GAME_OVER}
 
     var state = State.NONE
         set(value) {
             when (value) {
                 State.NONE -> {
-                    ctx.music.resume()
+                    music.resume()
                 }
                 State.PAUSED -> {
-                    ctx.music.pause()
+                    music.pause()
                 }
                 State.GAME_OVER -> {
-                    ctx.music.pause()
+                    music.pause()
                     gameOverOverlay.prepare()
                 }
             }
@@ -28,16 +32,16 @@ class StateGame(override val ctx: MainActivity) : State {
 
     override val buttons = mutableListOf<Button.ButtonHandler>()
 
-    val road = Road(ctx, this)
-    val player = Player(ctx, this)
-    val weather = Weather(ctx, this)
-    val status = Status(ctx, this)
-    val gameOverlay = GameOverlay(ctx, this)
-    val pausedOverlay = PausedOverlay(ctx, this)
-    val gameOverOverlay = GameOverOverlay(ctx, this)
+    val road = Road(this)
+    val player = Player(this)
+    val weather = Weather(this)
+    val status = Status(this)
+    val gameOverlay = GameOverlay(this)
+    val pausedOverlay = PausedOverlay(this)
+    val gameOverOverlay = GameOverOverlay(this)
 
     init {
-        ctx.music.playGame()
+        music.playGame()
     }
 
     override fun update() {

@@ -6,14 +6,14 @@ import android.os.SystemClock
 import net.rolodophone.leftright.button.ButtonText
 import net.rolodophone.leftright.main.*
 
-class Status(override val ctx: MainActivity, override val state: StateGame) : Component {
+class Status(override val state: StateGame) : Component {
     var showDebug = false
 
     var prevTime = SystemClock.elapsedRealtime()
     var viewFps = fps.toInt()
 
     val unlimitedFuelOn = ButtonText(
-        "unlimited fuel on", Paint.Align.RIGHT, ctx, state, RectF(
+        "unlimited fuel on", Paint.Align.RIGHT, state, RectF(
             w(200),
             statusBarHeight + w(30),
             w(353),
@@ -23,7 +23,7 @@ class Status(override val ctx: MainActivity, override val state: StateGame) : Co
         state.player.fuel = Float.POSITIVE_INFINITY
     }
     val unlimitedFuelOff = ButtonText(
-        "unlimited fuel off", Paint.Align.RIGHT, ctx, state, RectF(
+        "unlimited fuel off", Paint.Align.RIGHT, state, RectF(
             w(200),
             statusBarHeight + w(30),
             w(353),
@@ -35,7 +35,6 @@ class Status(override val ctx: MainActivity, override val state: StateGame) : Co
     val frenzyOn = ButtonText(
         "frenzy on",
         Paint.Align.RIGHT,
-        ctx,
         state,
         RectF(
             w(200),
@@ -49,7 +48,6 @@ class Status(override val ctx: MainActivity, override val state: StateGame) : Co
     val frenzyOff = ButtonText(
         "frenzy off",
         Paint.Align.RIGHT,
-        ctx,
         state,
         RectF(
             w(200),
@@ -81,7 +79,7 @@ class Status(override val ctx: MainActivity, override val state: StateGame) : Co
 
 
         //draw fuel meter
-        canvas.drawBitmap(ctx.bitmaps.fuel, null, fuelDim, bitmapPaint)
+        canvas.drawBitmap(state.bitmaps.fuel, null, fuelDim, bitmapPaint)
 
         whitePaint.textAlign = Paint.Align.RIGHT
         canvas.drawText(

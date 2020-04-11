@@ -3,10 +3,9 @@ package net.rolodophone.leftright.stategame
 import android.graphics.Color
 import android.graphics.Paint
 import net.rolodophone.leftright.main.Component
-import net.rolodophone.leftright.main.MainActivity
 import net.rolodophone.leftright.main.w
 
-class Weather(override val ctx: MainActivity, override val state: StateGame) : Component {
+class Weather(override val state: StateGame) : Component {
     private val rainPaint = Paint()
 
     init {

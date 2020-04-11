@@ -2,13 +2,13 @@ package net.rolodophone.leftright.stategame
 
 import net.rolodophone.leftright.main.*
 
-class Road(override val ctx: MainActivity, override val state: StateGame) : Component {
+class Road(override val state: StateGame) : Component {
     var isFrenzy = false
     val numLanes = 3
     val objects = mutableListOf<Spawnable>()
     val itemsToDel = mutableListOf<Spawnable>()
 
-    private val background = Background(this)
+    private val background = Background(state)
 
     override fun update() {
         background.update()
@@ -16,11 +16,11 @@ class Road(override val ctx: MainActivity, override val state: StateGame) : Comp
         //spawn new objects
         if (fps != Float.POSITIVE_INFINITY) {
             if (!isFrenzy) {
-                for (itemType in listOf(Fuel, Cone, Oil, Coin, Car1, Car2, Car3, Car4, Car5, Car6)) if (randomChance(itemType.averageSpawnMetres.toFloat())) itemType.spawn(this)
+                for (itemType in listOf(Fuel, Cone, Oil, Coin, Car1, Car2, Car3, Car4, Car5, Car6)) if (randomChance(itemType.averageSpawnMetres.toFloat())) itemType.spawn(state)
             }
             else {
                 for (itemType in listOf(Fuel, Cone, Oil, Coin, Car1, Car2, Car3, Car4, Car5, Car6)) {
-                    if (randomChance(itemType.averageSpawnMetres.toFloat() / 5)) itemType.spawn(this)
+                    if (randomChance(itemType.averageSpawnMetres.toFloat() / 5)) itemType.spawn(state)
                 }
             }
         }

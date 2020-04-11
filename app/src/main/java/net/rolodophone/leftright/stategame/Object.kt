@@ -8,9 +8,7 @@ import net.rolodophone.leftright.main.bitmapPaint
 import net.rolodophone.leftright.main.canvas
 import net.rolodophone.leftright.main.scaled
 
-abstract class Object(val road: Road, visibleDim: RectF) : Component {
-    override val ctx = road.ctx
-    override val state = road.state
+abstract class Object(override val state: StateGame, visibleDim: RectF) : Component {
 
     abstract val img: Bitmap
     abstract val w: Float
@@ -32,10 +30,10 @@ abstract class Object(val road: Road, visibleDim: RectF) : Component {
     @CallSuper
     override fun update() {
         //remove objects that have been deleted from hasTouched
-        hasTouched.retainAll { it in road.objects }
+        hasTouched.retainAll { it in state.road.objects }
 
         //perform onTouch()
-        for (otherObject in road.objects.minus(this)) {
+        for (otherObject in state.road.objects.minus(this)) {
             if (isTouching(otherObject) && otherObject !in hasTouched) {
                 onTouch(otherObject)
                 hasTouched.add(otherObject)
