@@ -3,6 +3,7 @@ package net.rolodophone.leftright.main
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.RectF
+import java.util.*
 
 
 var appOpen = true
@@ -38,7 +39,15 @@ fun RectF.scaled(factor: Float): RectF {
 }
 
 
+fun RectF.isOffscreen() = right < 0f || bottom < 0f || left > width || top > height
+
+
 fun w(n: Int): Float = wUnit * n
 fun w(n: Float): Float = wUnit * n
 fun h(n: Int): Float = hUnit * n
 fun h(n: Float): Float = hUnit * n
+
+val randomGen = Random()
+
+fun gaussianRandomFloat(mean: Float, std: Float) = randomGen.nextGaussian().toFloat() * std + mean
+fun gaussianRandomInt(mean: Float, std: Float) = (randomGen.nextGaussian() * std + mean).toInt()

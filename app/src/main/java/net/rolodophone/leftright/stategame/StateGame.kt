@@ -50,13 +50,11 @@ class StateGame(override val ctx: MainActivity) : State {
         pausedOverlay.update()
         gameOverOverlay.update()
 
-        when (state) {
-            State.NONE -> {
-                road.update()
-                player.update()
-            }
-            State.PAUSED -> {}
-            State.GAME_OVER -> {
+        if (state != State.PAUSED) {
+            road.update()
+            player.update()
+
+            if (state == State.GAME_OVER) {
                 gameOverOverlay.updateMsg()
             }
         }

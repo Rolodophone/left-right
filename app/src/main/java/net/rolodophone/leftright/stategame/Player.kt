@@ -64,35 +64,37 @@ class Player(state: StateGame) : Car(state.bitmaps.car1, 0f, state) {
     override fun update() {
         super.update()
 
-        //handle fuel
-        fuel -= 2f / fps
-        if (fuel <= 0f) die(DeathType.FUEL)
+        if (!isCrashed) {
+            //handle fuel
+            fuel -= 2f / fps
+            if (fuel <= 0f) die(DeathType.FUEL)
 
-        //increase distance travelled
-        distance += ySpeedMps / fps
+            //increase distance travelled
+            distance += ySpeedMps / fps
 
-        //speed up over time (except at top speed)
-        if (spinSpeed == 0f) {
-            ySpeedMps += 0.3f / fps
-            if (ySpeedMps > 2f) ySpeedMps = 2f
-        }
-
-        //handle switching lane
-        if (goingL) {
-            dim.offset(-xSpeed / fps, 0f)
-
-            if (dim.left <= laneXs[lane - 1]) {
-                goingL = false
-                dim.offsetTo(laneXs[lane - 1], dim.top)
-                lane -= 1
+            //speed up over time (except at top speed)
+            if (spinSpeed == 0f) {
+                ySpeedMps += 0.3f / fps
+                if (ySpeedMps > 2f) ySpeedMps = 2f
             }
-        } else if (goingR) {
-            dim.offset(xSpeed / fps, 0f)
 
-            if (dim.left >= laneXs[lane + 1]) {
-                goingR = false
-                dim.offsetTo(laneXs[lane + 1], dim.top)
-                lane += 1
+            //handle switching lane
+            if (goingL) {
+                dim.offset(-xSpeed / fps, 0f)
+
+                if (dim.left <= laneXs[lane - 1]) {
+                    goingL = false
+                    dim.offsetTo(laneXs[lane - 1], dim.top)
+                    lane -= 1
+                }
+            } else if (goingR) {
+                dim.offset(xSpeed / fps, 0f)
+
+                if (dim.left >= laneXs[lane + 1]) {
+                    goingR = false
+                    dim.offsetTo(laneXs[lane + 1], dim.top)
+                    lane += 1
+                }
             }
         }
     }
@@ -101,6 +103,7 @@ class Player(state: StateGame) : Car(state.bitmaps.car1, 0f, state) {
     private fun die(deathType: DeathType) {
         causeOfDeath = deathType
         state.state = StateGame.State.GAME_OVER
+        speed = 0f
     }
 
 

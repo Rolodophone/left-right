@@ -49,16 +49,16 @@ class Road(override val state: StateGame) : Component {
     }
 
 
-    fun randomLane(): Int {
+    fun randomLane(isObstacle: Boolean): Int {
         val remainingLanes = mutableSetOf<Int>()
-        remainingLanes.addAll((0 until numLanes).filter { checkValidLane(it) })
+        remainingLanes.addAll((0 until numLanes).filter { checkValidLane(it, isObstacle) })
 
         return if (remainingLanes.isEmpty()) -1
         else remainingLanes.random()
     }
 
 
-    fun checkValidLane(laneToCheck: Int): Boolean {
+    private fun checkValidLane(laneToCheck: Int, isObstacle: Boolean): Boolean {
 
         //too close to another item
         for (item in objects) if (item.lane == laneToCheck && item.dim.top < w(5)) {
@@ -66,16 +66,17 @@ class Road(override val state: StateGame) : Component {
         }
 
         //making it impossible for player to pass (an obstacle in each lane)
+        if (isObstacle) {
+            val remainingLanes = mutableSetOf<Int>()
+            remainingLanes.addAll(0 until numLanes)
+            remainingLanes.remove(laneToCheck)
 
-        val remainingLanes = mutableSetOf<Int>()
-        remainingLanes.addAll(0 until numLanes)
-        remainingLanes.remove(laneToCheck)
+            for (item in objects) {
+                if (item is Obstacle) remainingLanes.remove(item.lane)
+            }
 
-        for (item in objects) {
-            if (item is Obstacle) remainingLanes.remove(item.lane)
+            if (remainingLanes.isEmpty()) return false
         }
-
-        if (remainingLanes.isEmpty()) return false
 
         return true
     }

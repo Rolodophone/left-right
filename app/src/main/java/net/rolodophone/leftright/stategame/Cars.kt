@@ -6,8 +6,7 @@ import net.rolodophone.leftright.main.fps
 import net.rolodophone.leftright.main.w
 import net.rolodophone.leftright.resources.Bitmaps
 
-abstract class Car(private val imgGroup: Bitmaps.Car, var speed: Float, state: StateGame) : Obstacle(state, w(90), w(180)) {
-    override var img = imgGroup.clean
+abstract class Car(private val imgGroup: Bitmaps.Car, var speed: Float, state: StateGame) : Obstacle(state, w(90), w(180), imgGroup.clean) {
     override val z = 4
 
     override val deathType = DeathType.CAR
@@ -19,11 +18,14 @@ abstract class Car(private val imgGroup: Bitmaps.Car, var speed: Float, state: S
     var isCrashed = false
 
     override fun onTouch(otherObject: Object) {
+        super.onTouch(otherObject)
+
         if (otherObject is Obstacle) {
             if (!isCrashed) {
-                img = imgGroup.hit
+                if (otherObject.dim.top < this.dim.top) img = imgGroup.hit //only show the crashed at the top sprite if the crash is at the top
                 state.sounds.playHit()
                 isCrashed = true
+                spinSpeed = 0f
             }
         }
 
@@ -65,6 +67,8 @@ abstract class Car(private val imgGroup: Bitmaps.Car, var speed: Float, state: S
         canvas.rotate(rotation, dim.centerX(), dim.centerY())
         canvas.drawBitmap(img, null, imgDim, bitmapPaint)
         canvas.restore()
+
+        drawParticles()
     }
 }
 

@@ -5,7 +5,7 @@ import android.graphics.RectF
 import androidx.annotation.CallSuper
 import net.rolodophone.leftright.main.*
 
-abstract class Object(final override val state: StateGame, val w: Float, val h: Float) : Component {
+abstract class Object(final override val state: StateGame, val w: Float, val h: Float, var lane: Int = state.road.randomLane(false)) : Component {
 
     abstract val companion: ObjectCompanion
     abstract class ObjectCompanion(val averageSpawnMetres: Int, val constructor: (state: StateGame) -> Object) {
@@ -15,8 +15,6 @@ abstract class Object(final override val state: StateGame, val w: Float, val h: 
         }
     }
 
-
-    var lane = state.road.randomLane()
 
     open val dim = RectF(
         state.road.centerOfLane(lane) - w / 2,
@@ -28,13 +26,13 @@ abstract class Object(final override val state: StateGame, val w: Float, val h: 
     val imgDim
         get() = dim.scaled(10/9f)
 
-    abstract val img: Bitmap
+    abstract var img: Bitmap
     abstract val z: Int
 
 
     private val hasTouched = mutableListOf<Object>()
 
-    private fun isTouching(otherObject: Object) = this.dim.intersects(otherObject.dim.left, otherObject.dim.top, otherObject.dim.right, otherObject.dim.bottom)
+    fun isTouching(otherObject: Object) = this.dim.intersects(otherObject.dim.left, otherObject.dim.top, otherObject.dim.right, otherObject.dim.bottom)
 
     open fun onTouch(otherObject: Object) {}
 
@@ -56,7 +54,7 @@ abstract class Object(final override val state: StateGame, val w: Float, val h: 
         dim.offset(0f, state.player.speed / fps)
 
         //mark offscreen item for deletion
-        if (imgDim.top > height) state.road.itemsToDel.add(this)
+        if (imgDim.isOffscreen()) state.road.itemsToDel.add(this)
     }
 
 
