@@ -51,3 +51,5 @@ val randomGen = Random()
 
 fun gaussianRandomFloat(mean: Float, std: Float) = randomGen.nextGaussian().toFloat() * std + mean
 fun gaussianRandomInt(mean: Float, std: Float) = (randomGen.nextGaussian() * std + mean).toInt()
+
+fun randomFloat(min: Float, max: Float) = (randomGen.nextFloat() ) * (max-min)
