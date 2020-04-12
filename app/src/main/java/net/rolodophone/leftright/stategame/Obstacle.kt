@@ -5,7 +5,6 @@ import android.graphics.Paint
 import android.graphics.RectF
 import androidx.annotation.CallSuper
 import net.rolodophone.leftright.main.*
-import kotlin.random.Random
 
 abstract class Obstacle(state: StateGame, w: Float, h: Float, final override var img: Bitmap) : Object(state, w, h, state.road.randomLane(true)) {
     abstract val deathType: DeathType
@@ -65,7 +64,7 @@ abstract class Obstacle(state: StateGame, w: Float, h: Float, final override var
 
         val newParticleTypes = mutableListOf<ParticleType>()
         for (colour in colours.toSet()) {
-            newParticleTypes.add(ParticleType(colours.count{ it == colour } / 5f, colour))
+            newParticleTypes.add(ParticleType(colours.count{ it == colour } / 10f, colour))
         }
 
         particleTypes = newParticleTypes
@@ -105,8 +104,8 @@ abstract class Obstacle(state: StateGame, w: Float, h: Float, final override var
         for (particleType in particleTypes) {
             repeat(gaussianRandomInt(particleType.averageNumber, particleType.averageNumber / 7)) {
 
-                val x = Random.nextInt(area.left.toInt(), area.right.toInt()).toFloat()
-                val y = Random.nextInt(area.top.toInt(), area.bottom.toInt()).toFloat()
+                val x = randomFloat(area.left, area.right)
+                val y = randomFloat(area.top, area.bottom)
                 particles.add(Particle(x, y, particleType.colour))
             }
         }

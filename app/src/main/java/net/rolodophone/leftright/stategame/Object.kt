@@ -47,6 +47,8 @@ abstract class Object(final override val state: StateGame, val w: Float, val h: 
             if (isTouching(otherObject) && otherObject !in hasTouched) {
                 onTouch(otherObject)
                 hasTouched.add(otherObject)
+                otherObject.onTouch(this)
+                otherObject.hasTouched.add(this)
             }
         }
 

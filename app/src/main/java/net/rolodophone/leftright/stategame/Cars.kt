@@ -1,9 +1,6 @@
 package net.rolodophone.leftright.stategame
 
-import net.rolodophone.leftright.main.bitmapPaint
-import net.rolodophone.leftright.main.canvas
-import net.rolodophone.leftright.main.fps
-import net.rolodophone.leftright.main.w
+import net.rolodophone.leftright.main.*
 import net.rolodophone.leftright.resources.Bitmaps
 
 abstract class Car(private val imgGroup: Bitmaps.Car, var speed: Float, state: StateGame) : Obstacle(state, w(90), w(180), imgGroup.clean) {
@@ -17,21 +14,30 @@ abstract class Car(private val imgGroup: Bitmaps.Car, var speed: Float, state: S
 
     var isCrashed = false
 
+    var isOiling = false
+
     override fun onTouch(otherObject: Object) {
         super.onTouch(otherObject)
 
         if (otherObject is Obstacle) {
-            if (!isCrashed) {
-                if (otherObject.dim.top < this.dim.top) img = imgGroup.hit //only show the crashed at the top sprite if the crash is at the top
-                state.sounds.playHit()
-                isCrashed = true
-                spinSpeed = 0f
+            state.sounds.playHit()
+            isCrashed = true
+            spinSpeed = gaussianRandomFloat(0f, 50f)
+
+            if (otherObject.dim.top < this.dim.top) {
+                img = imgGroup.hit //only show the crashed at the top sprite if the crash is at the top
+                speed = 0f
+            }
+            else {
+                speed += w(300)
+                deceleration = w(500)
             }
         }
 
         when (otherObject) {
             is Oil -> {
                 state.sounds.playOil()
+                isOiling = true
 
                 //one full turn every second
                 spinSpeed = 720f
@@ -47,17 +53,21 @@ abstract class Car(private val imgGroup: Bitmaps.Car, var speed: Float, state: S
         super.update()
 
         //move upwards
-        if (!isCrashed) dim.offset(0f, -speed / fps)
+        dim.offset(0f, -speed / fps)
+
+        speed -= deceleration / fps
+        if (speed < 0f) speed = 0f
 
         //handle oil
         if (spinSpeed != 0f) {
             rotation += spinSpeed / fps
-            spinSpeed -= 144 / fps
-            speed -= deceleration / fps
 
-            if (spinSpeed < 0f) {
-                spinSpeed = 0f
+            spinSpeed -= 144 / fps
+            if (spinSpeed < 0f) spinSpeed = 0f
+
+            if (isOiling && spinSpeed == 0f) {
                 rotation = 0f
+                isOiling = false
             }
         }
     }
