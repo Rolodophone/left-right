@@ -8,4 +8,8 @@ class Fuel(state: StateGame) : Object(state, w(45), w(51.4285714286f)) {
 
     override var img = state.bitmaps.fuel
     override val z = 3
+
+    init {
+        if (state.player.fuel > 100f) lane = -1
+    }
 }
