@@ -19,8 +19,8 @@ class Road(override val state: StateGame) : Component {
                 for (itemType in listOf(Fuel, Cone, Oil, Coin, Car1, Car2, Car3, Car4, Car5, Car6)) if (randomChance(itemType.averageSpawnMetres.toFloat())) itemType.spawn(state)
             }
             else {
-                for (itemType in listOf(Fuel, Cone, Oil, Coin, Car1, Car2, Car3, Car4, Car5, Car6)) {
-                    if (randomChance(itemType.averageSpawnMetres.toFloat() / 5)) itemType.spawn(state)
+                if (randomChance(0.5f)) {
+                    listOf(Fuel, Cone, Oil, Coin, Car1, Car2, Car3, Car4, Car5, Car6).random().spawn(state)
                 }
             }
         }

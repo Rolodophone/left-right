@@ -23,6 +23,7 @@ abstract class Car(private val imgGroup: Bitmaps.Car, var speed: Float, state: S
             state.sounds.playHit()
             isCrashed = true
             spinSpeed = gaussianRandomFloat(0f, 50f)
+            isOiling = false //so that the rotation doesn't get set to 0 when spinSpeed reaches 0
 
             if (otherObject.dim.top < this.dim.top) {
                 img = imgGroup.hit //only show the crashed at the top sprite if the crash is at the top
@@ -62,7 +63,7 @@ abstract class Car(private val imgGroup: Bitmaps.Car, var speed: Float, state: S
         if (spinSpeed != 0f) {
             rotation += spinSpeed / fps
 
-            spinSpeed -= 144 / fps
+            spinSpeed -= 145 / fps //that value used to be 144 (which should work in theory) but I tweaked it because in practice was consistently too low
             if (spinSpeed < 0f) spinSpeed = 0f
 
             if (isOiling && spinSpeed == 0f) {
