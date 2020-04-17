@@ -7,7 +7,7 @@ import net.rolodophone.leftright.main.canvas
 import net.rolodophone.leftright.main.w
 import net.rolodophone.leftright.main.whitePaint
 
-class ButtonText(val text: String, val align: Paint.Align, state: State, dim: RectF, onClick: () -> Unit) : Button(state, dim, onClick) {
+open class ButtonText(val text: String, val align: Paint.Align, state: State, dim: RectF, onClick: () -> Unit) : Button(state, dim, onClick) {
 
     private val x = when (align) {
         Paint.Align.LEFT -> dim.left

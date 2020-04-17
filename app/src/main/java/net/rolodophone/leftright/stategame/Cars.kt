@@ -5,11 +5,11 @@ import net.rolodophone.leftright.resources.Bitmaps
 
 abstract class Car(private val imgGroup: Bitmaps.Car, var speed: Float, state: StateGame) : Obstacle(state, w(90), w(180), imgGroup.clean) {
     override val z = 4
-
     override val deathType = DeathType.CAR
+    override var weight = 3f
 
     var spinSpeed = 0f
-    private var deceleration = 0f
+    var acceleration = 0f
     var rotation = 0f
 
     var isCrashed = false
@@ -19,22 +19,6 @@ abstract class Car(private val imgGroup: Bitmaps.Car, var speed: Float, state: S
     override fun onTouch(otherObject: Object) {
         super.onTouch(otherObject)
 
-        if (otherObject is Obstacle) {
-            state.sounds.playHit()
-            isCrashed = true
-            spinSpeed = gaussianRandomFloat(0f, 50f)
-            isOiling = false //so that the rotation doesn't get set to 0 when spinSpeed reaches 0
-
-            if (otherObject.dim.top < this.dim.top) {
-                img = imgGroup.hit //only show the crashed at the top sprite if the crash is at the top
-                speed = 0f
-            }
-            else {
-                speed += w(300)
-                deceleration = w(500)
-            }
-        }
-
         when (otherObject) {
             is Oil -> {
                 state.sounds.playOil()
@@ -43,10 +27,26 @@ abstract class Car(private val imgGroup: Bitmaps.Car, var speed: Float, state: S
                 //one full turn every second
                 spinSpeed = 720f
                 //lose half your speed over 5 seconds
-                deceleration = (speed / 2f) / 5f
+                acceleration = -(speed / 2f) / 5f
                 //reset rotation
                 rotation = 0f
             }
+        }
+    }
+
+    override fun onHit(otherObstacle: Obstacle) {
+        state.sounds.playHit()
+        isCrashed = true
+        spinSpeed = gaussianRandomFloat(0f, 50f)
+        isOiling = false //so that the rotation doesn't get set to 0 when spinSpeed reaches 0
+
+        if (otherObstacle.dim.top < this.dim.top) {
+            img = imgGroup.hit //only show the crashed at the top sprite if the crash is at the top
+            speed = 0f
+        }
+        else {
+            speed += w(300)
+            acceleration = -w(500)
         }
     }
 
@@ -56,19 +56,20 @@ abstract class Car(private val imgGroup: Bitmaps.Car, var speed: Float, state: S
         //move upwards
         dim.offset(0f, -speed / fps)
 
-        speed -= deceleration / fps
+        speed += acceleration / fps
         if (speed < 0f) speed = 0f
 
         //handle oil
         if (spinSpeed != 0f) {
             rotation += spinSpeed / fps
 
-            spinSpeed -= 145 / fps //that value used to be 144 (which should work in theory) but I tweaked it because in practice was consistently too low
+            spinSpeed -= 144.5f / fps //that value used to be 144 (which should work in theory) but I tweaked it because in practice was consistently too low
             if (spinSpeed < 0f) spinSpeed = 0f
 
             if (isOiling && spinSpeed == 0f) {
                 rotation = 0f
                 isOiling = false
+                acceleration = 0f
             }
         }
     }

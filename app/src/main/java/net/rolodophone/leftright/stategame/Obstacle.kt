@@ -7,9 +7,6 @@ import androidx.annotation.CallSuper
 import net.rolodophone.leftright.main.*
 
 abstract class Obstacle(state: StateGame, w: Float, h: Float, final override var img: Bitmap) : Object(state, w, h, state.road.randomLane(true)) {
-    abstract val deathType: DeathType
-
-
     inner class Particle(x: Float, y: Float, colour: Int) {
         private val width = w(gaussianRandomFloat(8f, 1f))
         private var timeLeft = 1f
@@ -54,6 +51,14 @@ abstract class Obstacle(state: StateGame, w: Float, h: Float, final override var
 
     private val particleTypes: List<ParticleType>
 
+    abstract val deathType: DeathType
+    abstract var weight: Float //higher means it moves less when hit
+
+    var hitSpeedX = 0f //for moving slightly when hit
+    var hitSpeedY = 0f
+    var decelerationX = 0f //for only moving for a small amount of time
+    var decelerationY = 0f
+
     init {
         val colours = mutableListOf<Int>()
 
@@ -76,16 +81,75 @@ abstract class Obstacle(state: StateGame, w: Float, h: Float, final override var
         if (otherObject is Obstacle) {
             val intersection = RectF(dim)
             intersection.intersect(otherObject.dim)
-
             explode(intersection)
+
+            onHit(otherObject)
+        }
+    }
+
+
+    open fun onHit(otherObstacle: Obstacle) {
+        if (this.dim.top > otherObstacle.dim.top) {
+            hitSpeedX = 0f
+            hitSpeedY = 0f
+        }
+        else {
+            if (otherObstacle is Car) {
+                hitSpeedY = -otherObstacle.speed / weight
+
+                if (otherObstacle is Player) {
+                    if (otherObstacle.goingL) hitSpeedX = -otherObstacle.xSpeed / weight
+                    else if (otherObstacle.goingR) hitSpeedX = otherObstacle.xSpeed / weight
+                }
+
+                hitSpeedX += w(gaussianRandomFloat(0f, 50f))
+
+                decelerationX = hitSpeedX
+                decelerationY = hitSpeedY
+            }
         }
     }
 
 
     override fun update() {
         super.update()
+
         for (particle in particles) particle.update()
         for (particle in particlesToDel) particles.remove(particle)
+
+        dim.offset(hitSpeedX / fps, hitSpeedY / fps)
+
+        if (decelerationX != 0f && decelerationY != 0f) {
+            if (hitSpeedX > 0f) {
+                hitSpeedX -= decelerationX / fps
+                if (hitSpeedX < 0f) {
+                    hitSpeedX = 0f
+                    decelerationX = 0f
+                }
+            }
+            else {
+                hitSpeedX -= decelerationX / fps
+                if (hitSpeedX > 0f) {
+                    hitSpeedX = 0f
+                    decelerationX = 0f
+                }
+            }
+
+            if (hitSpeedY > 0f) {
+                hitSpeedY -= decelerationY / fps
+                if (hitSpeedY < 0f) {
+                    hitSpeedY = 0f
+                    decelerationY = 0f
+                }
+            }
+            else {
+                hitSpeedY -= decelerationY / fps
+                if (hitSpeedY > 0f) {
+                    hitSpeedY = 0f
+                    decelerationY = 0f
+                }
+            }
+        }
     }
 
 

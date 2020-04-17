@@ -10,6 +10,7 @@ import com.google.android.exoplayer2.upstream.RawResourceDataSource
 import com.google.android.exoplayer2.util.Util
 import net.rolodophone.leftright.R
 import net.rolodophone.leftright.main.MainActivity
+import net.rolodophone.leftright.stategame.StateGame
 import net.rolodophone.leftright.stateloading.StateLoading
 
 class Music(ctx: MainActivity) {
@@ -19,7 +20,12 @@ class Music(ctx: MainActivity) {
     init {
         player.addListener(object : Player.EventListener {
             override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
-                if (playbackState == Player.STATE_READY) ctx.state.let { if (it is StateLoading) it.loadingCountDown-- }
+                if (playbackState == Player.STATE_READY) {
+                    ctx.state.let { if (it is StateLoading) it.loadingCountDown-- }
+                }
+                else if (playbackState == Player.STATE_ENDED) {
+                    ctx.state.let { if (it is StateGame) it.player.victory() }
+                }
             }
         })
     }

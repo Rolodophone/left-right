@@ -8,6 +8,10 @@ class Road(override val state: StateGame) : Component {
     val objects = mutableListOf<Object>()
     val itemsToDel = mutableListOf<Object>()
 
+    var cameraSpeed = 0f
+        get() = if (!state.player.isDoingVictory) state.player.speed
+                else field
+
     private val background = Background(state)
 
     override fun update() {
@@ -31,6 +35,9 @@ class Road(override val state: StateGame) : Component {
         for (item in objects) item.update()
         for (item in itemsToDel) objects.remove(item)
         itemsToDel.clear()
+
+        //handle collisions
+        for (item in objects) item.handleCollisions()
     }
 
     override fun draw() {
@@ -38,11 +45,13 @@ class Road(override val state: StateGame) : Component {
         for (item in objects) item.draw()
     }
 
+
     fun centerOfLane(lane: Int): Float {
         require(lane < numLanes) { "lane index must be less than road.numLanes" }
 
         return (width * (lane + 1) - halfWidth) / numLanes
     }
+
 
     private fun randomChance(averageMetres: Float): Boolean {
         return (0 until ((averageMetres / state.player.ySpeedMps) * fps).toInt()).random() == 0

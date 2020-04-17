@@ -13,6 +13,8 @@ class Sounds(ctx: MainActivity) {
     private var fuel = soundPool.load(ctx, R.raw.fuel, 1)
     private var oil = soundPool.load(ctx, R.raw.oil, 1)
     private var coin = soundPool.load(ctx, R.raw.coin, 1)
+    private var victory = 0//soundPool.load(ctx, R.raw.victory, 1)
+    private var vroom = 0//soundPool.load(ctx, R.raw.victory, 1)
 
 
     private fun playSound(sound: Int) {
@@ -25,6 +27,8 @@ class Sounds(ctx: MainActivity) {
     fun playFuel() = playSound(fuel)
     fun playOil() = playSound(oil)
     fun playCoin() = playSound(coin)
+    fun playVictory() = playSound(victory)
+    fun playVroom() = playSound(vroom)
 
     fun pause() = soundPool.autoPause()
     fun resume() = soundPool.autoResume()

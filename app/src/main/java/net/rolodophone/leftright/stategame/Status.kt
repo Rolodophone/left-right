@@ -12,52 +12,26 @@ class Status(override val state: StateGame) : Component {
     var prevTime = SystemClock.elapsedRealtime()
     var viewFps = fps.toInt()
 
-    val unlimitedFuelOn = ButtonText(
-        "unlimited fuel on", Paint.Align.RIGHT, state, RectF(
-            w(200),
-            statusBarHeight + w(30),
-            w(353),
-            statusBarHeight + w(55)
+    inner class DebugButton(text: String, index: Int, onClick: () -> Unit) //index is 1 upwards
+        : ButtonText(
+            text,
+            Paint.Align.RIGHT,
+            state,
+            RectF(
+                w(200),
+                statusBarHeight + w(index * 30),
+                w(353),
+                statusBarHeight + w(index * 30 + 25)
+            ),
+            onClick
         )
-    ) {
-        state.player.fuel = Float.POSITIVE_INFINITY
-    }
-    val unlimitedFuelOff = ButtonText(
-        "unlimited fuel off", Paint.Align.RIGHT, state, RectF(
-            w(200),
-            statusBarHeight + w(30),
-            w(353),
-            statusBarHeight + w(55)
-        )
-    ) {
-        state.player.fuel = 50f
-    }
-    val frenzyOn = ButtonText(
-        "frenzy on",
-        Paint.Align.RIGHT,
-        state,
-        RectF(
-            w(200),
-            statusBarHeight + w(60),
-            w(353),
-            statusBarHeight + w(85)
-        )
-    ) {
-        state.road.isFrenzy = true
-    }
-    val frenzyOff = ButtonText(
-        "frenzy off",
-        Paint.Align.RIGHT,
-        state,
-        RectF(
-            w(200),
-            statusBarHeight + w(60),
-            w(353),
-            statusBarHeight + w(85)
-        )
-    ) {
-        state.road.isFrenzy = false
-    }
+
+    val unlimitedFuelOn = DebugButton("unlimited fuel on", 1) { state.player.fuel = Float.POSITIVE_INFINITY }
+    val unlimitedFuelOff = DebugButton("unlimited fuel off", 1) { state.player.fuel = 50f }
+    val frenzyOn = DebugButton("frenzy on", 2) { state.road.isFrenzy = true }
+    val frenzyOff = DebugButton("frenzy off", 2) { state.road.isFrenzy = false }
+    val spawnCone = DebugButton("spawn cone", 3) { Cone.spawn(state) }
+    val spawnOil = DebugButton("spawn oil", 4) { Oil.spawn(state) }
 
     val fuelDim = RectF(
         w(333),
@@ -71,6 +45,8 @@ class Status(override val state: StateGame) : Component {
         unlimitedFuelOff.update()
         frenzyOff.update()
         frenzyOn.update()
+        spawnCone.update()
+        spawnOil.update()
     }
 
 
@@ -115,6 +91,8 @@ class Status(override val state: StateGame) : Component {
             //draw buttons
             if (state.player.fuel == Float.POSITIVE_INFINITY) unlimitedFuelOff.draw() else unlimitedFuelOn.draw()
             if (state.road.isFrenzy) frenzyOff.draw() else frenzyOn.draw()
+            spawnCone.draw()
+            spawnOil.draw()
         }
     }
 }

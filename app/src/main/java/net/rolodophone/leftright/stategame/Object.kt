@@ -39,6 +39,15 @@ abstract class Object(final override val state: StateGame, val w: Float, val h: 
 
     @CallSuper
     override fun update() {
+        //move item down
+        dim.offset(0f, state.road.cameraSpeed / fps)
+
+        //mark offscreen item for deletion
+        if (imgDim.isOffscreen()) state.road.itemsToDel.add(this)
+    }
+
+
+    fun handleCollisions() {
         //remove objects that have been deleted from hasTouched
         hasTouched.retainAll { it in state.road.objects }
 
@@ -51,12 +60,6 @@ abstract class Object(final override val state: StateGame, val w: Float, val h: 
                 otherObject.hasTouched.add(this)
             }
         }
-
-        //move item down
-        dim.offset(0f, state.player.speed / fps)
-
-        //mark offscreen item for deletion
-        if (imgDim.isOffscreen()) state.road.itemsToDel.add(this)
     }
 
 

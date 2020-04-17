@@ -42,6 +42,7 @@ class StateGame(override val ctx: MainActivity) : State {
 
     init {
         music.playGame()
+        road.objects.add(player)
     }
 
     override fun update() {
@@ -52,7 +53,6 @@ class StateGame(override val ctx: MainActivity) : State {
 
         if (state != State.PAUSED) {
             road.update()
-            player.update()
 
             if (state == State.GAME_OVER) {
                 gameOverOverlay.updateMsg()
@@ -62,7 +62,6 @@ class StateGame(override val ctx: MainActivity) : State {
 
     override fun draw() {
         road.draw()
-        player.draw()
         weather.draw()
 
         when (state) {

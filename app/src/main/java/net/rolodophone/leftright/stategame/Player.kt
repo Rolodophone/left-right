@@ -17,6 +17,8 @@ class Player(state: StateGame) : Car(state.bitmaps.car1, 0f, state) {
         height + h/2
     ).scaled(9/10f)
 
+    override val z = 10
+
     //The x coordinate of the left side of the hitbox of the car, if it was in the Nth lane
     private var laneXs = List(state.road.numLanes) { state.road.centerOfLane(it) - dim.width()/2f }
 
@@ -31,6 +33,8 @@ class Player(state: StateGame) : Car(state.bitmaps.car1, 0f, state) {
     var goingL = false
     var goingR = false
 
+    var isDoingVictory = false
+
     //helper variable to use speed in m/s
     var ySpeedMps
         get() = (speed / width)
@@ -43,7 +47,8 @@ class Player(state: StateGame) : Car(state.bitmaps.car1, 0f, state) {
         super.onTouch(otherObject)
 
         if (otherObject is Obstacle) {
-            die(otherObject.deathType)
+            //if (isDoingVictory) otherObject.is
+            /*else*/ die(otherObject.deathType)
         }
 
         when (otherObject) {
@@ -103,7 +108,15 @@ class Player(state: StateGame) : Car(state.bitmaps.car1, 0f, state) {
     private fun die(deathType: DeathType) {
         causeOfDeath = deathType
         state.state = StateGame.State.GAME_OVER
-        speed = 0f
+    }
+
+
+    fun victory() {
+        isDoingVictory = true
+        state.sounds.playVictory()
+        state.sounds.playVroom()
+        state.road.cameraSpeed = speed
+        acceleration = w(500)
     }
 
 
