@@ -102,7 +102,7 @@ abstract class Obstacle(state: StateGame, w: Float, h: Float, final override var
                     else if (otherObstacle.goingR) hitSpeedX = otherObstacle.xSpeed / weight
                 }
 
-                hitSpeedX += w(gaussianRandomFloat(0f, 50f))
+                hitSpeedX += w(gaussianRandomFloat(0f, 10f)) / weight
 
                 decelerationX = hitSpeedX
                 decelerationY = hitSpeedY

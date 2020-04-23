@@ -30,7 +30,7 @@ abstract class Object(final override val state: StateGame, val w: Float, val h: 
     abstract val z: Int
 
 
-    private val hasTouched = mutableListOf<Object>()
+    val hasTouched = mutableListOf<Object>()
 
     fun isTouching(otherObject: Object) = this.dim.intersects(otherObject.dim.left, otherObject.dim.top, otherObject.dim.right, otherObject.dim.bottom)
 
@@ -56,8 +56,6 @@ abstract class Object(final override val state: StateGame, val w: Float, val h: 
             if (isTouching(otherObject) && otherObject !in hasTouched) {
                 onTouch(otherObject)
                 hasTouched.add(otherObject)
-                otherObject.onTouch(this)
-                otherObject.hasTouched.add(this)
             }
         }
     }

@@ -3,10 +3,10 @@ package net.rolodophone.leftright.stategame
 import net.rolodophone.leftright.main.*
 import net.rolodophone.leftright.resources.Bitmaps
 
-abstract class Car(private val imgGroup: Bitmaps.Car, var speed: Float, state: StateGame) : Obstacle(state, w(90), w(180), imgGroup.clean) {
+abstract class Car(imgGroup: Bitmaps.Car, var speed: Float, state: StateGame) : Obstacle(state, w(90), w(180), imgGroup.clean) {
     override val z = 4
     override val deathType = DeathType.CAR
-    override var weight = 3f
+    override var weight = 1f
 
     var spinSpeed = 0f
     var acceleration = 0f
@@ -35,19 +35,20 @@ abstract class Car(private val imgGroup: Bitmaps.Car, var speed: Float, state: S
     }
 
     override fun onHit(otherObstacle: Obstacle) {
+        super.onHit(otherObstacle)
+
         state.sounds.playHit()
         isCrashed = true
         spinSpeed = gaussianRandomFloat(0f, 50f)
         isOiling = false //so that the rotation doesn't get set to 0 when spinSpeed reaches 0
 
-        if (otherObstacle.dim.top < this.dim.top) {
-            img = imgGroup.hit //only show the crashed at the top sprite if the crash is at the top
-            speed = 0f
+        //if it is the obstacle below before changing speed make sure other obstacle has updated first
+        if (this.dim.top > otherObstacle.dim.top && this !in otherObstacle.hasTouched) {
+            otherObstacle.hasTouched.add(this)
+            otherObstacle.onTouch(this)
         }
-        else {
-            speed += w(300)
-            acceleration = -w(500)
-        }
+
+        speed = 0f
     }
 
     override fun update() {

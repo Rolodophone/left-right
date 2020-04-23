@@ -8,5 +8,5 @@ class Cone(state: StateGame) : Obstacle(state, w(45), w(51.4285714286f), state.b
 
     override val z = 2
     override val deathType = DeathType.CONE
-    override var weight = 0.5f
+    override var weight = 0.2f
 }

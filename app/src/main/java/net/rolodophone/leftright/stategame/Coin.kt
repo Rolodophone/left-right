@@ -22,10 +22,7 @@ class Coin(state: StateGame) : Object(state, w(45), w(45)) {
     override fun update() {
         super.update()
 
-        if (animationStage % 2 <= 1) dim.offset(w(20) / fps, 0f) else dim.offset(
-            w(
-                -20
-            ) / fps, 0f)
+        if (animationStage % 2 <= 1) dim.offset(w(20) / fps, 0f) else dim.offset(w(-20) / fps, 0f)
 
         if (SystemClock.elapsedRealtime() - timeSpriteLastChanged > 70) {
             if (shineNum <= 6) {
