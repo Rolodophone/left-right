@@ -6,13 +6,16 @@ import android.graphics.PixelFormat
 import android.graphics.Point
 import android.os.Bundle
 import android.util.Log
+import android.view.GestureDetector
+import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
+import androidx.core.view.GestureDetectorCompat
 import net.rolodophone.leftright.resources.Bitmaps
 import net.rolodophone.leftright.resources.Music
 import net.rolodophone.leftright.resources.Sounds
+import net.rolodophone.leftright.stateareas.StateAreas
 import net.rolodophone.leftright.stategame.StateGame
-import net.rolodophone.leftright.stateloading.StateLoading
 
 class MainActivity : Activity() {
 
@@ -26,6 +29,8 @@ class MainActivity : Activity() {
 
     private lateinit var mainView: MainView
     private lateinit var thread: Thread
+
+    private lateinit var gestureDetector: GestureDetectorCompat
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.i("Activity", "onCreate()")
@@ -54,7 +59,59 @@ class MainActivity : Activity() {
 
         setContentView(mainView)
 
+        gestureDetector = GestureDetectorCompat(this, MyGestureListener())
+
         init()
+    }
+
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        gestureDetector.onTouchEvent(event)
+
+        state.let {
+            if (it is StateAreas) {
+
+                if (event.action == MotionEvent.ACTION_UP) it.stopSeek()
+
+                else if (event.action == MotionEvent.ACTION_MOVE) it.seek(event.x)
+            }
+        }
+
+        return super.onTouchEvent(event)
+    }
+
+
+    private inner class MyGestureListener : GestureDetector.SimpleOnGestureListener() {
+
+        override fun onDown(event: MotionEvent): Boolean {
+            state.let {
+
+                if (it is StateGame) {
+                    for (button in it.buttons) if (button.checkClick(event.x, event.y)) {
+                        button.onClick()
+                        return true
+                    }
+                }
+
+                else if (it is StateAreas) {
+                    it.startSeek(event.x)
+                    return true
+                }
+
+                return false
+            }
+        }
+
+        override fun onSingleTapUp(event: MotionEvent?): Boolean {
+            state.let {
+                if (it is StateAreas) {
+                    it.tapArea()
+                    return true
+                }
+            }
+
+            return false
+        }
     }
 
 
@@ -79,8 +136,7 @@ class MainActivity : Activity() {
         //initialize grid
         grid = Grid(this)
 
-        //load state, waiting for music to finish
-        state = StateLoading(this, StateGame(this))
+        state = StateAreas(this)
 
         Log.i("Initialization", "</--------INIT--------->")
     }

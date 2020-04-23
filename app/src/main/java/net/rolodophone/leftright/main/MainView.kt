@@ -3,7 +3,6 @@ package net.rolodophone.leftright.main
 import android.annotation.SuppressLint
 import android.os.SystemClock
 import android.util.Log
-import android.view.MotionEvent
 import android.view.SurfaceView
 import net.rolodophone.leftright.stategame.StateGame
 
@@ -42,19 +41,6 @@ class MainView(private val ctx: MainActivity) : SurfaceView(ctx), Runnable {
                 Log.e("View", "Surface invalid")
             }
         }
-    }
-
-
-    @SuppressLint("ClickableViewAccessibility")
-    override fun onTouchEvent(event: MotionEvent?): Boolean {
-        if (event?.action == MotionEvent.ACTION_DOWN) {
-            for (button in ctx.state.buttons) if (button.checkClick(event.x, event.y)) {
-                button.onClick()
-                return true
-            }
-        }
-
-        return false
     }
 
 

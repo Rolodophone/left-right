@@ -2,12 +2,11 @@ package net.rolodophone.leftright.main
 
 import net.rolodophone.leftright.button.Button
 
-interface State {
-    val ctx: MainActivity
+abstract class State(val ctx: MainActivity) {
 
-    val buttons: MutableList<Button.ButtonHandler>
-    val numThingsToLoad: Int
+    val buttons = mutableListOf<Button.ButtonHandler>()
+    abstract val numThingsToLoad: Int
 
-    fun update()
-    fun draw()
+    abstract fun update()
+    abstract fun draw()
 }

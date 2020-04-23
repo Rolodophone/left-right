@@ -1,10 +1,9 @@
 package net.rolodophone.leftright.stategame
 
-import net.rolodophone.leftright.button.Button
 import net.rolodophone.leftright.main.MainActivity
 import net.rolodophone.leftright.main.State
 
-class StateGame(override val ctx: MainActivity) : State {
+class StateGame(ctx: MainActivity) : State(ctx) {
     override val numThingsToLoad = 1
 
     val bitmaps = ctx.bitmaps
@@ -30,8 +29,6 @@ class StateGame(override val ctx: MainActivity) : State {
             field = value
         }
 
-    override val buttons = mutableListOf<Button.ButtonHandler>()
-
     val road = Road(this)
     val player = Player(this)
     val weather = Weather(this)
@@ -41,7 +38,7 @@ class StateGame(override val ctx: MainActivity) : State {
     val gameOverOverlay = GameOverOverlay(this)
 
     init {
-        music.playGame()
+        music.prepGame()
         road.objects.add(player)
     }
 
