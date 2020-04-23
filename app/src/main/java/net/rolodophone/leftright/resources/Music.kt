@@ -57,4 +57,8 @@ class Music(ctx: MainActivity) {
     fun resume() {
         player.playWhenReady = true
     }
+
+    fun skipToFinish() {
+        player.seekTo(player.duration - 5000)
+    }
 }

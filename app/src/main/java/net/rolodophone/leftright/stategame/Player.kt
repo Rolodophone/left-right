@@ -47,8 +47,7 @@ class Player(state: StateGame) : Car(state.bitmaps.car1, 0f, state) {
         super.onTouch(otherObject)
 
         if (otherObject is Obstacle) {
-            //if (isDoingVictory) otherObject.is
-            /*else*/ die(otherObject.deathType)
+            die(otherObject.deathType)
         }
 
         when (otherObject) {
@@ -69,7 +68,7 @@ class Player(state: StateGame) : Car(state.bitmaps.car1, 0f, state) {
     override fun update() {
         super.update()
 
-        if (!isCrashed) {
+        if (!isDead && !isDoingVictory) {
             //handle fuel
             fuel -= 2f / fps
             if (fuel <= 0f) die(DeathType.FUEL)
@@ -108,6 +107,8 @@ class Player(state: StateGame) : Car(state.bitmaps.car1, 0f, state) {
     private fun die(deathType: DeathType) {
         causeOfDeath = deathType
         state.state = StateGame.State.GAME_OVER
+        acceleration = -w(500)
+        isDead = true
     }
 
 
@@ -122,30 +123,34 @@ class Player(state: StateGame) : Car(state.bitmaps.car1, 0f, state) {
 
     fun turnLeft() {
         //if the player turns in between lanes, set the lane to the lane it would have gone to
-        if (goingR) {
-            lane++
-        }
+        if (!isDoingVictory) {
+            if (goingR) {
+                lane++
+            }
 
-        if (lane != 0) {
-            goingL = true
-            state.sounds.playTap()
-        }
+            if (lane != 0) {
+                goingL = true
+                state.sounds.playTap()
+            }
 
-        goingR = false
+            goingR = false
+        }
     }
 
 
     fun turnRight() {
         //if the player turns in between lanes, set the lane to the lane it would have gone to
-        if (goingL) {
-            lane--
-        }
+        if (!isDoingVictory) {
+            if (goingL) {
+                lane--
+            }
 
-        if (lane != state.road.numLanes - 1) {
-            goingR = true
-            state.sounds.playTap()
-        }
+            if (lane != state.road.numLanes - 1) {
+                goingR = true
+                state.sounds.playTap()
+            }
 
-        goingL = false
+            goingL = false
+        }
     }
 }

@@ -30,8 +30,7 @@ class Status(override val state: StateGame) : Component {
     val unlimitedFuelOff = DebugButton("unlimited fuel off", 1) { state.player.fuel = 50f }
     val frenzyOn = DebugButton("frenzy on", 2) { state.road.isFrenzy = true }
     val frenzyOff = DebugButton("frenzy off", 2) { state.road.isFrenzy = false }
-    val spawnCone = DebugButton("spawn cone", 3) { Cone.spawn(state) }
-    val spawnOil = DebugButton("spawn oil", 4) { Oil.spawn(state) }
+    val skipToFinish = DebugButton("skip to finish", 3) { state.music.skipToFinish() }
 
     val fuelDim = RectF(
         w(333),
@@ -45,8 +44,7 @@ class Status(override val state: StateGame) : Component {
         unlimitedFuelOff.update()
         frenzyOff.update()
         frenzyOn.update()
-        spawnCone.update()
-        spawnOil.update()
+        skipToFinish.update()
     }
 
 
@@ -91,8 +89,7 @@ class Status(override val state: StateGame) : Component {
             //draw buttons
             if (state.player.fuel == Float.POSITIVE_INFINITY) unlimitedFuelOff.draw() else unlimitedFuelOn.draw()
             if (state.road.isFrenzy) frenzyOff.draw() else frenzyOn.draw()
-            spawnCone.draw()
-            spawnOil.draw()
+            skipToFinish.draw()
         }
     }
 }
