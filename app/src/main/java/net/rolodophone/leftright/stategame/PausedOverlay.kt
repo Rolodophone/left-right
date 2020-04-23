@@ -13,7 +13,10 @@ class PausedOverlay(override val state: StateGame) : Component {
         RectF(
             w(90), halfHeight + w(5),
             w(270), halfHeight + w(49)
-        ), {
+        ),
+        listOf(),
+        true,
+        {
             state.sounds.playSelect()
             state.state = StateGame.State.NONE
         }

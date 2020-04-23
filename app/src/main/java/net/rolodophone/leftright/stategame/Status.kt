@@ -23,6 +23,7 @@ class Status(override val state: StateGame) : Component {
                 w(353),
                 statusBarHeight + w(index * 30 + 25)
             ),
+        true,
             onClick
         )
 

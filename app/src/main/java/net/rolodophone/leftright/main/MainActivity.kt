@@ -15,7 +15,6 @@ import net.rolodophone.leftright.resources.Bitmaps
 import net.rolodophone.leftright.resources.Music
 import net.rolodophone.leftright.resources.Sounds
 import net.rolodophone.leftright.stateareas.StateAreas
-import net.rolodophone.leftright.stategame.StateGame
 
 class MainActivity : Activity() {
 
@@ -77,37 +76,30 @@ class MainActivity : Activity() {
             }
         }
 
-        return super.onTouchEvent(event)
+        return false
     }
 
 
     private inner class MyGestureListener : GestureDetector.SimpleOnGestureListener() {
 
         override fun onDown(event: MotionEvent): Boolean {
-            state.let {
-
-                if (it is StateGame) {
-                    for (button in it.buttons) if (button.checkClick(event.x, event.y)) {
-                        button.onClick()
-                        return true
-                    }
-                }
-
-                else if (it is StateAreas) {
-                    it.startSeek(event.x)
-                    return true
-                }
-
-                return false
+            for (button in state.buttons) if (button.checkClick(event.x, event.y)) {
+                button.onClick()
+                return true
             }
+
+            state.let { if (it is StateAreas) {
+                it.startSeek(event.x)
+                return true
+            }}
+
+            return false
         }
 
-        override fun onSingleTapUp(event: MotionEvent?): Boolean {
-            state.let {
-                if (it is StateAreas) {
-                    it.tapArea()
-                    return true
-                }
+        override fun onSingleTapUp(event: MotionEvent): Boolean {
+            for (button in state.strictButtons) if (button.checkClick(event.x, event.y)) {
+                button.onClick()
+                return true
             }
 
             return false

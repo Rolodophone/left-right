@@ -6,7 +6,7 @@ import android.graphics.RectF
 import android.graphics.Typeface
 import net.rolodophone.leftright.button.ButtonBitmap
 import net.rolodophone.leftright.main.*
-import net.rolodophone.leftright.stateloading.StateLoading
+import net.rolodophone.leftright.stateareas.StateAreas
 import java.io.FileNotFoundException
 import kotlin.random.Random
 
@@ -24,19 +24,23 @@ class GameOverOverlay(override val state: StateGame) : Component {
             w(220),
             h(250),
             w(300), h(250) + w(80)
-        )
+        ),
+        true
     ) {
         state.sounds.playSelect()
-        state.ctx.state = StateLoading(state.ctx, StateGame(state.ctx))
+        state.ctx.state = StateGame(state.ctx)
+        state.music.resume()
     }
     val mainMenu = ButtonBitmap(
         state.bitmaps.mainMenu, state, RectF(
             w(60),
             h(250),
             w(140), h(250) + w(80)
-        )
+        ),
+        true
     ) {
         state.sounds.playSelect()
+        state.ctx.state = StateAreas(state.ctx)
     }
 
     private val comments = mapOf(

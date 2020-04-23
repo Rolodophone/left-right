@@ -6,7 +6,7 @@ import net.rolodophone.leftright.main.State
 import net.rolodophone.leftright.main.canvas
 import net.rolodophone.leftright.main.whitePaint
 
-class ButtonBitmap(val bitmap: Bitmap, state: State, dim: RectF, onClick: () -> Unit) : Button(state, dim, onClick) {
+class ButtonBitmap(val bitmap: Bitmap, state: State, dim: RectF, isStrict: Boolean = true, onClick: () -> Unit) : Button(state, dim, listOf(), isStrict, onClick) {
 
     override fun draw() {
         super.draw()

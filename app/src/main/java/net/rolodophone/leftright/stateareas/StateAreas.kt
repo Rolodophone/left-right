@@ -1,8 +1,8 @@
 package net.rolodophone.leftright.stateareas
 
-import net.rolodophone.leftright.main.MainActivity
-import net.rolodophone.leftright.main.State
-import net.rolodophone.leftright.main.canvas
+import android.graphics.RectF
+import net.rolodophone.leftright.button.Button
+import net.rolodophone.leftright.main.*
 import net.rolodophone.leftright.stategame.StateGame
 
 class StateAreas(ctx: MainActivity) : State(ctx) {
@@ -16,10 +16,20 @@ class StateAreas(ctx: MainActivity) : State(ctx) {
 
     private val areas = listOf(StateGame(ctx))
 
+    private val selectAreaButton = Button(this, RectF(0f, 0f, width, height)) {
+        ctx.sounds.playTap()
+        if (areaIsReady) startArea()
+        else areaIsAwaitingMusic = true
+    }
 
-    override fun update() {}
+
+    override fun update() {
+        selectAreaButton.update()
+    }
 
     override fun draw() {
+        selectAreaButton.draw()
+
         if (seekDistance != 0f) {
             canvas.save()
             canvas.translate(seekDistance, 0f)
@@ -40,12 +50,7 @@ class StateAreas(ctx: MainActivity) : State(ctx) {
 
     fun startArea() {
         ctx.state = areas[area]
-    }
-
-    fun tapArea() {
-        ctx.sounds.playTap()
-        if (areaIsReady) startArea()
-        else areaIsAwaitingMusic = true
+        ctx.music.resume()
     }
 
     fun startSeek(x: Float) {

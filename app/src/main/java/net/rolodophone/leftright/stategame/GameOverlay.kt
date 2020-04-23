@@ -11,6 +11,8 @@ class GameOverlay(override val state: StateGame) : Component {
             w(5), height - w(50),
             w(50), height - w(5)
         ),
+        listOf(),
+        true,
         {
             state.sounds.playSelect()
             state.state = StateGame.State.PAUSED
@@ -36,13 +38,13 @@ class GameOverlay(override val state: StateGame) : Component {
         }
     }
 
-    val leftButton = Button(state, RectF(0f, 0f, halfWidth - 1f, height)) {
+    val leftButton = Button(state, RectF(0f, 0f, halfWidth - 1f, height), listOf(pause.dim), false) {
         val degree = state.player.rotation % 360f
         if (degree < 90f || degree > 270f) state.player.turnLeft()
         else state.player.turnRight()
     }
 
-    val rightButton = Button(state, RectF(halfWidth, 0f, width, height)) {
+    val rightButton = Button(state, RectF(halfWidth, 0f, width, height), listOf(pause.dim), false) {
         val degree = state.player.rotation % 360f
         if (degree < 90f || degree > 270f) state.player.turnRight()
         else state.player.turnLeft()
