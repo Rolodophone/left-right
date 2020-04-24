@@ -65,32 +65,33 @@ class MainActivity : Activity() {
 
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        if (!gestureDetector.onTouchEvent(event)) {
+        if (gestureDetector.onTouchEvent(event)) return true
 
-            state.let {
-                if (it is StateAreas) {
-                    if (event.action == MotionEvent.ACTION_UP) {
-                        it.stopSeek()
-                        return true
-                    }
+        state.let {
+            if (it is StateAreas) {
+                if (event.action == MotionEvent.ACTION_UP) {
+                    it.stopSeek()
+                    return true
+                }
 
-                    if (event.action == MotionEvent.ACTION_MOVE) {
-                        it.seek(event.x)
-                        return true
-                    }
+                if (event.action == MotionEvent.ACTION_MOVE) {
+                    it.seek(event.x)
+                    return true
                 }
             }
         }
 
-        return false
+        return super.onTouchEvent(event)
     }
 
 
     private inner class MyGestureListener : GestureDetector.SimpleOnGestureListener() {
+        var skipNextUp = false
 
         override fun onDown(event: MotionEvent): Boolean {
             for (button in state.buttons) if (button.checkClick(event.x, event.y)) {
                 button.onClick()
+                skipNextUp = true
                 return true
             }
 
@@ -103,10 +104,16 @@ class MainActivity : Activity() {
         }
 
         override fun onSingleTapUp(event: MotionEvent): Boolean {
-            for (button in state.strictButtons) if (button.checkClick(event.x, event.y)) {
-                button.onClick()
-                return true
+            if (!skipNextUp) {
+                for (button in state.strictButtons) if (button.checkClick(event.x, event.y)) {
+                    button.onClick()
+                    return true
+                }
             }
+            else {
+                skipNextUp = false
+            }
+
 
             return false
         }
