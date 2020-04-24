@@ -44,6 +44,14 @@ abstract class Object(final override val state: StateGame, val w: Float, val h: 
 
         //mark offscreen item for deletion
         if (imgDim.isOffscreen()) state.road.itemsToDel.add(this)
+
+        //update lane if dim got moved by collisions etc
+        for (i in 0 until state.road.numLanes) {
+            if (dim.centerX() < ((width) / state.road.numLanes) * (i+1)) {
+                lane = i
+                break
+            }
+        }
     }
 
 

@@ -5,8 +5,14 @@ import net.rolodophone.leftright.button.Button
 import net.rolodophone.leftright.main.*
 import net.rolodophone.leftright.stategame.StateGame
 
-class StateAreas(ctx: MainActivity, private var area: Int = 0) : State(ctx) {
+class StateAreas(ctx: MainActivity, area: Int = 0) : State(ctx) {
     override val numThingsToLoad = 1
+
+    private var area = area
+        set(value) {
+            ctx.music.prepare(value)
+            field = value
+        }
 
     private var areaIsReady = false
     private var areaIsAwaitingMusic = false
@@ -19,6 +25,11 @@ class StateAreas(ctx: MainActivity, private var area: Int = 0) : State(ctx) {
         ctx.sounds.playTap()
         if (areaIsReady) startArea()
         else areaIsAwaitingMusic = true
+    }
+
+    init {
+        ctx.music.prepare(area) //I have to do this because area's setter isn't called when area is initialised
+        ctx.music.resume()
     }
 
 
@@ -73,7 +84,7 @@ class StateAreas(ctx: MainActivity, private var area: Int = 0) : State(ctx) {
 
     fun startArea() {
         ctx.state = areas[area]
-        ctx.music.resume()
+        ctx.music.resetToStart()
     }
 
     fun startSeek(x: Float) {

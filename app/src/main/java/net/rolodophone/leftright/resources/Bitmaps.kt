@@ -51,15 +51,23 @@ class Bitmaps(private val ctx: MainActivity) {
     val playAgain: Bitmap = BitmapFactory.decodeResource(ctx.resources, R.drawable.play_again, bitmapOptions)
     val cone: Bitmap = BitmapFactory.decodeResource(ctx.resources, R.drawable.cone, bitmapOptions)
     val oil: Bitmap = BitmapFactory.decodeResource(ctx.resources, R.drawable.oil, bitmapOptions)
-    val coin: Bitmap = BitmapFactory.decodeResource(ctx.resources, R.drawable.coin, bitmapOptions)
-    val coinShining = listOf(
-        BitmapFactory.decodeResource(ctx.resources, R.drawable.coin0, bitmapOptions),
+    val coin = listOf(
+        BitmapFactory.decodeResource(ctx.resources, R.drawable.coin, bitmapOptions),
         BitmapFactory.decodeResource(ctx.resources, R.drawable.coin1, bitmapOptions),
         BitmapFactory.decodeResource(ctx.resources, R.drawable.coin2, bitmapOptions),
         BitmapFactory.decodeResource(ctx.resources, R.drawable.coin3, bitmapOptions),
         BitmapFactory.decodeResource(ctx.resources, R.drawable.coin4, bitmapOptions),
         BitmapFactory.decodeResource(ctx.resources, R.drawable.coin5, bitmapOptions),
         BitmapFactory.decodeResource(ctx.resources, R.drawable.coin6, bitmapOptions),
-        BitmapFactory.decodeResource(ctx.resources, R.drawable.coin7, bitmapOptions)
+        BitmapFactory.decodeResource(ctx.resources, R.drawable.coin7, bitmapOptions),
+        BitmapFactory.decodeResource(ctx.resources, R.drawable.coin8, bitmapOptions)
+    )
+    val camel = listOf(
+        BitmapFactory.decodeResource(ctx.resources, R.drawable.camel1, bitmapOptions),
+        BitmapFactory.decodeResource(ctx.resources, R.drawable.camel2, bitmapOptions),
+        BitmapFactory.decodeResource(ctx.resources, R.drawable.camel3, bitmapOptions),
+        BitmapFactory.decodeResource(ctx.resources, R.drawable.camel4, bitmapOptions),
+        BitmapFactory.decodeResource(ctx.resources, R.drawable.camel5, bitmapOptions),
+        BitmapFactory.decodeResource(ctx.resources, R.drawable.camel6, bitmapOptions)
     )
 }

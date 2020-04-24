@@ -31,18 +31,21 @@ class Music(ctx: MainActivity) {
     }
 
 
-    private val game: MediaSource
+    private val areas = mutableListOf<MediaSource>()
 
     init {
         val dataSourceFactory = DefaultDataSourceFactory(ctx, Util.getUserAgent(ctx, ctx.resources.getString(R.string.app_name)))
         val rawDataSource = RawResourceDataSource(ctx)
 
         rawDataSource.open(DataSpec(RawResourceDataSource.buildRawResourceUri(R.raw.just_nasty)))
-        game = ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(rawDataSource.uri)
+        areas.add(ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(rawDataSource.uri))
+
+        rawDataSource.open(DataSpec(RawResourceDataSource.buildRawResourceUri(R.raw.hidden_wonders)))
+        areas.add(ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(rawDataSource.uri))
     }
 
 
-    fun prepGame() = player.prepare(game)
+    fun prepare(area: Int) = player.prepare(areas[area])
 
     fun pause() {
         player.playWhenReady = false
@@ -54,5 +57,9 @@ class Music(ctx: MainActivity) {
 
     fun skipToFinish() {
         player.seekTo(player.duration - 5000)
+    }
+
+    fun resetToStart() {
+        player.seekTo(0)
     }
 }

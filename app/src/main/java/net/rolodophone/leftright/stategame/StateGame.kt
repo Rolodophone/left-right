@@ -38,7 +38,6 @@ class StateGame(ctx: MainActivity, val area: Int) : State(ctx) {
     val gameOverOverlay = GameOverOverlay(this)
 
     init {
-        music.prepGame()
         road.objects.add(player)
     }
 

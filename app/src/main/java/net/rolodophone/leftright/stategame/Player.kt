@@ -23,6 +23,10 @@ class Player(state: StateGame) : Car(state.bitmaps.car1, 0f, state) {
     private var laneXs = List(state.road.numLanes) { state.road.centerOfLane(it) - dim.width()/2f }
 
     val xSpeed = w(1800)
+    val topSpeed = when (state.area) {
+        0 -> 2f
+        else -> 1f
+    }
 
     var fuel = 50f
     var distance = 0f
@@ -32,6 +36,7 @@ class Player(state: StateGame) : Car(state.bitmaps.car1, 0f, state) {
 
     var goingL = false
     var goingR = false
+    var targetX = 0f
 
     var isDoingVictory = false
 
@@ -79,25 +84,23 @@ class Player(state: StateGame) : Car(state.bitmaps.car1, 0f, state) {
             //speed up over time (except at top speed)
             if (spinSpeed == 0f) {
                 ySpeedMps += 0.3f / fps
-                if (ySpeedMps > 2f) ySpeedMps = 2f
+                if (ySpeedMps > topSpeed) ySpeedMps = topSpeed
             }
 
             //handle switching lane
             if (goingL) {
                 dim.offset(-xSpeed / fps, 0f)
 
-                if (dim.left <= laneXs[lane - 1]) {
+                if (dim.left <= targetX) {
                     goingL = false
-                    dim.offsetTo(laneXs[lane - 1], dim.top)
-                    lane -= 1
+                    dim.offsetTo(targetX, dim.top)
                 }
             } else if (goingR) {
                 dim.offset(xSpeed / fps, 0f)
 
-                if (dim.left >= laneXs[lane + 1]) {
+                if (dim.left >= targetX) {
                     goingR = false
-                    dim.offsetTo(laneXs[lane + 1], dim.top)
-                    lane += 1
+                    dim.offsetTo(targetX, dim.top)
                 }
             }
         }
@@ -122,14 +125,11 @@ class Player(state: StateGame) : Car(state.bitmaps.car1, 0f, state) {
 
 
     fun turnLeft() {
-        //if the player turns in between lanes, set the lane to the lane it would have gone to
         if (!isDoingVictory) {
-            if (goingR) {
-                lane++
-            }
 
             if (lane != 0) {
                 goingL = true
+                targetX = laneXs[lane - 1]
                 state.sounds.playTap()
             }
 
@@ -141,12 +141,10 @@ class Player(state: StateGame) : Car(state.bitmaps.car1, 0f, state) {
     fun turnRight() {
         //if the player turns in between lanes, set the lane to the lane it would have gone to
         if (!isDoingVictory) {
-            if (goingL) {
-                lane--
-            }
 
             if (lane != state.road.numLanes - 1) {
                 goingR = true
+                targetX = laneXs[lane + 1]
                 state.sounds.playTap()
             }
 

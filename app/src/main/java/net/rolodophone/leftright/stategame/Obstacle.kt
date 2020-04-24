@@ -6,7 +6,7 @@ import android.graphics.RectF
 import androidx.annotation.CallSuper
 import net.rolodophone.leftright.main.*
 
-abstract class Obstacle(state: StateGame, w: Float, h: Float, final override var img: Bitmap) : Object(state, w, h, state.road.randomLane(true)) {
+abstract class Obstacle(state: StateGame, w: Float, h: Float, final override var img: Bitmap, lane: Int = state.road.randomLane(true)) : Object(state, w, h, lane) {
     inner class Particle(x: Float, y: Float, colour: Int) {
         private val width = w(gaussianRandomFloat(8f, 1f))
         private var timeLeft = 1f
