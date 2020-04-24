@@ -25,7 +25,7 @@ class Player(state: StateGame) : Car(state.bitmaps.car1, 0f, state) {
     val xSpeed = w(1800)
     val topSpeed = when (state.area) {
         0 -> 2f
-        else -> 1f
+        else -> 1.2f
     }
 
     var fuel = 50f

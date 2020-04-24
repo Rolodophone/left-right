@@ -14,7 +14,7 @@ class Road(override val state: StateGame) : Component {
 
     private val background = Background(state)
 
-    private val itemFactories = listOf(listOf(Fuel, Cone, Oil, Coin, Car1, Car2, Car3, Car4, Car5, Car6), listOf(Camel, Fuel, Coin, Car3))
+    private val itemFactories = listOf(listOf(Fuel, Cone, Oil, Coin, Car1, Car2, Car3, Car4, Car5, Car6), listOf(Camel, Coin))
 
     override fun update() {
         background.update()

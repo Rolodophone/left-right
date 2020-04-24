@@ -6,7 +6,7 @@ import kotlin.random.Random
 
 class Camel(state: StateGame) : AnimatedObstacle(state, w(170), w(170 * (23/31f)), state.bitmaps.camel) {
     override val companion = Companion
-    companion object : ObjectCompanion(20, { Camel(it) })
+    companion object : ObjectCompanion(15, { Camel(it) })
 
     override val frameDuration = 333
     override val deathType = DeathType.CAMEL
