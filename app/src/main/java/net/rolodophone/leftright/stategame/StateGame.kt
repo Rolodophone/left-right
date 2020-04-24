@@ -3,7 +3,7 @@ package net.rolodophone.leftright.stategame
 import net.rolodophone.leftright.main.MainActivity
 import net.rolodophone.leftright.main.State
 
-class StateGame(ctx: MainActivity) : State(ctx) {
+class StateGame(ctx: MainActivity, val area: Int) : State(ctx) {
     override val numThingsToLoad = 1
 
     val bitmaps = ctx.bitmaps

@@ -5,16 +5,15 @@ import net.rolodophone.leftright.button.Button
 import net.rolodophone.leftright.main.*
 import net.rolodophone.leftright.stategame.StateGame
 
-class StateAreas(ctx: MainActivity) : State(ctx) {
+class StateAreas(ctx: MainActivity, private var area: Int = 0) : State(ctx) {
     override val numThingsToLoad = 1
 
-    private var area = 0
     private var areaIsReady = false
     private var areaIsAwaitingMusic = false
     private var seekDistance = 0f
     private var seekStartX: Float? = null
 
-    private val areas = listOf(StateGame(ctx))
+    private val areas = listOf(StateGame(ctx, 0), StateGame(ctx, 1))
 
     private val selectAreaButton = Button(this, RectF(0f, 0f, width, height)) {
         ctx.sounds.playTap()
@@ -30,16 +29,40 @@ class StateAreas(ctx: MainActivity) : State(ctx) {
     override fun draw() {
         selectAreaButton.draw()
 
-        if (seekDistance != 0f) {
-            canvas.save()
-            canvas.translate(seekDistance, 0f)
-            for (area in areas) area.road.draw()
-            for (area in areas) area.weather.draw()
-            canvas.restore()
-        }
-        else {
-            areas[area].road.draw()
-            areas[area].weather.draw()
+        area.let {
+            if (seekDistance != 0f) {
+                canvas.save()
+                canvas.translate(seekDistance, 0f)
+
+                areas[it].road.draw()
+                areas[it].weather.draw()
+
+                //draw adjacent areas
+                if (seekDistance < 0f) {
+                    canvas.save()
+                    canvas.translate(width, 0f)
+
+                    areas[it + 1].road.draw()
+                    areas[it + 1].weather.draw()
+
+                    canvas.restore()
+                }
+                else if (seekDistance > 0f) {
+                    canvas.save()
+                    canvas.translate(-width, 0f)
+
+                    areas[it - 1].road.draw()
+                    areas[it - 1].weather.draw()
+
+                    canvas.restore()
+                }
+
+                canvas.restore()
+            }
+            else {
+                areas[it].road.draw()
+                areas[it].weather.draw()
+            }
         }
     }
 
@@ -59,13 +82,32 @@ class StateAreas(ctx: MainActivity) : State(ctx) {
 
     fun stopSeek() {
         seekStartX = null
+        if (seekDistance > width / 2) area--
+        else if (seekDistance < -width / 2) area++
         seekDistance = 0f
     }
 
     fun seek(toX: Float) {
         seekDistance = seekStartX.let {
-            if (it != null) toX - it
+            if (it != null) {
+                val newSeekDistance = toX - it
+
+                if ((area == 0 && newSeekDistance > 0f) || (area == areas.size - 1 && newSeekDistance < 0)) 0f
+                else newSeekDistance
+            }
             else 0f
         }
+    }
+
+    fun flingLeft() {
+        if (area != areas.size - 1) area++
+        seekStartX = null
+        seekDistance = 0f
+    }
+
+    fun flingRight() {
+        if (area != 0) area--
+        seekStartX = null
+        seekDistance = 0f
     }
 }

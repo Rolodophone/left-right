@@ -14,13 +14,15 @@ class Road(override val state: StateGame) : Component {
 
     private val background = Background(state)
 
+    private val itemFactories = listOf(listOf(Fuel, Cone, Oil, Coin, Car1, Car2, Car3, Car4, Car5, Car6), listOf(Fuel, Coin, Car1, Car2, Car3, Car4, Car5, Car6))
+
     override fun update() {
         background.update()
 
         //spawn new objects
         if (fps != Float.POSITIVE_INFINITY) {
             if (!isFrenzy) {
-                for (itemType in listOf(Fuel, Cone, Oil, Coin, Car1, Car2, Car3, Car4, Car5, Car6)) if (randomChance(itemType.averageSpawnMetres.toFloat())) itemType.spawn(state)
+                for (itemType in itemFactories[state.area]) if (randomChance(itemType.averageSpawnMetres.toFloat())) itemType.spawn(state)
             }
             else {
                 if (randomChance(0.5f)) {

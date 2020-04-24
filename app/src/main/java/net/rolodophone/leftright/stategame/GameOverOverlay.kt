@@ -28,7 +28,7 @@ class GameOverOverlay(override val state: StateGame) : Component {
         true
     ) {
         state.sounds.playSelect()
-        state.ctx.state = StateGame(state.ctx)
+        state.ctx.state = StateGame(state.ctx, state.area)
         state.music.resume()
     }
     val mainMenu = ButtonBitmap(
@@ -40,7 +40,7 @@ class GameOverOverlay(override val state: StateGame) : Component {
         true
     ) {
         state.sounds.playSelect()
-        state.ctx.state = StateAreas(state.ctx)
+        state.ctx.state = StateAreas(state.ctx, state.area)
     }
 
     private val comments = mapOf(

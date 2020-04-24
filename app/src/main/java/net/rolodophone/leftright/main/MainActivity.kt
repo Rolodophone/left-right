@@ -65,14 +65,20 @@ class MainActivity : Activity() {
 
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        gestureDetector.onTouchEvent(event)
+        if (!gestureDetector.onTouchEvent(event)) {
 
-        state.let {
-            if (it is StateAreas) {
+            state.let {
+                if (it is StateAreas) {
+                    if (event.action == MotionEvent.ACTION_UP) {
+                        it.stopSeek()
+                        return true
+                    }
 
-                if (event.action == MotionEvent.ACTION_UP) it.stopSeek()
-
-                else if (event.action == MotionEvent.ACTION_MOVE) it.seek(event.x)
+                    if (event.action == MotionEvent.ACTION_MOVE) {
+                        it.seek(event.x)
+                        return true
+                    }
+                }
             }
         }
 
@@ -102,6 +108,19 @@ class MainActivity : Activity() {
                 return true
             }
 
+            return false
+        }
+
+        override fun onFling(e1: MotionEvent, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
+            state.let {
+                if (it is StateAreas) {
+
+                    if (velocityX < 0f) it.flingLeft()
+                    else it.flingRight()
+
+                    return true
+                }
+            }
             return false
         }
     }

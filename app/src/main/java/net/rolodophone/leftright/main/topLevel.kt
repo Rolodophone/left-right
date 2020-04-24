@@ -23,6 +23,7 @@ var canvas = Canvas()
 var whitePaint = Paint()
 var bitmapPaint = Paint()
 var dimmerPaint = Paint()
+var paint = Paint()
 
 
 fun RectF.scaled(factor: Float): RectF {

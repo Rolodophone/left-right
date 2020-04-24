@@ -1,5 +1,6 @@
 package net.rolodophone.leftright.stategame
 
+import android.graphics.Color
 import net.rolodophone.leftright.main.*
 
 class Background(override val state: StateGame) : Component {
@@ -16,7 +17,11 @@ class Background(override val state: StateGame) : Component {
 
     override fun draw() {
         //draw background
-        canvas.drawRGB(111, 111, 111)
+        when (state.area) {
+            0 -> paint.color = Color.rgb(111, 111, 111)
+            1 -> paint.color = Color.rgb(239, 227, 134)
+        }
+        canvas.drawRect(0f, 0f, width, height, paint)
 
         //draw lines
         var y = topLineBottom
