@@ -4,6 +4,7 @@ import android.app.Activity
 import android.graphics.Color
 import android.graphics.PixelFormat
 import android.graphics.Point
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.GestureDetector
@@ -35,7 +36,10 @@ class MainActivity : Activity() {
         Log.i("Activity", "onCreate()")
         super.onCreate(savedInstanceState)
 
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+        window.decorView.systemUiVisibility = when  {
+            Build.VERSION.SDK_INT >= 19 -> View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+            else                        -> View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+        }
 
         val dim = Point()
         windowManager.defaultDisplay.getRealSize(dim)
@@ -164,9 +168,13 @@ class MainActivity : Activity() {
         super.onStart()
 
         //configure window
-        window.statusBarColor = Color.argb(0, 0, 0, 0)
-        window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_IN_OVERSCAN)
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+        if (Build.VERSION.SDK_INT >= 21) window.statusBarColor = Color.argb(0, 0, 0, 0)
+        if (Build.VERSION.SDK_INT >= 18) window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_IN_OVERSCAN)
+        window.decorView.systemUiVisibility = when  {
+            Build.VERSION.SDK_INT >= 19 -> View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+            else                        -> View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+        }
+
 
         appOpen = true
         thread = Thread(mainView)

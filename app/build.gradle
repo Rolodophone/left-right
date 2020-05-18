@@ -7,7 +7,7 @@ apply plugin: 'kotlin-android-extensions'
 android {
     signingConfigs {
         release {
-            storeFile file('keys/keys.jks')
+            storeFile file('***REMOVED***')
             storePassword '***REMOVED***'
             keyPassword '***REMOVED***'
             keyAlias = '***REMOVED***'
@@ -16,14 +16,15 @@ android {
     compileSdkVersion 29
     defaultConfig {
         applicationId "net.rolodophone.leftright"
-        minSdkVersion 29
+        minSdkVersion 17
         targetSdkVersion 29
         versionCode 1
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }

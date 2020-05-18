@@ -64,6 +64,13 @@ class GameOverOverlay(override val state: StateGame) : Component {
         DeathType.CAR to listOf(
             listOf("Better luck next time!"),
             listOf("Death can be fatal...")
+        ),
+
+        DeathType.CAMEL to listOf(
+            listOf("Better luck next time!"),
+            listOf("Death can be fatal..."),
+
+            listOf("All it takes is", "one fat camel")
         )
     )
 
