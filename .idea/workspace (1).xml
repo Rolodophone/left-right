@@ -181,7 +181,7 @@
   </component>
   <component name="GenerateSignedApkSettings">
     <option name="KEY_STORE_PATH" value="C:\Users\Admin\Documents\Programming\AndroidStudio\LeftRight\app\keys\keys.jks" />
-    <option name="KEY_ALIAS" value="***REMOVED***" />
+    <option name="KEY_ALIAS" value="key0" />
     <option name="BUILD_TARGET_KEY" value="apk" />
   </component>
   <component name="Git.Settings">
