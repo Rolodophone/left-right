@@ -109,9 +109,9 @@ class Player(state: StateGame) : Car(state.bitmaps.car1, 0f, state) {
 
     private fun die(deathType: DeathType) {
         causeOfDeath = deathType
-        state.state = StateGame.State.GAME_OVER
         acceleration = -w(500)
         isDead = true
+        state.endGame()
     }
 
 

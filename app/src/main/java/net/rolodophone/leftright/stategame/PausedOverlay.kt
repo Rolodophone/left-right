@@ -10,15 +10,12 @@ import net.rolodophone.leftright.main.*
 class PausedOverlay(override val state: StateGame) : Component {
     var resume = object : Button(
         state,
-        RectF(
-            w(90), halfHeight + w(5),
-            w(270), halfHeight + w(49)
-        ),
+        RectF(w(90), halfHeight + w(5), w(270), halfHeight + w(49)),
         listOf(),
         true,
         {
             state.sounds.playSelect()
-            state.state = StateGame.State.NONE
+            state.unpauseGame()
         }
     ) {
         override fun draw() {
@@ -33,20 +30,14 @@ class PausedOverlay(override val state: StateGame) : Component {
             canvas.drawPath(path, whitePaint)
             whitePaint.textSize = w(40)
             whitePaint.textAlign = Paint.Align.LEFT
-            canvas.drawText("Resume",
-                w(132), halfHeight + w(39),
-                whitePaint
-            )
+            canvas.drawText("Resume", w(132), halfHeight + w(39), whitePaint)
         }
     }
     val btnShowDebug = ButtonText(
         "debug",
         Paint.Align.RIGHT,
         state,
-        RectF(
-            w(200), height - w(35),
-            w(348), height - w(10)
-        )
+        RectF(w(200), height - w(35), w(348), height - w(10))
     ) {
         state.status.showDebug = true
     }

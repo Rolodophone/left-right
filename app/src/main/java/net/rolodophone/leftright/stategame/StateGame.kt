@@ -10,24 +10,10 @@ class StateGame(ctx: MainActivity, val area: Int) : State(ctx) {
     val sounds = ctx.sounds
     val music = ctx.music
 
-    enum class State {NONE, PAUSED, GAME_OVER}
+    enum class State {UNPAUSED, PAUSED, GAME_OVER}
 
-    var state = State.NONE
-        set(value) {
-            when (value) {
-                State.NONE -> {
-                    music.resume()
-                }
-                State.PAUSED -> {
-                    music.pause()
-                }
-                State.GAME_OVER -> {
-                    music.pause()
-                    gameOverOverlay.prepare()
-                }
-            }
-            field = value
-        }
+    var state = State.UNPAUSED
+        private set
 
     val road = Road(this)
     val player = Player(this)
@@ -61,7 +47,7 @@ class StateGame(ctx: MainActivity, val area: Int) : State(ctx) {
         weather.draw()
 
         when (state) {
-            State.NONE -> {
+            State.UNPAUSED -> {
                 status.draw()
                 gameOverlay.draw()
             }
@@ -73,5 +59,21 @@ class StateGame(ctx: MainActivity, val area: Int) : State(ctx) {
                 gameOverOverlay.draw()
             }
         }
+    }
+
+    fun unpauseGame() {
+        music.resume()
+        state = State.UNPAUSED
+    }
+
+    fun pauseGame() {
+        music.pause()
+        state = State.PAUSED
+    }
+
+    fun endGame() {
+        music.pause()
+        gameOverOverlay.prepare()
+        state = State.GAME_OVER
     }
 }

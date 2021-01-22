@@ -45,7 +45,11 @@ class MainView(private val ctx: MainActivity) : SurfaceView(ctx), Runnable {
 
 
     fun pause() {
-        ctx.state.let { if (it is StateGame && it.state == StateGame.State.NONE) it.state = StateGame.State.PAUSED }
+        ctx.state.let {
+            if (it is StateGame && it.state == StateGame.State.UNPAUSED) {
+                it.pauseGame()
+            }
+        }
     }
 
 

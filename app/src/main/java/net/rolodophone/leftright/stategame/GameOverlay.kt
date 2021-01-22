@@ -7,34 +7,19 @@ import net.rolodophone.leftright.main.*
 class GameOverlay(override val state: StateGame) : Component {
     val pause = object : Button(
         state,
-        RectF(
-            w(5), height - w(50),
-            w(50), height - w(5)
-        ),
+        RectF(w(5), height - w(50), w(50), height - w(5)),
         listOf(),
         true,
         {
             state.sounds.playSelect()
-            state.state = StateGame.State.PAUSED
+            state.pauseGame()
         }
     ) {
         override fun draw() {
             super.draw()
 
-            canvas.drawRect(
-                w(5),
-            height - w(50),
-                w(20),
-            height - w(5),
-                whitePaint
-            )
-            canvas.drawRect(
-                w(35),
-                height - w(50),
-                w(50),
-                height - w(5),
-                whitePaint
-            )
+            canvas.drawRect(w(5), height - w(50), w(20), height - w(5), whitePaint)
+            canvas.drawRect(w(35), height - w(50), w(50), height - w(5), whitePaint)
         }
     }
 
