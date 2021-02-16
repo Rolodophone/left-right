@@ -5,6 +5,8 @@
       <w>hitbox</w>
       <w>leftright</w>
       <w>spawnable</w>
+      <w>unpause</w>
+      <w>unpaused</w>
     </words>
   </dictionary>
 </component>

@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Paint
 import android.graphics.RectF
 import android.graphics.Typeface
+import net.rolodophone.leftright.button.Button
 import net.rolodophone.leftright.button.ButtonBitmap
 import net.rolodophone.leftright.main.*
 import net.rolodophone.leftright.stateareas.StateAreas
@@ -20,24 +21,24 @@ class GameOverOverlay(override val state: StateGame) : Component {
     private val deathMsgPaint = Paint(bitmapPaint)
 
     val playAgain = ButtonBitmap(
-        state.bitmaps.playAgain, state, RectF(
+        state.bitmaps.playAgain, RectF(
             w(220),
             h(250),
             w(300), h(250) + w(80)
         ),
-        true
+        Button.TriggerType.UP
     ) {
         state.sounds.playSelect()
         state.ctx.state = StateGame(state.ctx, state.area)
         state.music.resume()
     }
     val mainMenu = ButtonBitmap(
-        state.bitmaps.mainMenu, state, RectF(
+        state.bitmaps.mainMenu, RectF(
             w(60),
             h(250),
             w(140), h(250) + w(80)
         ),
-        true
+        Button.TriggerType.UP
     ) {
         state.sounds.playSelect()
         state.ctx.state = StateAreas(state.ctx, state.area)
@@ -104,12 +105,6 @@ class GameOverOverlay(override val state: StateGame) : Component {
                 it.write(score.toString().toByteArray())
             }
         }
-    }
-
-
-    override fun update() {
-        playAgain.update()
-        mainMenu.update()
     }
 
 

@@ -21,25 +21,18 @@ class StateAreas(ctx: MainActivity, area: Int = 0) : State(ctx) {
 
     private val areas = listOf(StateGame(ctx, 0), StateGame(ctx, 1))
 
-    private val selectAreaButton = Button(this, RectF(0f, 0f, width, height)) {
-        ctx.sounds.playTap()
-        if (areaIsReady) startArea()
-        else areaIsAwaitingMusic = true
-    }
-
     init {
         ctx.music.prepare(area) //I have to do this because area's setter isn't called when area is initialised
         ctx.music.resume()
-    }
 
-
-    override fun update() {
-        selectAreaButton.update()
+        buttons.add(Button(RectF(0f, 0f, width, height), Button.TriggerType.UP) {
+            ctx.sounds.playTap()
+            if (areaIsReady) startArea()
+            else areaIsAwaitingMusic = true
+        })
     }
 
     override fun draw() {
-        selectAreaButton.draw()
-
         area.let {
             if (seekDistance != 0f) {
                 canvas.save()

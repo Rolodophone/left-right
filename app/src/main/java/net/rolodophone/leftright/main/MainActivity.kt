@@ -36,10 +36,7 @@ class MainActivity : Activity() {
         Log.i("Activity", "onCreate()")
         super.onCreate(savedInstanceState)
 
-        window.decorView.systemUiVisibility = when  {
-            Build.VERSION.SDK_INT >= 19 -> View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-            else                        -> View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-        }
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
 
         val dim = Point()
         windowManager.defaultDisplay.getRealSize(dim)
@@ -93,10 +90,12 @@ class MainActivity : Activity() {
         var skipNextUp = false
 
         override fun onDown(event: MotionEvent): Boolean {
-            for (button in state.buttons) if (button.checkClick(event.x, event.y)) {
-                button.onClick()
-                skipNextUp = true
-                return true
+            for (button in state.buttons) {
+                if (button.wasClicked(event.x, event.y, fingerWasReleased = false)) {
+                    button.onClick()
+                    skipNextUp = true
+                    return true
+                }
             }
 
             state.let { if (it is StateAreas) {
@@ -109,9 +108,11 @@ class MainActivity : Activity() {
 
         override fun onSingleTapUp(event: MotionEvent): Boolean {
             if (!skipNextUp) {
-                for (button in state.strictButtons) if (button.checkClick(event.x, event.y)) {
-                    button.onClick()
-                    return true
+                for (button in state.buttons) {
+                    if (button.wasClicked(event.x, event.y, fingerWasReleased = true)) {
+                        button.onClick()
+                        return true
+                    }
                 }
             }
             else {
