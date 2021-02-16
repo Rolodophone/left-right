@@ -1,10 +1,11 @@
 package net.rolodophone.leftright
 
-import com.badlogic.gdx.Game
+import ktx.app.KtxGame
+import ktx.app.KtxScreen
 
 /** [com.badlogic.gdx.ApplicationListener] implementation shared by all platforms.  */
-class LeftRight : Game() {
+class LeftRight : KtxGame<KtxScreen>() {
 	override fun create() {
-		setScreen(FirstScreen())
+		setScreen<FirstScreen>()
 	}
 }

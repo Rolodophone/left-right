@@ -1,9 +1,9 @@
 package net.rolodophone.leftright
 
-import com.badlogic.gdx.Screen
+import ktx.app.KtxScreen
 
 /** First screen of the application. Displayed after the application is created.  */
-class FirstScreen : Screen {
+class FirstScreen : KtxScreen {
 	override fun show() {
 		// Prepare your screen here.
 	}
