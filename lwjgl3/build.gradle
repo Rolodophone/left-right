@@ -1,7 +1,7 @@
 apply plugin: 'application'
 
 sourceSets.main.resources.srcDirs += [ rootProject.file('assets').path ]
-mainClassName = 'net.rolodophone.leftright.lwjgl3.Lwjgl3Launcher'
+mainClassName = 'net.rolodophone.leftright.lwjgl3.Lwjgl3LauncherKt'
 eclipse.project.name = appName + '-lwjgl3'
 sourceCompatibility = 8.0
 
