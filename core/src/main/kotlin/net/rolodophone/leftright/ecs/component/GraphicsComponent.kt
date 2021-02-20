@@ -13,7 +13,7 @@ class GraphicsComponent: Component, Pool.Poolable {
 	val sprite = Sprite()
 
 	override fun reset() {
-		sprite.texture = null
-		sprite.setColor(1f, 1f, 1f, 1f)
+		//not resetting anything because I'm assuming I'll always set a new texture when I use this component
+		//if you don't set the texture you'll get the wrong texture instead of no texture
 	}
 }

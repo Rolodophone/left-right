@@ -1,8 +1,8 @@
 package net.rolodophone.leftright.ecs.component
 
 import com.badlogic.ashley.core.Component
-import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.math.Vector3
+import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.utils.Pool
 import ktx.ashley.mapperFor
 
@@ -11,17 +11,19 @@ class TransformComponent: Component, Pool.Poolable, Comparable<TransformComponen
 		val mapper = mapperFor<TransformComponent>()
 	}
 
-	val position = Vector3()
-	val size = Vector2()
-	var rotationDeg = 0f
+	val rect = Rectangle()
+	var z = 0
 
 	override fun reset() {
-		position.set(Vector3.Zero)
-		size.set(1f, 1f)
-		rotationDeg = 0f
+		//Note the rect is not reset. If you don't define the rect when using this component behaviour is undefined
+		z = 0
 	}
 
 	override fun compareTo(other: TransformComponent): Int {
-		return (position.z - other.position.z).toInt()
+		return z - other.z
+	}
+
+	fun setSizeFromTexture(texture: Texture) {
+		rect.setSize(texture.width.toFloat(), texture.height.toFloat())
 	}
 }

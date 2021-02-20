@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport
 import ktx.app.KtxGame
 import ktx.log.debug
 import ktx.log.logger
+import net.rolodophone.leftright.ecs.system.RenderSystem
 import net.rolodophone.leftright.screen.GameScreen
 import net.rolodophone.leftright.screen.LeftRightScreen
 
@@ -22,7 +23,7 @@ class LeftRight : KtxGame<LeftRightScreen>() {
 	val batch: Batch by lazy { SpriteBatch(BATCH_SIZE) }
 	val engine: Engine by lazy { PooledEngine().apply {
 		//addSystem(PlayerInputSystem(gameViewport))
-		//addSystem(RenderSystem(batch, gameViewport))
+		addSystem(RenderSystem(batch, gameViewport))
 	} }
 
 	override fun create() {

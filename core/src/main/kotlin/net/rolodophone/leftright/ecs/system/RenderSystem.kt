@@ -30,20 +30,24 @@ class RenderSystem(
 	}
 
 	override fun processEntity(entity: Entity, deltaTime: Float) {
-		val transform = entity[TransformComponent.mapper]
-		requireNotNull(transform) { "Entity $entity must have a TransformComponent" }
+		val transformComponent = entity[TransformComponent.mapper]
+		requireNotNull(transformComponent) { "Entity $entity must have a TransformComponent" }
 
-		val graphics = entity[GraphicsComponent.mapper]
-		requireNotNull(graphics) { "Entity $entity must have a GraphicsComponent" }
+		val graphicsComponent = entity[GraphicsComponent.mapper]
+		requireNotNull(graphicsComponent) { "Entity $entity must have a GraphicsComponent" }
 
-		if (graphics.sprite.texture == null) {
+		if (graphicsComponent.sprite.texture == null) {
 			log.error { "Entity $entity has no texture for rendering" }
 			return
 		}
 
-		graphics.sprite.run {
-			rotation = transform.rotationDeg
-			setBounds(transform.position.x, transform.position.y, transform.size.x, transform.size.y)
+		graphicsComponent.sprite.run {
+			setBounds(
+				transformComponent.rect.x,
+				transformComponent.rect.y,
+				transformComponent.rect.width,
+				transformComponent.rect.height
+			)
 			draw(batch)
 		}
 	}
