@@ -11,6 +11,7 @@ import ktx.log.error
 import ktx.log.logger
 import net.rolodophone.leftright.ecs.component.GraphicsComponent
 import net.rolodophone.leftright.ecs.component.TransformComponent
+import net.rolodophone.leftright.ecs.component.getNotNull
 
 private val log = logger<RenderSystem>()
 
@@ -30,11 +31,8 @@ class RenderSystem(
 	}
 
 	override fun processEntity(entity: Entity, deltaTime: Float) {
-		val transformComponent = entity[TransformComponent.mapper]
-		requireNotNull(transformComponent) { "Entity $entity must have a TransformComponent" }
-
-		val graphicsComponent = entity[GraphicsComponent.mapper]
-		requireNotNull(graphicsComponent) { "Entity $entity must have a GraphicsComponent" }
+		val transformComponent = entity.getNotNull(TransformComponent.mapper)
+		val graphicsComponent = entity.getNotNull(GraphicsComponent.mapper)
 
 		if (graphicsComponent.sprite.texture == null) {
 			log.error { "Entity $entity has no texture for rendering" }
