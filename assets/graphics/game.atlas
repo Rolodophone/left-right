@@ -1,0 +1,237 @@
+
+game.png
+size: 1024, 128
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+camel1
+  rotate: false
+  xy: 35, 2
+  size: 31, 23
+  orig: 31, 23
+  offset: 0, 0
+  index: -1
+camel2
+  rotate: false
+  xy: 198, 34
+  size: 31, 23
+  orig: 31, 23
+  offset: 0, 0
+  index: -1
+camel3
+  rotate: false
+  xy: 656, 75
+  size: 31, 23
+  orig: 31, 23
+  offset: 0, 0
+  index: -1
+camel4
+  rotate: false
+  xy: 656, 100
+  size: 31, 23
+  orig: 31, 23
+  offset: 0, 0
+  index: -1
+camel5
+  rotate: false
+  xy: 2, 2
+  size: 31, 23
+  orig: 31, 23
+  offset: 0, 0
+  index: -1
+camel6
+  rotate: false
+  xy: 231, 34
+  size: 31, 23
+  orig: 31, 23
+  offset: 0, 0
+  index: -1
+car1
+  rotate: false
+  xy: 588, 59
+  size: 32, 64
+  orig: 32, 64
+  offset: 0, 0
+  index: -1
+car1_hit
+  rotate: false
+  xy: 232, 59
+  size: 32, 64
+  orig: 32, 64
+  offset: 0, 0
+  index: -1
+car2
+  rotate: false
+  xy: 368, 59
+  size: 32, 64
+  orig: 32, 64
+  offset: 0, 0
+  index: -1
+car2_hit
+  rotate: false
+  xy: 402, 59
+  size: 32, 64
+  orig: 32, 64
+  offset: 0, 0
+  index: -1
+car3
+  rotate: false
+  xy: 266, 59
+  size: 32, 64
+  orig: 32, 64
+  offset: 0, 0
+  index: -1
+car3_hit
+  rotate: false
+  xy: 554, 59
+  size: 32, 64
+  orig: 32, 64
+  offset: 0, 0
+  index: -1
+car4
+  rotate: false
+  xy: 470, 59
+  size: 32, 64
+  orig: 32, 64
+  offset: 0, 0
+  index: -1
+car4_hit
+  rotate: false
+  xy: 300, 59
+  size: 32, 64
+  orig: 32, 64
+  offset: 0, 0
+  index: -1
+car5
+  rotate: false
+  xy: 334, 59
+  size: 32, 64
+  orig: 32, 64
+  offset: 0, 0
+  index: -1
+car5_hit
+  rotate: false
+  xy: 436, 59
+  size: 32, 64
+  orig: 32, 64
+  offset: 0, 0
+  index: -1
+car6
+  rotate: false
+  xy: 198, 59
+  size: 32, 64
+  orig: 32, 64
+  offset: 0, 0
+  index: -1
+car6_hit
+  rotate: false
+  xy: 622, 59
+  size: 32, 64
+  orig: 32, 64
+  offset: 0, 0
+  index: -1
+coin
+  rotate: false
+  xy: 264, 41
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+coin1
+  rotate: false
+  xy: 689, 89
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+coin2
+  rotate: false
+  xy: 725, 107
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+coin3
+  rotate: false
+  xy: 86, 9
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+coin4
+  rotate: false
+  xy: 68, 9
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+coin5
+  rotate: false
+  xy: 707, 89
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+coin6
+  rotate: false
+  xy: 707, 107
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+coin7
+  rotate: false
+  xy: 689, 107
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+coin8
+  rotate: false
+  xy: 282, 41
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+cone
+  rotate: false
+  xy: 104, 9
+  size: 14, 16
+  orig: 14, 16
+  offset: 0, 0
+  index: -1
+death_msg
+  rotate: false
+  xy: 504, 64
+  size: 37, 9
+  orig: 37, 9
+  offset: 0, 0
+  index: -1
+fuel
+  rotate: false
+  xy: 300, 41
+  size: 14, 16
+  orig: 14, 16
+  offset: 0, 0
+  index: -1
+main_menu
+  rotate: false
+  xy: 100, 27
+  size: 96, 96
+  orig: 96, 96
+  offset: 0, 0
+  index: -1
+oil
+  rotate: false
+  xy: 504, 75
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: -1
+play_again
+  rotate: false
+  xy: 2, 27
+  size: 96, 96
+  orig: 96, 96
+  offset: 0, 0
+  index: -1
