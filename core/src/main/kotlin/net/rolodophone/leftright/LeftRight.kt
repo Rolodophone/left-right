@@ -19,7 +19,7 @@ private const val BATCH_SIZE = 1000
 private val log = logger<LeftRight>()
 
 class LeftRight : KtxGame<LeftRightScreen>() {
-	val gameViewport = FitViewport(9 * 30f, 16 * 30f)
+	val gameViewport = FitViewport(135f, 240f)
 	val batch: Batch by lazy { SpriteBatch(BATCH_SIZE) }
 	val engine: Engine by lazy { PooledEngine().apply {
 		//addSystem(PlayerInputSystem(gameViewport))

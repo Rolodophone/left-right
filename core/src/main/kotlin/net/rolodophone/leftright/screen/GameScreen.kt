@@ -13,8 +13,8 @@ class GameScreen(game: LeftRight) : LeftRightScreen(game) {
 	override fun show() {
 		engine.entity {
 			with<TransformComponent> {
-				rect.setPosition(50f, 50f)
 				setSizeFromTexture(playerTexture)
+				rect.setCenter(gameViewport.worldWidth / 2f, 0f)
 			}
 			with<GraphicsComponent> {
 				sprite.run {
