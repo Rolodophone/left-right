@@ -1,7 +1,7 @@
 package net.rolodophone.leftright.ecs.component
 
 import com.badlogic.ashley.core.Component
-import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.utils.Pool
 import ktx.ashley.mapperFor
@@ -23,7 +23,7 @@ class TransformComponent: Component, Pool.Poolable, Comparable<TransformComponen
 		return z - other.z
 	}
 
-	fun setSizeFromTexture(texture: Texture) {
-		rect.setSize(texture.width.toFloat(), texture.height.toFloat())
+	fun setSizeFromTexture(texture: TextureRegion) {
+		rect.setSize(texture.regionWidth.toFloat(), texture.regionHeight.toFloat())
 	}
 }
