@@ -23,7 +23,6 @@ class RenderSystem(
 	compareBy { entity -> entity[TransformComponent.mapper] }
 ) {
 	override fun update(deltaTime: Float) {
-		forceSort()
 		gameViewport.apply()
 		batch.use(gameViewport.camera.combined) {
 			super.update(deltaTime)
