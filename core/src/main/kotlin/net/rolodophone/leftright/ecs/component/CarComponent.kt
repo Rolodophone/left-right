@@ -9,13 +9,13 @@ class CarComponent: Component, Pool.Poolable {
 		val mapper = mapperFor<CarComponent>()
 	}
 
-	var speed = 0f
+	var velocity = 0f
 	var acceleration = 0f
 	var spinSpeed = 0f
 	var isSkidding = false
 
 	override fun reset() {
-		speed = 0f
+		velocity = 0f
 		acceleration = 0f
 		spinSpeed = 0f
 		isSkidding = false

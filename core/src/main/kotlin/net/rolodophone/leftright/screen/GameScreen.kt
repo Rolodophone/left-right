@@ -3,6 +3,7 @@ package net.rolodophone.leftright.screen
 import ktx.ashley.entity
 import ktx.ashley.with
 import net.rolodophone.leftright.LeftRight
+import net.rolodophone.leftright.ecs.component.CarComponent
 import net.rolodophone.leftright.ecs.component.GraphicsComponent
 import net.rolodophone.leftright.ecs.component.TransformComponent
 
@@ -15,10 +16,9 @@ class GameScreen(game: LeftRight) : LeftRightScreen(game) {
 				rect.setCenter(gameViewport.worldWidth / 2f, 0f)
 			}
 			with<GraphicsComponent> {
-				sprite.run {
-					setRegion(textures.car1)
-				}
+				sprite.setRegion(textures.car1)
 			}
+			with<CarComponent>()
 		}
 	}
 
