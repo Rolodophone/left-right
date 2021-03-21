@@ -20,9 +20,10 @@ class GameOverOverlay(override val state: StateGame) : Component {
 
     val playAgain = ButtonBitmap(
         state.bitmaps.playAgain, state, RectF(
-            w(220),
+            w(140),
             h(250),
-            w(300), h(250) + w(80)
+            w(220),
+            h(250) + w(80)
         ),
         true
     ) {
@@ -30,19 +31,6 @@ class GameOverOverlay(override val state: StateGame) : Component {
         state.ctx.state = StateGame(state.ctx, state.area)
         state.music.resume()
     }
-    val mainMenu = ButtonBitmap(
-        state.bitmaps.mainMenu, state, RectF(
-            w(60),
-            h(250),
-            w(140), h(250) + w(80)
-        ),
-        true
-    ) {
-        state.sounds.playSelect()
-//        state.ctx.state = StateAreas(state.ctx, state.area)
-    }
-
-    //TODO remove menu button
 
     private val comments = mapOf(
         DeathType.CONE to listOf(
@@ -110,7 +98,6 @@ class GameOverOverlay(override val state: StateGame) : Component {
 
     override fun update() {
         playAgain.update()
-        mainMenu.update()
     }
 
 
@@ -231,6 +218,5 @@ class GameOverOverlay(override val state: StateGame) : Component {
 
         //draw buttons
         playAgain.draw()
-        mainMenu.draw()
     }
 }
