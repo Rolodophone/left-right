@@ -6,7 +6,6 @@ import android.graphics.RectF
 import android.graphics.Typeface
 import net.rolodophone.leftright.button.ButtonBitmap
 import net.rolodophone.leftright.main.*
-import net.rolodophone.leftright.stateareas.StateAreas
 import java.io.FileNotFoundException
 import kotlin.random.Random
 
@@ -40,8 +39,10 @@ class GameOverOverlay(override val state: StateGame) : Component {
         true
     ) {
         state.sounds.playSelect()
-        state.ctx.state = StateAreas(state.ctx, state.area)
+//        state.ctx.state = StateAreas(state.ctx, state.area)
     }
+
+    //TODO remove menu button
 
     private val comments = mapOf(
         DeathType.CONE to listOf(

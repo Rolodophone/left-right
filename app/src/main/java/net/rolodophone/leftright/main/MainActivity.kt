@@ -15,7 +15,7 @@ import androidx.core.view.GestureDetectorCompat
 import net.rolodophone.leftright.resources.Bitmaps
 import net.rolodophone.leftright.resources.Music
 import net.rolodophone.leftright.resources.Sounds
-import net.rolodophone.leftright.stateareas.StateAreas
+import net.rolodophone.leftright.stategame.StateGame
 
 class MainActivity : Activity() {
 
@@ -71,20 +71,6 @@ class MainActivity : Activity() {
     override fun onTouchEvent(event: MotionEvent): Boolean {
         if (gestureDetector.onTouchEvent(event)) return true
 
-        state.let {
-            if (it is StateAreas) {
-                if (event.action == MotionEvent.ACTION_UP) {
-                    it.stopSeek()
-                    return true
-                }
-
-                if (event.action == MotionEvent.ACTION_MOVE) {
-                    it.seek(event.x)
-                    return true
-                }
-            }
-        }
-
         return super.onTouchEvent(event)
     }
 
@@ -98,11 +84,6 @@ class MainActivity : Activity() {
                 skipNextUp = true
                 return true
             }
-
-            state.let { if (it is StateAreas) {
-                it.startSeek(event.x)
-                return true
-            }}
 
             return false
         }
@@ -119,19 +100,6 @@ class MainActivity : Activity() {
             }
 
 
-            return false
-        }
-
-        override fun onFling(e1: MotionEvent, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
-            state.let {
-                if (it is StateAreas) {
-
-                    if (velocityX < 0f) it.flingLeft()
-                    else it.flingRight()
-
-                    return true
-                }
-            }
             return false
         }
     }
@@ -158,7 +126,7 @@ class MainActivity : Activity() {
         //initialize grid
         grid = Grid(this)
 
-        state = StateAreas(this)
+        state = StateGame(this, 0)
 
         Log.i("Initialization", "</--------INIT--------->")
     }

@@ -17,7 +17,6 @@ class StateGame(ctx: MainActivity, val area: Int) : State(ctx) {
 
     val road = Road(this)
     val player = Player(this)
-    val weather = Weather(this)
     val status = Status(this)
     val gameOverlay = GameOverlay(this)
     val pausedOverlay = PausedOverlay(this)
@@ -25,6 +24,9 @@ class StateGame(ctx: MainActivity, val area: Int) : State(ctx) {
 
     init {
         road.objects.add(player)
+
+        //load music
+        music.prepare(0)
     }
 
     override fun update() {
@@ -44,7 +46,6 @@ class StateGame(ctx: MainActivity, val area: Int) : State(ctx) {
 
     override fun draw() {
         road.draw()
-        weather.draw()
 
         when (state) {
             State.UNPAUSED -> {
@@ -62,18 +63,22 @@ class StateGame(ctx: MainActivity, val area: Int) : State(ctx) {
     }
 
     fun unpauseGame() {
-        music.resume()
         state = State.UNPAUSED
+        music.resume()
     }
 
     fun pauseGame() {
-        music.pause()
         state = State.PAUSED
+        music.pause()
     }
 
     fun endGame() {
+        state = State.GAME_OVER
         music.pause()
         gameOverOverlay.prepare()
-        state = State.GAME_OVER
+    }
+
+    fun onMusicReady() {
+        if (state == State.UNPAUSED) music.resume()
     }
 }
