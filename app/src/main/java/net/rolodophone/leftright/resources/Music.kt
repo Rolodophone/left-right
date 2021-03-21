@@ -23,9 +23,12 @@ class Music(ctx: MainActivity) {
                     ctx.state.let { if (it is StateGame) it.onMusicReady() }
                 }
                 else if (playbackState == Player.STATE_ENDED) {
-                    ctx.state.let { if (it is StateGame) it.player.victory() }
+                    ctx.state.let {
+                        if (it is StateGame) {
+                            prepare(0)
+                        }
+                    }
                 }
-                //TODO fix end of game
             }
         })
     }

@@ -38,8 +38,6 @@ class Player(state: StateGame) : Car(state.bitmaps.car1, 0f, state) {
     var goingR = false
     var targetX = 0f
 
-    var isDoingVictory = false
-
     //helper variable to use speed in m/s
     var ySpeedMps
         get() = (speed / width)
@@ -73,7 +71,7 @@ class Player(state: StateGame) : Car(state.bitmaps.car1, 0f, state) {
     override fun update() {
         super.update()
 
-        if (!isDead && !isDoingVictory) {
+        if (!isDead) {
             //handle fuel
             fuel -= 2f / fps
             if (fuel <= 0f) die(DeathType.FUEL)
@@ -115,40 +113,25 @@ class Player(state: StateGame) : Car(state.bitmaps.car1, 0f, state) {
     }
 
 
-    fun victory() {
-        isDoingVictory = true
-        state.sounds.playVictory()
-        state.sounds.playVroom()
-        state.road.cameraSpeed = speed
-        acceleration = w(500)
-    }
-
-
     fun turnLeft() {
-        if (!isDoingVictory) {
-
-            if (lane != 0) {
-                goingL = true
-                targetX = laneXs[lane - 1]
-                state.sounds.playTap()
-            }
-
-            goingR = false
+        if (lane != 0) {
+            goingL = true
+            targetX = laneXs[lane - 1]
+            state.sounds.playTap()
         }
+
+        goingR = false
     }
 
 
     fun turnRight() {
         //if the player turns in between lanes, set the lane to the lane it would have gone to
-        if (!isDoingVictory) {
-
-            if (lane != state.road.numLanes - 1) {
-                goingR = true
-                targetX = laneXs[lane + 1]
-                state.sounds.playTap()
-            }
-
-            goingL = false
+        if (lane != state.road.numLanes - 1) {
+            goingR = true
+            targetX = laneXs[lane + 1]
+            state.sounds.playTap()
         }
+
+        goingL = false
     }
 }

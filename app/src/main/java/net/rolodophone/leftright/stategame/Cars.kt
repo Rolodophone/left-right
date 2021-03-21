@@ -37,21 +37,18 @@ abstract class Car(imgGroup: Bitmaps.Car, var speed: Float, state: StateGame) : 
     override fun onHit(otherObstacle: Obstacle) {
         super.onHit(otherObstacle)
 
-        //if the player is doing the victory animation don't set speed to zero
-        if (!(this is Player && this.isDoingVictory)) {
-            state.sounds.playHit()
-            isDead = true
-            spinSpeed = gaussianRandomFloat(0f, 50f)
-            isOiling = false //so that the rotation doesn't get set to 0 when spinSpeed reaches 0
+        state.sounds.playHit()
+        isDead = true
+        spinSpeed = gaussianRandomFloat(0f, 50f)
+        isOiling = false //so that the rotation doesn't get set to 0 when spinSpeed reaches 0
 
-            //if it is the obstacle below before changing speed make sure other obstacle has updated first
-            if (this.dim.top > otherObstacle.dim.top && this !in otherObstacle.hasTouched) {
-                otherObstacle.hasTouched.add(this)
-                otherObstacle.onTouch(this)
-            }
-
-            speed = 0f
+        //if it is the obstacle below before changing speed make sure other obstacle has updated first
+        if (this.dim.top > otherObstacle.dim.top && this !in otherObstacle.hasTouched) {
+            otherObstacle.hasTouched.add(this)
+            otherObstacle.onTouch(this)
         }
+
+        speed = 0f
     }
 
     override fun update() {

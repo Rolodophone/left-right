@@ -8,9 +8,9 @@ class Road(override val state: StateGame) : Component {
     val objects = mutableListOf<Object>()
     val itemsToDel = mutableListOf<Object>()
 
-    var cameraSpeed = 0f
-        get() = if (!state.player.isDoingVictory) state.player.speed
-                else field
+    val cameraSpeed
+        get() = state.player.speed
+
 
     private val background = Background(state)
 
