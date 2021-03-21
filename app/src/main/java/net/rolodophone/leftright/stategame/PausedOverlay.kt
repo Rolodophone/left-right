@@ -4,7 +4,6 @@ import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
 import net.rolodophone.leftright.button.Button
-import net.rolodophone.leftright.button.ButtonText
 import net.rolodophone.leftright.main.*
 
 class PausedOverlay(override val state: StateGame) : Component {
@@ -33,19 +32,10 @@ class PausedOverlay(override val state: StateGame) : Component {
             canvas.drawText("Resume", w(132), halfHeight + w(39), whitePaint)
         }
     }
-    val btnShowDebug = ButtonText(
-        "debug",
-        Paint.Align.RIGHT,
-        state,
-        RectF(w(200), height - w(35), w(348), height - w(10))
-    ) {
-        state.status.showDebug = true
-    }
 
 
     override fun update() {
         resume.update()
-        btnShowDebug.update()
     }
 
 
@@ -74,6 +64,5 @@ class PausedOverlay(override val state: StateGame) : Component {
         )
 
         resume.draw()
-        if (!state.status.showDebug) btnShowDebug.draw()
     }
 }
