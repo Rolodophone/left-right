@@ -7,7 +7,6 @@ apply plugin: 'kotlin-android-extensions'
 android {
     signingConfigs {
         release {
-            println(keysData)
             storeFile file(keysData[0])
             storePassword keysData[1]
             keyAlias keysData[2]
