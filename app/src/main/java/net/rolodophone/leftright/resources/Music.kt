@@ -1,5 +1,6 @@
 package net.rolodophone.leftright.resources
 
+import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.MediaSource
@@ -34,21 +35,27 @@ class Music(ctx: MainActivity) {
     }
 
 
-    private val areas = mutableListOf<MediaSource>()
+    private val areas: List<MediaSource>
 
     init {
         val dataSourceFactory = DefaultDataSourceFactory(ctx, Util.getUserAgent(ctx, ctx.resources.getString(R.string.app_name)))
+        val progressiveMediaSourceFactory = ProgressiveMediaSource.Factory(dataSourceFactory)
         val rawDataSource = RawResourceDataSource(ctx)
 
         rawDataSource.open(DataSpec(RawResourceDataSource.buildRawResourceUri(R.raw.just_nasty)))
-        areas.add(ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(rawDataSource.uri))
+        val mediaSource1 = progressiveMediaSourceFactory.createMediaSource(MediaItem.fromUri(rawDataSource.uri!!))
 
         rawDataSource.open(DataSpec(RawResourceDataSource.buildRawResourceUri(R.raw.hidden_wonders)))
-        areas.add(ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(rawDataSource.uri))
+        val mediaSource2 = progressiveMediaSourceFactory.createMediaSource(MediaItem.fromUri(rawDataSource.uri!!))
+
+        areas = listOf(mediaSource1, mediaSource2)
     }
 
 
-    fun prepare(area: Int) = player.prepare(areas[area])
+    fun prepare(area: Int) {
+        player.setMediaSource(areas[area])
+        player.prepare()
+    }
 
     fun pause() {
         player.playWhenReady = false

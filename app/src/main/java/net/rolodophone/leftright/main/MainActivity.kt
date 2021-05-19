@@ -145,7 +145,7 @@ class MainActivity : Activity() {
 
 
         appOpen = true
-        thread = Thread(mainView)
+        thread = GameThread(mainView)
         thread.name = "LeftRightDraw"
         thread.start()
     }
